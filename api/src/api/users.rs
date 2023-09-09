@@ -126,7 +126,7 @@ async fn users_handler(
             .create(id, username, name, email.to_string(), vec![])
             .exec().await;
 
-          match admin {https://banchan.art/register
+          match admin {
             Ok(_) => println!("User promoted to admin"),
             Err(_) => println!("User failed to be promoted to admin"),
           }
