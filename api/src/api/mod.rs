@@ -70,5 +70,8 @@ pub(crate) fn new() -> PublicRouter {
             })
         })
         .merge("users.", users::private_route())
+        .merge("tags.", tags::private_route())
+        .merge("collections.", collections::private_route())
+        .merge("links.", links::private_route())
         .build()
 }
