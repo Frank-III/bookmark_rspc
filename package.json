@@ -13,6 +13,9 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^4.24.2",
+    "@emotion/react": "^11.11.1",
+    "@mantine/core": "^6.0.20",
+    "@mantine/hooks": "^6.0.20",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-toast": "^1.1.4",
     "@rspc/client": "^0.1.2",
@@ -35,7 +38,6 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",
     "autoprefixer": "^10.4.15",
-    "daisyui": "^3.7.3",
     "postcss": "^8.4.29",
     "prettier": "^2.8.8",
     "prettier-plugin-rust": "^0.1.9",

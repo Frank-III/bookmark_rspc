@@ -13,6 +13,8 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import {Layout} from './components/layout'
+import { MantineProvider } from '@mantine/core';
+
 
 
 
@@ -161,7 +163,9 @@ function App() {
   return (
     <rspc.Provider client={client} queryClient={queryClient}>
       <ClerkProvider publishableKey={clerkPubKey}>      
-        <RouterProvider router={router} />
+        <MantineProvider>
+          <RouterProvider router={router} />
+        </MantineProvider>
       </ClerkProvider>
     </rspc.Provider>
   );
