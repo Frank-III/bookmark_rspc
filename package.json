@@ -19,6 +19,7 @@
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-toast": "^1.1.4",
     "@rspc/client": "^0.1.2",
+    "@tabler/icons-react": "^2.34.0",
     "@tanstack/react-query": "^4.10.1",
     "@tanstack/react-router": "^0.0.1-beta.185",
     "class-variance-authority": "^0.7.0",

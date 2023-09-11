@@ -70,6 +70,7 @@ model Link {
   name        String
   url         String
   description String @default("")
+  archived    Boolean @default(false)
 
   pinnedBy User[]
 
