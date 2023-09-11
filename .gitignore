@@ -24,3 +24,5 @@ target/*
 *.sw?
 
 api/prisma.rs
+
+.env
