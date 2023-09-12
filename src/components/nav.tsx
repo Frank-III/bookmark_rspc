@@ -19,6 +19,7 @@ import {
   NavbarProps,
   Loader,
   Center,
+  Avatar,
 } from '@mantine/core';
 import {
   IconAlertCircle,
@@ -35,6 +36,7 @@ import { rspc } from '../utils/rspc';
 import { LinksGroup } from './collapsible_links';
 import { ReactNode, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { User } from 'lucide-react';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -62,6 +64,17 @@ const useStyles = createStyles((theme) => ({
     }`,
   },
 
+  user: {
+    display: 'block',
+    width: '100%',
+    padding: theme.spacing.md,
+    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+
+    '&:hover': {
+      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+    },
+  },
+
   mainLinks: {
     paddingLeft: `calc(${theme.spacing.md} - ${theme.spacing.xs})`,
     paddingRight: `calc(${theme.spacing.md} - ${theme.spacing.xs})`,
@@ -79,9 +92,13 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 500,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
 
+    // '&:hover': {
+    //   backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+    //   color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+    // },
     '&:hover': {
-      backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
     },
   },
 
@@ -157,16 +174,14 @@ const links = [
   { icon: IconUser, href: "/me", label: 'Me' },
 ];
 
-interface NavbarSearchProps extends NavbarProps {
-  children?: React.ReactNode,
-}
+interface NavbarSearchProps extends NavbarProps {}
 
 export function NavbarSearch({children, ...others}: NavbarSearchProps) {
 
-  const { user } = useUser();
+  const { isSignedIn ,user } = useUser();
   const { classes, cx } = useStyles();
 
-  const { status, data: collections } = rspc.useQuery(["collections.getByUser"], {enabled: !!user})
+  const { status, data: collections } = rspc.useQuery(["collections.getByUser"], {enabled: isSignedIn})
 
   const mainLinks = links.map((link) => (
       <Link to={link.href} key={link.label} activeProps={{className: classes.mainLinkActive}} className={classes.mainLink}>
@@ -204,12 +219,22 @@ export function NavbarSearch({children, ...others}: NavbarSearchProps) {
   return (
     <Navbar width={{ sm: 300 }} p="md" className={classes.navbar} {...others}>
       <Navbar.Section className={classes.section}>
-        {<UserButton
-          image="https://i.imgur.com/fGxgcDF.png"
-          name="Bob Rulebreaker"
-          email="Product owner"
-          icon={<IconSelector size="0.9rem" stroke={1.5} />}
-        />}
+        {!isSignedIn ? (
+          <Link to="/auth/sign_in">
+            <UnstyledButton className={classes.user}>
+              <Group>
+                <Avatar radius="xl" color="blue">U</Avatar>
+                Log In
+              </Group>
+            </UnstyledButton>
+          </Link>
+        ) : (
+          <UserButton user={{
+            avatar: user?.imageUrl, 
+            name: user.username,
+            email: user.fullName}}>
+          </UserButton>
+        )}
       </Navbar.Section>
 
       <TextInput
@@ -248,7 +273,6 @@ export function NavbarSearch({children, ...others}: NavbarSearchProps) {
           }
           </div>
       </Navbar.Section>
-      {children}
     </Navbar>
   );
 }

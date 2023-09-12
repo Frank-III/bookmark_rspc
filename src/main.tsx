@@ -13,8 +13,8 @@ import {
   RouterContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import {Layout} from './components/layout'
-import { MantineProvider, ColorSchemeProvider, ColorScheme} from '@mantine/core';
+import { Layout } from './components/layout';
+import { MantineProvider, ColorSchemeProvider, ColorScheme, Center} from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 
 
@@ -91,7 +91,9 @@ const signRoute = new Route({
     return (
       <div className="grid w-full h-full place-items-center">
         <div className="w-full max-w-md p-4 h-fit rounded-xl md:py-10">
-          <SignIn />
+          <Center>
+            <SignIn />
+          </Center>
         </div>
       </div>
     )
@@ -106,9 +108,9 @@ export const meRoute = new Route({
       <>
       <SignedIn>
       <div className="w-full bg-base-200">
-        <div className="w-full max-w-7xl p-4 mx-auto">
-          <UserProfile />
-        </div>
+          <Center>
+            <UserProfile />
+          </Center>
       </div>
       </SignedIn>
       <SignedOut>

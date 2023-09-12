@@ -11,11 +11,12 @@ import { useJwtStore } from '../store';
 import { useAuth } from '@clerk/clerk-react';
 import { NavbarSearch } from './nav';
 import React, { useState } from 'react';
-import { ActionIcon, AppShell, Burger, Group, Header, MediaQuery, createStyles, rem, useMantineColorScheme } from '@mantine/core';
+import { Text, ActionIcon, AppShell, Aside, Burger, Group, Header, MediaQuery, createStyles, rem, useMantineColorScheme } from '@mantine/core';
 import {IconSun, IconMoonStars} from "@tabler/icons-react"
+import { DateLinks } from './calendar_links';
 
 
-const headerStyle = createStyles((theme) => ({
+export const headerStyle = createStyles((theme) => ({
   header: {
     paddingLeft: theme.spacing.md,
     paddingRight: theme.spacing.md,
@@ -28,7 +29,6 @@ const headerStyle = createStyles((theme) => ({
     alignItems: 'center',
   },
 }))
-
 
 
 export function Layout() {
@@ -76,10 +76,20 @@ export function Layout() {
     )
   }
 
+  // TODO: absract links outside of NavbarSearch, to make open works
   return (
     <>
       <AppShell 
-        navbar={<NavbarSearch hiddenBreakpoint="sm" hidden={!opened}/>} 
+        navbarOffsetBreakpoint="sm"
+        asideOffsetBreakpoint="md"
+        navbar={<NavbarSearch hiddenBreakpoint="sm" hidden={!opened}>Nothing</NavbarSearch>} 
+        aside={
+          <MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
+            <Aside p="md" hiddenBreakpoint="md" width={{ sm: 200, lg: 300 }}>
+              <DateLinks />
+            </Aside>
+          </MediaQuery>
+        }
         header={<HeaderBar/>}>
         <Outlet />
       </AppShell>
