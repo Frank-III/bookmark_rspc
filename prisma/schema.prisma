@@ -17,6 +17,7 @@ model User {
   username   String    @unique(map: "customers_username_unique") @db.VarChar(255)
   name       String    @db.VarChar(255)
   email      String    @unique(map: "customers_email_unique") @db.VarChar(255)
+  avatar     String?   @db.VarChar(255)
 
   collections Collection[]
   tags        Tag[]

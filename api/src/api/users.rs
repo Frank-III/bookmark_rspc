@@ -96,6 +96,7 @@ async fn users_handler(
       last_name,
       email_addresses,
       public_metadata,
+      image_url,
       ..
     } => {
       if payload.r#type == "user.created" {
@@ -104,7 +105,7 @@ async fn users_handler(
 
         let user = db
           .user()
-          .create(id, username, name, email.to_string(), vec![])
+          .create(id, username, name, email.to_string(), vec![prisma::user::avatar::set(Some(image_url))])
           .exec().await;
         match user {
           Ok(_) => println!("User created"),

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^4.24.2",
+    "@clerk/themes": "^1.7.5",
     "@emotion/react": "^11.11.1",
     "@mantine/core": "^6.0.20",
     "@mantine/hooks": "^6.0.20",

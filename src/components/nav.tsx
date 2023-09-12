@@ -12,11 +12,20 @@ import {
   ActionIcon,
   Tooltip,
   rem,
+  Box,
+  Alert,
+  getStylesRef,
+  Grid,
+  NavbarProps,
+  Loader,
+  Center,
 } from '@mantine/core';
 import {
-  IconBulb,
+  IconAlertCircle,
+  IconPinned,
+  IconBookmark,
   IconUser,
-  IconCheckbox,
+  IconLuggage,
   IconSearch,
   IconPlus,
   IconSelector,
@@ -24,6 +33,8 @@ import {
 import { UserButton } from './buttons/userbutton';
 import { rspc } from '../utils/rspc';
 import { LinksGroup } from './collapsible_links';
+import { ReactNode, useState } from 'react';
+import { Link } from '@tanstack/react-router';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -63,13 +74,24 @@ const useStyles = createStyles((theme) => ({
     width: '100%',
     fontSize: theme.fontSizes.xs,
     padding: `${rem(8)} ${theme.spacing.xs}`,
+    paddingRight: `${rem(12)}`,
     borderRadius: theme.radius.sm,
     fontWeight: 500,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
 
     '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+      backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+    },
+  },
+
+  mainLinkActive: {
+    '&': {
+      backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+      [`& .${getStylesRef('icon')}`]: {
+        color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+      },
     },
   },
 
@@ -85,6 +107,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   mainLinkBadge: {
+    right: 0,
     padding: 0,
     width: rem(20),
     height: rem(20),
@@ -100,7 +123,7 @@ const useStyles = createStyles((theme) => ({
   collectionsHeader: {
     paddingLeft: `calc(${theme.spacing.md} + ${rem(2)})`,
     paddingRight: theme.spacing.md,
-    marginBottom: rem(5),
+    marginBottom: rem(6),
   },
 
   collectionLink: {
@@ -120,46 +143,48 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+// const links = [
+//   { icon: IconBookmark, href: tagsRoute.to, label: 'Tags', notifications: 3 },
+//   { icon: IconLuggage, href:collectionRoute.to, label: 'Collections', notifications: 4 },
+//   { icon: IconUser, href: meRoute.to, label: 'Me' },
+// ];
+
+
+
 const links = [
-  { icon: IconBulb, href: 'tags',label: 'Tags', notifications: 3 },
-  { icon: IconCheckbox, href:'collections', label: 'Collections', notifications: 4 },
-  { icon: IconUser, href: 'me', label: 'Me' },
+  { icon: IconBookmark, href: "/tags", label: 'Tags', notifications: 3 },
+  { icon: IconLuggage, href:"/collections", label: 'Collections', notifications: 4 },
+  { icon: IconUser, href: "/me", label: 'Me' },
 ];
 
-const collections = [
-  { emoji: '👍', label: 'Sales' },
-  { emoji: '🚚', label: 'Deliveries' },
-  { emoji: '💸', label: 'Discounts' },
-  { emoji: '💰', label: 'Profits' },
-  { emoji: '✨', label: 'Reports' },
-  { emoji: '🛒', label: 'Orders' },
-  { emoji: '📅', label: 'Events' },
-  { emoji: '🙈', label: 'Debts' },
-  { emoji: '💁‍♀️', label: 'Customers' },
-];
+interface NavbarSearchProps extends NavbarProps {
+  children?: React.ReactNode,
+}
 
-export function NavbarSearch() {
+export function NavbarSearch({children, ...others}: NavbarSearchProps) {
 
   const { user } = useUser();
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
 
   const { status, data: collections } = rspc.useQuery(["collections.getByUser"], {enabled: !!user})
 
   const mainLinks = links.map((link) => (
-    <UnstyledButton key={link.label} className={classes.mainLink}>
-      <div className={classes.mainLinkInner}>
-        {/* <Link to={link.href as string}>
-          <link.icon size={20} className={classes.mainLinkIcon} stroke={1.5} />
-          <span>{link.label}</span>
-        </Link> */}
-      </div>
-      {link.notifications && (
-        <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
-          {link.notifications}
-        </Badge>
-      )}
-    </UnstyledButton>
-  ));
+      <Link to={link.href} key={link.label} activeProps={{className: classes.mainLinkActive}} className={classes.mainLink}>
+        <UnstyledButton key={link.label} className={classes.mainLink}>
+          <div className={classes.mainLinkInner}>
+            <Group position="apart">
+              <link.icon size={20} className={classes.mainLinkIcon} stroke={1.5} />
+              <Text size={"20"}>{link.label}</Text>
+            </Group>
+          </div>
+          {link.notifications && (
+            <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
+              {link.notifications}
+            </Badge>
+          )}
+        </UnstyledButton>
+      </Link>
+    ));
 
   const collectionLinks = collections?.map((collection) => (
     {
@@ -169,18 +194,22 @@ export function NavbarSearch() {
     }
   ));
 
-
+  const collectionLinksGroup = {
+    icon: IconPinned,
+    label: "Pinned Collections",
+    links: collectionLinks
+  }
 
 
   return (
-    <Navbar height={700} width={{ sm: 300 }} p="md" className={classes.navbar}>
+    <Navbar width={{ sm: 300 }} p="md" className={classes.navbar} {...others}>
       <Navbar.Section className={classes.section}>
-        <UserButton
+        {<UserButton
           image="https://i.imgur.com/fGxgcDF.png"
           name="Bob Rulebreaker"
           email="Product owner"
           icon={<IconSelector size="0.9rem" stroke={1.5} />}
-        />
+        />}
       </Navbar.Section>
 
       <TextInput
@@ -208,11 +237,18 @@ export function NavbarSearch() {
             </ActionIcon>
           </Tooltip>
         </Group>
-        <div className={classes.collections}>
           {/* TODO: make it  */}
-          <LinksGroup />
-        </div>
+          <div className={classes.collections}>
+          {status == "success" ? 
+            (<LinksGroup {...collectionLinksGroup}/>) :
+            status == "loading" ?  (<Center><Loader variant='dots'/></Center>) :
+            (<Alert icon={<IconAlertCircle size="1rem" />} title="Bummer!" color="yellow">
+              You may want to Log in or Register Now!
+            </Alert>) 
+          }
+          </div>
       </Navbar.Section>
+      {children}
     </Navbar>
   );
 }

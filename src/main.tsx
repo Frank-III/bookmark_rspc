@@ -1,7 +1,8 @@
 import './app.css'
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { rspc, client, queryClient } from "./utils/rspc";
+import { dark } from '@clerk/themes';
 import { ClerkProvider, RedirectToSignIn, SignIn, SignUp, SignedIn, SignedOut, UserProfile} from "@clerk/clerk-react";
 import {
   Outlet,
@@ -13,9 +14,8 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import {Layout} from './components/layout'
-import { MantineProvider } from '@mantine/core';
-
-
+import { MantineProvider, ColorSchemeProvider, ColorScheme} from '@mantine/core';
+import { useLocalStorage } from '@mantine/hooks';
 
 
 if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
@@ -33,7 +33,7 @@ const rootRoute = routerContext.createRootRoute({
   component: () => {
     return (
       <>
-        <Layout padding="4"/>
+        <Layout />
         <TanStackRouterDevtools position="bottom-left" />
       </>
     )
@@ -98,7 +98,7 @@ const signRoute = new Route({
   }
 })
 
-const meRoute = new Route({
+export const meRoute = new Route({
   getParentRoute: () => rootRoute,
   path: 'me',
   component: () => {
@@ -119,6 +119,48 @@ const meRoute = new Route({
   }
 })
 
+export const tagsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: 'tags',
+  component: () => {
+    return (
+      <>
+      <SignedIn>
+      <div className="w-full bg-base-200">
+        <div className="w-full max-w-7xl p-4 mx-auto">
+          <h1> Test Tags</h1>
+        </div>
+      </div>
+      </SignedIn>
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>     
+      </>
+    )
+  }
+})
+
+
+export const collectionRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: 'collections',
+  component: () => {
+    return (
+      <>
+      <SignedIn>
+      <div className="w-full bg-base-200">
+        <div className="w-full max-w-7xl p-4 mx-auto">
+          <h1> Test Collections</h1>
+        </div>
+      </div>
+      </SignedIn>
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>     
+      </>
+    )
+  }
+})
 
 const registerRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -139,7 +181,9 @@ const routeTree = rootRoute.addChildren([
   versionRoute.addChildren([versionIndexRoute]),
   signRoute,
   registerRoute,
-  meRoute
+  meRoute,
+  tagsRoute,
+  collectionRoute
 ])
 
 const router = new Router({
@@ -159,13 +203,30 @@ declare module '@tanstack/react-router' {
 
 
 function App() {
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'mantine-color-scheme',
+    defaultValue: 'light',
+    getInitialValueInEffect: true,
+  });
 
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+  
   return (
     <rspc.Provider client={client} queryClient={queryClient}>
-      <ClerkProvider publishableKey={clerkPubKey}>      
-        <MantineProvider>
+      <ClerkProvider publishableKey={clerkPubKey} >      
+        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            /** Put your mantine theme override here */
+            colorScheme: colorScheme,
+          }}
+        >
           <RouterProvider router={router} />
         </MantineProvider>
+      </ColorSchemeProvider>
       </ClerkProvider>
     </rspc.Provider>
   );

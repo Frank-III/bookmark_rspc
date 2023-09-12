@@ -16,14 +16,14 @@ export type Procedures = {
 
 export type CreateTagArgs = { tag_name: string }
 
-export type User = { id: string; created_at: string | null; updated_at: string | null; username: string; name: string; email: string }
-
-export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string }
-
 export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number }
 
-export type Link = { id: number; name: string; url: string; description: string; collectionId: number; createdAt: string }
+export type Link = { id: number; name: string; url: string; description: string; archived: boolean; collectionId: number; createdAt: string }
+
+export type UpdateTagArgs = { tag_id: number; tag_name: string }
+
+export type User = { id: string; created_at: string | null; updated_at: string | null; username: string; name: string; email: string; avatar: string | null }
 
 export type Tag = { id: number; name: string; ownerId: string }
 
-export type UpdateTagArgs = { tag_id: number; tag_name: string }
+export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string }
