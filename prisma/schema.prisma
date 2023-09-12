@@ -18,7 +18,9 @@ model User {
   name       String    @db.VarChar(255)
   email      String    @unique(map: "customers_email_unique") @db.VarChar(255)
   avatar     String?   @db.VarChar(255)
+  bio        String?   @db.VarChar(255)
 
+  connectedTG Boolean      @default(false)
   collections Collection[]
   tags        Tag[]
 
@@ -67,10 +69,10 @@ model UsersAndCollections {
 }
 
 model Link {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   url         String
-  description String @default("")
+  description String  @default("")
   archived    Boolean @default(false)
 
   pinnedBy User[]

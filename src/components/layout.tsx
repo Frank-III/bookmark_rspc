@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-router'
 import { useIsFetching } from '@tanstack/react-query';
 import { useJwtStore } from '../store';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, UserButton} from '@clerk/clerk-react';
 import { NavbarSearch } from './nav';
 import React, { useState } from 'react';
 import { Text, ActionIcon, AppShell, Aside, Burger, Group, Header, MediaQuery, createStyles, rem, useMantineColorScheme } from '@mantine/core';
@@ -46,6 +46,7 @@ export function Layout() {
   const isExpired = useJwtStore((s) => s.expired);
 
   React.useEffect(() => {
+    console.log("enters:", isSignedIn);
     if (isSignedIn && !isExpired) return;
     const token = async () => {
       return await getToken();
@@ -63,6 +64,8 @@ export function Layout() {
               <Burger opened={opened} onClick={() => setOpened((o) => !o)} size="sm" />
             </MediaQuery>
           </Group>
+          <Group>
+            <UserButton afterSignOutUrl="/"/>
             <ActionIcon
               variant="outline"
               color={dark ? 'yellow' : 'blue'}
@@ -71,6 +74,7 @@ export function Layout() {
             >
               {dark ? <IconSun size="1.1rem" /> : <IconMoonStars size="1.1rem" />}
             </ActionIcon>
+          </Group>
         </div>
       </Header>
     )
