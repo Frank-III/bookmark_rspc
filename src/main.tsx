@@ -15,7 +15,7 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Layout } from './components/layout';
-import { MantineProvider, ColorSchemeProvider, ColorScheme, Center} from '@mantine/core';
+import { MantineProvider, ColorSchemeProvider, ColorScheme, Center, Stack, Container} from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 
 
@@ -48,7 +48,14 @@ const indexRoute = new Route({
   component: () => {
     return (
       <div className="p-2">
-        <h3>Welcome Home!</h3>
+        <Stack>
+          <Container size="" bg='red'>
+            Hi
+          </Container>
+          <Container size="30rem" bg='blue'>
+            Hello
+          </Container>
+        </Stack>
       </div>
     )
   },

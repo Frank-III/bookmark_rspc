@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { Link } from "../../bindings";
-import { Paper, Stack, Text, Divider, Card, Center, createStyles, Box, ThemeIcon} from "@mantine/core";
+import { Paper, Stack, Text, Divider, Card, Center, createStyles, Box, ThemeIcon, useMantineTheme} from "@mantine/core";
 
 
 interface DateLinksProps {
@@ -25,7 +25,6 @@ const linkStyle = createStyles((theme) => ({
   }))
 
 export function CalendarLinks({date, links}: DateLinksProps) {
-
   return (
     <Stack>
       <Paper shadow="xs" radius="md" withBorder={true}>
@@ -33,6 +32,7 @@ export function CalendarLinks({date, links}: DateLinksProps) {
           <Divider orientation="vertical" size="lg" color="red" />
           <ThemeIcon size="xl" m={4} color="violet" variant="light">
             <Text 
+            className=""
             size="lg" 
             sx={{ fontFamily: 'Greycliff CF, sans-serif' }}
             variant="gradient"
@@ -41,24 +41,25 @@ export function CalendarLinks({date, links}: DateLinksProps) {
               {dayjs(date).format("ddd")}
             </Text>
           </ThemeIcon>
-          <Stack ml="">
-            <Text sx={{ fontFamily: 'Greycliff CF, sans-serif' }} ta="center" fz="xl" fw={700} size="lg">
+            <div>
+            <Text sx={{ fontFamily: 'Greycliff CF, sans-serif', }} ta="center" fz="xl" fw={700} size="lg">
               {dayjs(date).format('YYYY-MM-DD')}
             </Text>
-            <Text>
+            <Text color="dimmed">
               you have {links ? links.length : 0} links this day
             </Text>
-          </Stack>
+          </div>
         </Box>
       </Paper>
       {links && (links.length) ? (
         links.map((link) => {
           return (
             <Card>
+              {/* TOD: make it better */}
               <Text>{link.name}</Text>
             </Card>
           )})) : (
-            <Center>
+            <Center sx={(theme) => ({color: theme.colorScheme === "dark" ? theme.white : theme.colors.gray[7], textShadow: "5px"})}>
               <Text>No Links available!</Text>
             </Center>
           )

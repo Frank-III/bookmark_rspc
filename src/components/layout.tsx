@@ -25,6 +25,10 @@ export const headerStyle = createStyles((theme) => ({
     paddingRight: theme.spacing.md,
   },
 
+  logo: {
+    color: theme.colorScheme === "dark" ? theme.colors.blue[7] : theme.white ,
+  },
+
   inner: {
     height: rem(56),
     display: 'flex',
@@ -69,9 +73,25 @@ export function Layout() {
             <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
               <Burger opened={opened} onClick={() => setOpened((o) => !o)} size="sm" />
             </MediaQuery>
-            <UnstyledButton component={Link} to="/">
+            <Link to="/">
+            <UnstyledButton >
+              <Group>
               <Avatar src="/TOV3AU.jpg"/>
+              <div className=''>
+                <Text 
+                className=""
+                size="lg" 
+                sx={{ fontFamily: 'Greycliff CF, sans-serif' }}
+                variant="gradient"
+                gradient={{ from: 'pink', to: 'yellow', deg: 45 }}
+                fw={800}>
+                  BookMarks
+                </Text>
+                <Text color="dimmed" size="xs" fw={900} >for web</Text>
+              </div>
+              </Group>
             </UnstyledButton>
+            </Link>
           </Group>
           <Group>
             <UserButton afterSignOutUrl="/"/>
@@ -101,6 +121,7 @@ export function Layout() {
             <Aside p="md" hiddenBreakpoint="md" width={{ sm: 200, lg: 300 }}>
               <DateLinks onDateChange={setSelectedDate}/>
               <Divider my="sm"/>
+              {/* TODO: use switch here*/}
               {dateLinkStatus === "loading" ? 
                 (<Center><Loader variant='dots'/></Center>) : 
                 dateLinkStatus=== "error" ?

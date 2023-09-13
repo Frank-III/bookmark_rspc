@@ -23,6 +23,6 @@ target/*
 *.sln
 *.sw?
 
-api/prisma.rs
+api/src/prisma.rs
 
 .env

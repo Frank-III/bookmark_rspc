@@ -5,6 +5,7 @@ export type Procedures = {
         { key: "collections.getByUser", input: never, result: Collection[] } | 
         { key: "collections.getPinned", input: never, result: PinnedCollections[] } | 
         { key: "links.getByDate", input: string, result: Link[] } | 
+        { key: "links.getSummary", input: never, result: SummariesData[] } | 
         { key: "tags.getByUser", input: never, result: Tag[] } | 
         { key: "users.get", input: never, result: User | null } | 
         { key: "version", input: never, result: string },
@@ -17,11 +18,13 @@ export type Procedures = {
 
 export type CreateTagArgs = { tag_name: string }
 
-export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number }
-
 export type PinnedCollections = { collection: Collection }
 
 export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string }
+
+export type SummariesData = { date: string; count: number }
+
+export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number }
 
 export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
 

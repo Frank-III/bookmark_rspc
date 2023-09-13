@@ -1,7 +1,7 @@
 use std::{ env, sync::Arc };
 
 use axum::{ http::{ HeaderMap, StatusCode }, routing::post, Extension, Router };
-use prisma_client_rust::{chrono::{DateTime, FixedOffset}, and};
+use prisma_client_rust::{chrono::{DateTime, FixedOffset}, and, raw, PrismaValue};
 use rspc::{ Error, ErrorCode, RouterBuilder, Type };
 use super::{ PrivateCtx, PrivateRouter };
 use serde::{ Deserialize, Serialize };
@@ -30,6 +30,29 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
             ]).exec().await?;
             tracing::info!("{links:?}");
             Ok(links)
+        })
+    })
+    .query("getSummary", |t| {
+        t(|ctx: PrivateCtx, _:()| async move {
+            #[derive(Debug, Serialize, Deserialize, Type)]
+            struct SummariesData {
+                date: String,
+                count: i32,
+            }
+
+            let summaries : Vec<SummariesData> = ctx.db._query_raw(raw!(
+                r#"SELECT
+                    DATE(created_at) AS date,
+                    COUNT(*) AS count
+                FROM
+                    links
+                WHERE
+                    owner_id = $1
+                GROUP BY
+                    DATE(created_at)"#,
+                PrismaValue::String(ctx.user_id)
+            )).exec().await?;
+            Ok(summaries)
         })
     })
     .mutation("create", |t| {
