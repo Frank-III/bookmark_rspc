@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@rspc/react": "^0.1.2",
+    "@tanstack/react-query-devtools": "^4.35.0",
     "@tanstack/router-devtools": "^0.0.1-beta.185",
     "@types/node": "^20.5.9",
     "@types/react": "^18.0.17",

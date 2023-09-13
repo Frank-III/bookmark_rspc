@@ -3,7 +3,8 @@
 export type Procedures = {
     queries: 
         { key: "collections.getByUser", input: never, result: Collection[] } | 
-        { key: "links.getPinned", input: never, result: User | null } | 
+        { key: "collections.getPinned", input: never, result: PinnedCollections[] } | 
+        { key: "links.getByDate", input: string, result: Link[] } | 
         { key: "tags.getByUser", input: never, result: Tag[] } | 
         { key: "users.get", input: never, result: User | null } | 
         { key: "version", input: never, result: string },
@@ -18,12 +19,14 @@ export type CreateTagArgs = { tag_name: string }
 
 export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number }
 
-export type Link = { id: number; name: string; url: string; description: string; archived: boolean; collectionId: number; createdAt: string }
+export type PinnedCollections = { collection: Collection }
+
+export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string }
+
+export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
 
 export type UpdateTagArgs = { tag_id: number; tag_name: string }
 
-export type User = { id: string; created_at: string | null; updated_at: string | null; username: string; name: string; email: string; avatar: string | null }
-
 export type Tag = { id: number; name: string; ownerId: string }
 
-export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string }
+export type User = { id: string; created_at: string | null; updated_at: string | null; username: string; name: string; email: string; avatar: string | null; bio: string | null; connectedTG: boolean }

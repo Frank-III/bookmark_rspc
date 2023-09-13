@@ -181,7 +181,7 @@ export function NavbarSearch({children, ...others}: NavbarSearchProps) {
   const { isSignedIn ,user } = useUser();
   const { classes, cx } = useStyles();
 
-  const { status, data: collections } = rspc.useQuery(["collections.getByUser"], {enabled: isSignedIn})
+  const { status, error, data: collections } = rspc.useQuery(["collections.getByUser"], {enabled: isSignedIn})
 
   const mainLinks = links.map((link) => (
       <Link to={link.href} key={link.label} activeProps={{className: classes.mainLinkActive}} className={classes.mainLink}>
@@ -224,7 +224,7 @@ export function NavbarSearch({children, ...others}: NavbarSearchProps) {
             <UnstyledButton className={classes.user}>
               <Group>
                 <Avatar radius="xl" color="blue">U</Avatar>
-                Log In
+                Sign In
               </Group>
             </UnstyledButton>
           </Link>

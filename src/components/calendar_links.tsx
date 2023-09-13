@@ -1,12 +1,38 @@
-import { useState } from 'react';
-import { Group } from '@mantine/core';
-import { DatePicker } from '@mantine/dates';
+import dayjs from "dayjs";
+import { Link } from "../../bindings";
+import { Paper, Stack, Text, Divider, Card, Center } from "@mantine/core";
 
-export function DateLinks() {
-  const [value, setValue] = useState<Date | null>(null);
+
+interface DateLinksProps {
+  date: Date;
+  links?: Link[];
+}
+
+
+export function CalendarLinks({date, links}: DateLinksProps) {
+
   return (
-    <Group position="center">
-      <DatePicker value={value} onChange={setValue} />
-    </Group>
+    <Stack>
+      <Paper>
+        <div className="flex">
+          <Divider orientation="vertical" color="green"/>
+          <Text>
+            {dayjs(date).format('YYYY-MM-DD')}
+          </Text>
+        </div>
+      </Paper>
+      {links && (links.length) ? (
+        links.map((link) => {
+          return (
+            <Card>
+              <Text>{link.name}</Text>
+            </Card>
+          )})) : (
+            <Center>
+              <Text>No Links available!</Text>
+            </Center>
+          )
+      }
+    </Stack>
   );
 }

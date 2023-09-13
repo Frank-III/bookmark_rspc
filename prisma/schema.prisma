@@ -20,11 +20,13 @@ model User {
   avatar     String?   @db.VarChar(255)
   bio        String?   @db.VarChar(255)
 
+  links       Link[]
   connectedTG Boolean      @default(false)
-  collections Collection[]
-  tags        Tag[]
+  collections Collection[] @relation("UsersAndCollections")
 
-  pinned_links      Link[]
+  pinnedCollections PinnedUserCollections[]
+  tags              Tag[]
+
   collectionsJoined UsersAndCollections[]
 }
 
@@ -44,12 +46,15 @@ model Collection {
   color       String  @default("#0ea5e9")
   isPublic    Boolean @default(false)
 
-  owner   User   @relation(fields: [ownerId], references: [id])
+  owner   User   @relation("UsersAndCollections", fields: [ownerId], references: [id])
   ownerId String
 
-  members   UsersAndCollections[]
-  links     Link[]
-  createdAt DateTime              @default(now())
+  members  UsersAndCollections[]
+  pinnedBy PinnedUserCollections[]
+
+  links Link[]
+
+  createdAt DateTime @default(now()) @db.Date
 
   @@unique([name, ownerId])
 }
@@ -68,6 +73,16 @@ model UsersAndCollections {
   @@id([userId, collectionId])
 }
 
+model PinnedUserCollections {
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  collectionId Int
+
+  @@id([userId, collectionId])
+}
+
 model Link {
   id          Int     @id @default(autoincrement())
   name        String
@@ -75,7 +90,8 @@ model Link {
   description String  @default("")
   archived    Boolean @default(false)
 
-  pinnedBy User[]
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String
 
   collection   Collection @relation(fields: [collectionId], references: [id])
   collectionId Int

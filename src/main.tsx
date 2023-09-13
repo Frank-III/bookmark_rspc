@@ -13,6 +13,7 @@ import {
   RouterContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Layout } from './components/layout';
 import { MantineProvider, ColorSchemeProvider, ColorScheme, Center} from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
@@ -34,6 +35,7 @@ const rootRoute = routerContext.createRootRoute({
     return (
       <>
         <Layout />
+        <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
         <TanStackRouterDevtools position="bottom-left" />
       </>
     )

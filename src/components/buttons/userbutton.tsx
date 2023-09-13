@@ -12,7 +12,7 @@ import {
   Collapse,
   Blockquote,
 } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight, IconChevronDown, IconEdit} from '@tabler/icons-react';
 import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import {useJwtStore} from '../../store'
@@ -56,10 +56,6 @@ interface UserButtonProps extends UnstyledButtonProps {
 export function UserButton({user, ...others }: UserButtonProps) {
   const { classes } = useStyles();
   const [open, setOpen] = useState<boolean>(false);
-  const handle_logout = (o: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    useJwtStore.getState().setExpired(true)
-    setOpen(false)
-  }
   return (
     <>
       <UnstyledButton onClick={() => setOpen((o) => !o)} className={classes.user}>
@@ -73,13 +69,18 @@ export function UserButton({user, ...others }: UserButtonProps) {
             {user.email}
           </Text>}
         </div>
-        <IconChevronRight size="0.9rem" stroke={1.5} />
+        {!open ? <IconChevronRight size="0.9rem" stroke={1.5} /> : <IconChevronDown size="0.9rem" stroke={1.5} />}
         </Group>
       </UnstyledButton>
       <Collapse in={open}>
-        <Blockquote color="blue">
-          Life is like an npm install – you never know what you are going to get.
-        </Blockquote>
+        <div className=''>
+          <Blockquote color="blue">
+            Life is like an npm install – you never know what you are going to get.
+          </Blockquote>
+          <UnstyledButton >
+            <IconEdit size="0.9rem" stroke={1.5} />
+          </UnstyledButton>
+        </div>
       </Collapse>
     </>
     // <Popover closeOnEscape={true} opened={open} width="target" >
