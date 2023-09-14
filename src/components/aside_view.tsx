@@ -19,6 +19,7 @@ export function AsideView() {
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
+
   };
 
   const LinksView = () => {

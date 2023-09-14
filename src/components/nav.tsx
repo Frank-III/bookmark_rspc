@@ -169,8 +169,8 @@ const useStyles = createStyles((theme) => ({
 
 
 const links = [
-  { icon: IconBookmark, href: "/tags", label: 'Tags', notifications: 3 },
-  { icon: IconLuggage, href:"/collections", label: 'Collections', notifications: 4 },
+  { icon: IconBookmark, href: "/tags", label: 'Tags',  },
+  { icon: IconLuggage, href:"/collections", label: 'Collections',  },
   { icon: IconUser, href: "/me", label: 'Me' },
 ];
 

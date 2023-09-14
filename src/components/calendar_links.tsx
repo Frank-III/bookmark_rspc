@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { Link } from "../../bindings";
-import { Paper, Stack, Text, Divider, Card, Center, createStyles, Box, ThemeIcon, useMantineTheme} from "@mantine/core";
+import { Paper, Stack, Text, Divider, Card, Center, createStyles, Box, ThemeIcon, useMantineTheme, ScrollArea} from "@mantine/core";
 
 
 interface DateLinksProps {
@@ -50,15 +50,18 @@ export function CalendarLinks({date, links}: DateLinksProps) {
         </Box>
       </Paper>
       {links && (links.length) ? (
-        links.map((link) => {
+        <ScrollArea h={700}>
+        {links.map((link) => {
           return (
             <Card>
               {/* TOD: make it better */}
               <Text>{link.name}</Text>
             </Card>
-          )})) : (
-            <Center sx={(theme) => ({color: theme.colorScheme === "dark" ? theme.white : theme.colors.gray[7], textShadow: "5px"})}>
-              <Text>No Links available!</Text>
+          )})}
+        </ScrollArea>
+        ) : (
+            <Center sx={(theme) => ({color: theme.colorScheme === "dark" ? theme.white : theme.colors.gray[7], textShadow: "5px"})} mt="lg">
+              <Text color="dimmed" fw={800}>No Links available!</Text>
             </Center>
           )
       }

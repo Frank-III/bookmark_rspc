@@ -1,12 +1,12 @@
-use std::{ env, sync::Arc };
+use std::{ env, sync::Arc, vec };
 
 use axum::{ http::{ HeaderMap, StatusCode }, routing::post, Extension, Router };
 use prisma_client_rust::{chrono::{DateTime, FixedOffset}, and, raw, PrismaValue};
 use rspc::{ Error, ErrorCode, RouterBuilder, Type };
 use super::{ PrivateCtx, PrivateRouter };
 use serde::{ Deserialize, Serialize };
-use svix::webhooks::Webhook;
 use crate::prisma::{ self, PrismaClient, link };
+
 
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
     PrivateRouter::new()
@@ -41,7 +41,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
                 count: i32,
             }
             let summaries : Vec<SummariesData> = ctx.db._query_raw(raw!(
-                r#"SELECT
+                "SELECT
                     createdAt AS date,
                     COUNT(*) AS count
                 FROM
@@ -50,11 +50,54 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
                     ownerId = {} 
                     AND createdAt >= NOW() - INTERVAL '1 day' * {}
                 GROUP BY
-                    createdAt"#,
+                    createdAt",
                 PrismaValue::String(ctx.user_id),
                 PrismaValue::Int(time_span.map_or(365, |x| x.parse::<i64>().unwrap_or(365)))
             )).exec().await?;
             Ok(summaries)
+        })
+    })
+    .query("archiveStatByDate", |t| {
+
+        #[derive(Serialize, Deserialize, Type)]
+        struct ArchiveStatData {
+            total: i64,
+            archived: i64,
+            not_archived: i64,
+        }
+        // TODO: make the date count work
+        t(|ctx: PrivateCtx, _: Option<String>| async move {
+            let archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id.clone()), and!(prisma::link::archived::equals(true))]).exec().await?;                
+            let not_archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id), and!(prisma::link::archived::equals(false))]).exec().await?;                
+            Ok(ArchiveStatData {
+                total: archived + not_archived,
+                archived,
+                not_archived,
+            })
+        })
+    })
+    .query("archiveStatByCollection", |t| {
+        // TODO: rethink the design
+        #[derive(Serialize, Deserialize, Type)]
+        struct ArchiveStatCollectionData {
+            collection: prisma::collection::Data,
+            total: i64,
+            archived: i64,
+            not_archived: i64,
+        }
+        t(|ctx: PrivateCtx, collection_id: i32| async move {
+            let archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id.clone()), and!(prisma::link::collection_id::equals(collection_id)), and!(prisma::link::archived::equals(true))]).exec().await?;                
+            let not_archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id.clone()), and!(prisma::link::collection_id::equals(collection_id)), and!(prisma::link::archived::equals(false))]).exec().await?;                
+            let collection = ctx.db.collection().find_first(vec![prisma::collection::id::equals(collection_id), and!(prisma::collection::owner_id::equals(ctx.user_id))]).exec().await?;
+
+
+            Ok(ArchiveStatCollectionData {
+                collection: collection.unwrap(), 
+                total: archived + not_archived,
+                archived,
+                not_archived,
+            })
+
         })
     })
     .mutation("create", |t| {
