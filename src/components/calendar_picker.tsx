@@ -5,13 +5,13 @@ import dayjs from 'dayjs';
 import { on } from 'events';
 
 interface DateLinksProps {
-  onDateChange: React.Dispatch<React.SetStateAction<Date | null>>
+  onDateChange: (date: Date) => void
 }
 export function DateLinks({onDateChange}: DateLinksProps) {
   // get today date as Date
   const today = dayjs().toDate();
 
-  const [value, setValue] = useState<Date | null>(null);
+  const [value, setValue] = useState<Date | undefined>();
   const handleChange = (date: Date) => {
     setValue(date);
     onDateChange(date);

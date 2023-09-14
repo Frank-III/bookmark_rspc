@@ -12,6 +12,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
     PrivateRouter::new()
     .query("getByDate", |t| {
         t(|ctx: PrivateCtx, date: String | async move {
+            println!("date: {}", date);
             let links = ctx.db.link().find_many(vec![
                 prisma::link::owner_id::equals(ctx.user_id),
                 // and!(prisma::link::created_at::equals(date)),
@@ -33,24 +34,25 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         })
     })
     .query("getSummary", |t| {
-        t(|ctx: PrivateCtx, _:()| async move {
+        t(|ctx: PrivateCtx, time_span: Option<String>| async move {
             #[derive(Debug, Serialize, Deserialize, Type)]
             struct SummariesData {
                 date: String,
                 count: i32,
             }
-
             let summaries : Vec<SummariesData> = ctx.db._query_raw(raw!(
                 r#"SELECT
-                    DATE(created_at) AS date,
+                    createdAt AS date,
                     COUNT(*) AS count
                 FROM
-                    links
+                    Link
                 WHERE
-                    owner_id = $1
+                    ownerId = {} 
+                    AND createdAt >= NOW() - INTERVAL '1 day' * {}
                 GROUP BY
-                    DATE(created_at)"#,
-                PrismaValue::String(ctx.user_id)
+                    createdAt"#,
+                PrismaValue::String(ctx.user_id),
+                PrismaValue::Int(time_span.map_or(365, |x| x.parse::<i64>().unwrap_or(365)))
             )).exec().await?;
             Ok(summaries)
         })

@@ -9,6 +9,7 @@ import {
   createStyles,
   rem,
   ColorSwatch,
+  ScrollArea,
 } from '@mantine/core';
 import { IconCalendarStats, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
@@ -49,6 +50,10 @@ const useStyles = createStyles((theme) => ({
   chevron: {
     transition: 'transform 200ms ease',
   },
+
+  collapse: {
+    backgournColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+  }
 }));
 
 interface LinksGroupProps {
@@ -70,16 +75,16 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
       key={link.name}
       className={classes.link}
     >
-      <span style={{ marginRight: rem(9), fontSize: rem(16) }}>
-        <ColorSwatch key={link.color} color={link.color} />
-      </span>{' '}
-      {link.name}
+      <Group style={{ marginRight: rem(9), fontSize: rem(16) }}>
+        <ColorSwatch key={link.color} color={link.color} size="15"/>
+        {link.name}
+      </Group>{' '}
     </a>
   ));
 
   return (
     <>
-      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
+      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control} >
         <Group position="apart" spacing={0}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
@@ -99,11 +104,11 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
           )}
         </Group>
       </UnstyledButton>
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
+      {hasLinks ? <Collapse in={opened} ><ScrollArea h={700}>{items}</ScrollArea></Collapse> : null}
     </>
   );
 }
-
+// sx={(theme) => {return {backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background}}
 // export function NavbarLinksGroup() {
 //   return (
 //     <Box

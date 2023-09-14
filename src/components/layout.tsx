@@ -17,7 +17,7 @@ import { DateLinks } from './calendar_picker';
 import { rspc } from '../utils/rspc';
 import dayjs from 'dayjs';
 import { CalendarLinks } from './calendar_links';
-
+import { AsideView } from './aside_view';
 
 export const headerStyle = createStyles((theme) => ({
   header: {
@@ -49,14 +49,11 @@ export function Layout() {
   const { classes: headerClasses} = headerStyle();
 
   const [opened, setOpened] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null >(null);
-  const { status: dateLinkStatus, error, data: dateLinks} =  rspc.useQuery(["links.getByDate", dayjs(selectedDate).format('YYYY-MM-DD')], {enabled: isSignedIn && (selectedDate !== null)})
 
   const setToken = useJwtStore((s) => s.setJwt);
   const isExpired = useJwtStore((s) => s.expired);
 
   React.useEffect(() => {
-    console.log("enters:", isSignedIn);
     if (isSignedIn && !isExpired) return;
     const token = async () => {
       return await getToken();
@@ -115,24 +112,8 @@ export function Layout() {
       <AppShell 
         navbarOffsetBreakpoint="sm"
         asideOffsetBreakpoint="md"
-        navbar={<NavbarSearch hiddenBreakpoint="sm" hidden={!opened}>Nothing</NavbarSearch>} 
-        aside={
-          <MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
-            <Aside p="md" hiddenBreakpoint="md" width={{ sm: 200, lg: 300 }}>
-              <DateLinks onDateChange={setSelectedDate}/>
-              <Divider my="sm"/>
-              {/* TODO: use switch here*/}
-              {dateLinkStatus === "loading" ? 
-                (<Center><Loader variant='dots'/></Center>) : 
-                dateLinkStatus=== "error" ?
-                (<Alert icon={<IconAlertCircle size="1rem" />} title="Bummer!" color="yellow">
-                  You may want to Log in or Register Now!
-                </Alert>) : (
-                  <CalendarLinks date={selectedDate} links={dateLinks}/>
-                )}
-            </Aside>
-          </MediaQuery>
-        }
+        navbar={<NavbarSearch hiddenBreakpoint="sm" hidden={!opened} />} 
+        aside={ <AsideView /> }
         header={<HeaderBar/>}>
         <Outlet />
       </AppShell>

@@ -11,7 +11,7 @@ use rspc::{Error, ErrorCode, RouterBuilder, Type};
 use serde::{Deserialize, Serialize};
 use svix::webhooks::Webhook;
 
-use crate::prisma::{self, PrismaClient, user::pinned_collections};
+use crate::prisma::{self, PrismaClient, user::pinned_collections, link::collection_id};
 
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
     PrivateRouter::new()
@@ -38,6 +38,20 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
             .select(PinnedCollections::select())
             .exec().await?;
             Ok(pinned_collections)
+        })
+    })
+    .mutation("addPinned", |t| {
+        
+        t(|ctx: PrivateCtx, collection_id| async move {
+            let pinned_collection = ctx.db
+            .pinned_user_collections()
+            .create(
+                prisma::user::id::equals(ctx.user_id), 
+                prisma::collection::id::equals(collection_id),
+                vec![]
+            )
+            .exec().await?;
+            Ok(pinned_collection)
         })
     })
 }

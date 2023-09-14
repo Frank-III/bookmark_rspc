@@ -10,9 +10,7 @@ interface DateLinksProps {
 
 
 const linkStyle = createStyles((theme) => ({
-
   header: {
-
   },
 
   link: {

@@ -5,11 +5,12 @@ export type Procedures = {
         { key: "collections.getByUser", input: never, result: Collection[] } | 
         { key: "collections.getPinned", input: never, result: PinnedCollections[] } | 
         { key: "links.getByDate", input: string, result: Link[] } | 
-        { key: "links.getSummary", input: never, result: SummariesData[] } | 
+        { key: "links.getSummary", input: string | null, result: SummariesData[] } | 
         { key: "tags.getByUser", input: never, result: Tag[] } | 
         { key: "users.get", input: never, result: User | null } | 
         { key: "version", input: never, result: string },
     mutations: 
+        { key: "collections.addPinned", input: number, result: PinnedUserCollections } | 
         { key: "links.create", input: CreateLinkArgs, result: Link } | 
         { key: "tags.create", input: CreateTagArgs, result: Tag } | 
         { key: "tags.edit", input: UpdateTagArgs, result: Tag },
@@ -20,11 +21,13 @@ export type CreateTagArgs = { tag_name: string }
 
 export type PinnedCollections = { collection: Collection }
 
+export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number }
+
 export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string }
 
-export type SummariesData = { date: string; count: number }
+export type PinnedUserCollections = { userId: string; collectionId: number }
 
-export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number }
+export type SummariesData = { date: string; count: number }
 
 export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
 

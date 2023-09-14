@@ -15,7 +15,7 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Layout } from './components/layout';
-import { MantineProvider, ColorSchemeProvider, ColorScheme, Center, Stack, Container} from '@mantine/core';
+import { MantineProvider, ColorSchemeProvider, ColorScheme, Center, Stack, Container, Text} from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 
 
@@ -46,11 +46,18 @@ const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
   component: () => {
+
+    const {status, error, data: linkSummary} = rspc.useQuery(["links.getSummary", null]);
+    if (status === "loading" || status === "error") {
+      return <Center><Text> NO </Text></Center>
+    }
     return (
       <div className="p-2">
         <Stack>
           <Container size="" bg='red'>
-            Hi
+            {linkSummary?.map(({date, count}) => {
+              <Text>{date, count}</Text>
+            })}
           </Container>
           <Container size="30rem" bg='blue'>
             Hello

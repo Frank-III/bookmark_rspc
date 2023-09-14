@@ -20,6 +20,7 @@ import {
   Loader,
   Center,
   Avatar,
+  ScrollArea,
 } from '@mantine/core';
 import {
   IconAlertCircle,
@@ -167,16 +168,15 @@ const useStyles = createStyles((theme) => ({
 // ];
 
 
-
 const links = [
   { icon: IconBookmark, href: "/tags", label: 'Tags', notifications: 3 },
   { icon: IconLuggage, href:"/collections", label: 'Collections', notifications: 4 },
   { icon: IconUser, href: "/me", label: 'Me' },
 ];
 
-interface NavbarSearchProps extends NavbarProps {}
+interface NavbarSearchProps extends Omit<NavbarProps,  "children"> {}
 
-export function NavbarSearch({children, ...others}: NavbarSearchProps) {
+export function NavbarSearch({...others}: NavbarSearchProps) {
 
   const { isSignedIn ,user } = useUser();
   const { classes, cx } = useStyles();
@@ -201,7 +201,7 @@ export function NavbarSearch({children, ...others}: NavbarSearchProps) {
       </Link>
     ));
 
-  const collectionLinks = pinnedCollections ?.map(({collection}) => (
+  const collectionLinks = pinnedCollections?.map(({collection}) => (
     {
       color: collection.color,
       name: collection.name,
@@ -214,7 +214,6 @@ export function NavbarSearch({children, ...others}: NavbarSearchProps) {
     label: "Pinned Collections",
     links: collectionLinks
   }
-
 
   return (
     <Navbar width={{ sm: 300 }} p="md" className={classes.navbar} {...others}>
@@ -251,7 +250,7 @@ export function NavbarSearch({children, ...others}: NavbarSearchProps) {
         <div className={classes.mainLinks}>{mainLinks}</div>
       </Navbar.Section>
 
-      <Navbar.Section className={classes.section}>
+      <Navbar.Section className={classes.section} >
         <Group className={classes.collectionsHeader} position="apart">
           <Text size="xs" weight={500} color="dimmed">
             Collections
@@ -266,7 +265,7 @@ export function NavbarSearch({children, ...others}: NavbarSearchProps) {
           <div className={classes.collections}>
           {status == "success" ? 
             (<LinksGroup {...collectionLinksGroup}/>) :
-            status == "loading" ?  (<Center><Loader variant='dots'/></Center>) :
+            status == "loading" ?  (<Center mt="lg"><Loader variant='dots'/></Center>) :
             (<Alert icon={<IconAlertCircle size="1rem" />} title="Bummer!" color="yellow">
               You may want to Log in or Register Now!
             </Alert>) 
