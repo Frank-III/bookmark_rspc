@@ -91,7 +91,6 @@ export function Layout() {
             </Link>
           </Group>
           <Group>
-            <UserButton afterSignOutUrl="/"/>
             <ActionIcon
               variant="outline"
               color={dark ? 'yellow' : 'blue'}

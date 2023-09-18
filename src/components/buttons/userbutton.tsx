@@ -21,7 +21,8 @@ const useStyles = createStyles((theme) => ({
   user: {
     display: 'block',
     width: '100%',
-    padding: theme.spacing.md,
+    paddingTop: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
 
     '&:hover': {
@@ -59,9 +60,10 @@ export function UserButton({user, ...others }: UserButtonProps) {
   return (
     <>
       <UnstyledButton className={classes.user}>
-        <Group>
-          <ClerkUserButton afterSignOutUrl="/"/>
-          <div style={{ flex: 1 }} onClick={() => setOpen((o) => !o)}>
+        <div className='px-4 flex items-center relative' >
+          <ClerkUserButton afterSignOutUrl="/" />
+          <div className='flex items-center w-full' onClick={() => setOpen((o) => !o)}>
+          <div className='flex-1 px-4' >
             <Text size="sm" weight={500}>
               {user.name? user.name : "My friend"}
             </Text>
@@ -70,7 +72,8 @@ export function UserButton({user, ...others }: UserButtonProps) {
             </Text>}
           </div>
           {!open ? <IconChevronRight size="0.9rem" stroke={1.5} /> : <IconChevronDown size="0.9rem" stroke={1.5} />}
-        </Group>
+          </div>
+        </div>
       </UnstyledButton>
       <Collapse in={open}>
         <div className=''>
