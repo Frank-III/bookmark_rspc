@@ -1,4 +1,4 @@
-import { SignOutButton } from '@clerk/clerk-react';
+import { SignOutButton, UserProfile, UserButton as ClerkUserButton} from '@clerk/clerk-react';
 import {
   UnstyledButton,
   UnstyledButtonProps,
@@ -58,18 +58,18 @@ export function UserButton({user, ...others }: UserButtonProps) {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <>
-      <UnstyledButton onClick={() => setOpen((o) => !o)} className={classes.user}>
+      <UnstyledButton className={classes.user}>
         <Group>
-          <Avatar src={user.avatar} radius="xl" />
-        <div style={{ flex: 1 }}>
-          <Text size="sm" weight={500}>
-            {user.name? user.name : "My friend"}
-          </Text>
-          {user.email && <Text color="dimmed" size="xs">
-            {user.email}
-          </Text>}
-        </div>
-        {!open ? <IconChevronRight size="0.9rem" stroke={1.5} /> : <IconChevronDown size="0.9rem" stroke={1.5} />}
+          <ClerkUserButton afterSignOutUrl="/"/>
+          <div style={{ flex: 1 }} onClick={() => setOpen((o) => !o)}>
+            <Text size="sm" weight={500}>
+              {user.name? user.name : "My friend"}
+            </Text>
+            {user.email && <Text color="dimmed" size="xs">
+              {user.email}
+            </Text>}
+          </div>
+          {!open ? <IconChevronRight size="0.9rem" stroke={1.5} /> : <IconChevronDown size="0.9rem" stroke={1.5} />}
         </Group>
       </UnstyledButton>
       <Collapse in={open}>

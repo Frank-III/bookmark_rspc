@@ -39,7 +39,8 @@ export function AsideView() {
   }}
   
 
-  return (<MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
+  return (
+  <MediaQuery smallerThan="lg" styles={{ display: 'none' }}>
     <Aside p="md" hiddenBreakpoint="md" width={{ sm: 200, lg: 300 }}>
       <DateLinks onDateChange={handleDateChange}/>
       <Divider my="sm"/>
