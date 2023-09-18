@@ -17,6 +17,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Layout } from './components/layout';
 import { MantineProvider, ColorSchemeProvider, ColorScheme, Center, Stack, Container, Text} from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
+import { SearchProvider } from './components/modals/search';
 
 
 if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
@@ -50,23 +51,23 @@ const indexRoute = new Route({
     const {status, error, data: linkSummary} = rspc.useQuery(["links.getSummary", null]);
     if (status === "loading" || status === "error") {
       return <Center><Text> NO </Text></Center>
-    }
-    return (
-      <div className="p-2">
-        <Stack>
-          <Container size="" bg='red'>
-            {linkSummary?.map(({date, count}) => {
-              <Text>{date, count}</Text>
-            })}
-          </Container>
-          <Container size="30rem" bg='blue'>
-            Hello
-          </Container>
-        </Stack>
-      </div>
+    } else {
+      return (
+        <div className="p-2">
+          <Stack>
+            <Container size="" bg='red'>
+              {linkSummary?.map(({date, count}) => {
+                <Text>{date, count}</Text>
+              })}
+            </Container>
+            <Container size="30rem" bg='blue'>
+              Hello
+            </Container>
+          </Stack>
+        </div>
     )
-  },
-})
+  }
+}})
 
 const versionRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -242,7 +243,9 @@ function App() {
             colorScheme: colorScheme,
           }}
         >
-          <RouterProvider router={router} />
+          <SearchProvider>
+            <RouterProvider router={router} />
+          </SearchProvider>
         </MantineProvider>
       </ColorSchemeProvider>
       </ClerkProvider>

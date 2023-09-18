@@ -61,45 +61,45 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
 
         #[derive(Serialize, Deserialize, Type)]
         struct ArchiveStatData {
-            total: i64,
-            archived: i64,
-            not_archived: i64,
+            total: i32,
+            archived: i32,
+            not_archived: i32,
         }
         // TODO: make the date count work
         t(|ctx: PrivateCtx, _: Option<String>| async move {
             let archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id.clone()), and!(prisma::link::archived::equals(true))]).exec().await?;                
             let not_archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id), and!(prisma::link::archived::equals(false))]).exec().await?;                
             Ok(ArchiveStatData {
-                total: archived + not_archived,
-                archived,
-                not_archived,
+                total: (archived + not_archived) as i32,
+                archived: archived as i32,
+                not_archived: not_archived as i32,
             })
         })
     })
-    .query("archiveStatByCollection", |t| {
-        // TODO: rethink the design
-        #[derive(Serialize, Deserialize, Type)]
-        struct ArchiveStatCollectionData {
-            collection: prisma::collection::Data,
-            total: i64,
-            archived: i64,
-            not_archived: i64,
-        }
-        t(|ctx: PrivateCtx, collection_id: i32| async move {
-            let archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id.clone()), and!(prisma::link::collection_id::equals(collection_id)), and!(prisma::link::archived::equals(true))]).exec().await?;                
-            let not_archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id.clone()), and!(prisma::link::collection_id::equals(collection_id)), and!(prisma::link::archived::equals(false))]).exec().await?;                
-            let collection = ctx.db.collection().find_first(vec![prisma::collection::id::equals(collection_id), and!(prisma::collection::owner_id::equals(ctx.user_id))]).exec().await?;
+    // .query("archiveStatByCollection", |t| {
+    //     // TODO: rethink the design
+    //     #[derive(Serialize, Deserialize, Type)]
+    //     struct ArchiveStatCollectionData {
+    //         collection: prisma::collection::Data,
+    //         total: i64,
+    //         archived: i64,
+    //         not_archived: i64,
+    //     }
+    //     t(|ctx: PrivateCtx, collection_id: i32| async move {
+    //         let archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id.clone()), and!(prisma::link::collection_id::equals(collection_id)), and!(prisma::link::archived::equals(true))]).exec().await?;                
+    //         let not_archived = ctx.db.link().count(vec![prisma::link::owner_id::equals(ctx.user_id.clone()), and!(prisma::link::collection_id::equals(collection_id)), and!(prisma::link::archived::equals(false))]).exec().await?;                
+    //         let collection = ctx.db.collection().find_first(vec![prisma::collection::id::equals(collection_id), and!(prisma::collection::owner_id::equals(ctx.user_id))]).exec().await?;
 
 
-            Ok(ArchiveStatCollectionData {
-                collection: collection.unwrap(), 
-                total: archived + not_archived,
-                archived,
-                not_archived,
-            })
+    //         Ok(ArchiveStatCollectionData {
+    //             collection: collection.unwrap(), 
+    //             total: archived + not_archived,
+    //             archived,
+    //             not_archived,
+    //         })
 
-        })
-    })
+    //     })
+    // })
     .mutation("create", |t| {
         #[derive(Debug, Deserialize, Serialize, Type)]
         struct CreateLinkArgs {

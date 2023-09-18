@@ -54,6 +54,9 @@ model Collection {
 
   links Link[]
 
+  archivedLinks Int @default(0)
+  totalLinks    Int @default(autoincrement()) 
+
   createdAt DateTime @default(now()) @db.Date
 
   @@unique([name, ownerId])
@@ -109,4 +112,15 @@ model Tag {
   ownerId String
 
   @@unique([name, ownerId])
+}
+
+// TODO: daily stats
+model  DailyStats {
+  id         Int     @id @default(autoincrement())
+  date       DateTime @default(now()) @db.Date
+
+  // links   Link[] have to create another table
+  totallinks Int
+  archived Int
+  unarchived Int
 }

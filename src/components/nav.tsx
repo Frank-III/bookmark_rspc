@@ -172,7 +172,7 @@ const links = [
   { icon: IconBookmark, href: "/tags", label: 'Tags',  },
   { icon: IconLuggage, href:"/collections", label: 'Collections',  },
   { icon: IconUser, href: "/me", label: 'Me' },
-];
+] as const ;
 
 interface NavbarSearchProps extends Omit<NavbarProps,  "children"> {}
 
@@ -192,11 +192,11 @@ export function NavbarSearch({...others}: NavbarSearchProps) {
               <Text size={"20"}>{link.label}</Text>
             </Group>
           </div>
-          {link.notifications && (
+          {/* {link.notifications && (
             <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
               {link.notifications}
             </Badge>
-          )}
+          )} */}
         </UnstyledButton>
       </Link>
     ));
