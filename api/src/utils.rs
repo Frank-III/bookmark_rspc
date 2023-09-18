@@ -40,10 +40,12 @@ pub(crate) fn get_user(token: Option<HeaderValue>) -> Option<Role> {
   }
 
   let jwt = token?;
+  // TODO: fix this
+  // let key = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAx+gnISYJEW/H8owHAJlYiADBLlkH/pVJrFGRW7usrsvQ2hLV4DzuixmgMJ42T5BsxY4PPoU7a1gjnEYER+YUMAgImwfaK5jJ4THLtP5f/nkcs5NF4S3/tkdiIczWZpiAzDJigPAe+ZmMA91bf6ouSASJq0lKc2Lgn6RmTLeOBHlLBMwktQWb0zJFgT6bYhg0SvZIHEZemwHcU7/wnuvgrakT82kpwFT/t575qBPMSfgUfwcOFAfc/rK8/d2uz5zkprxv/NbleuO02A7hs76zsyateQv54N5OEbtH2sU0mkEVSHDRZTyWSphhbkNRn+kDI8DUcmN7d46bwHVURIN4MQIDAQAB-----END PUBLIC KEY-----".to_string();
   let key = env
     ::var("CLERK_PEM_PUBLIC_KEY")
-    .expect("CLERK_PEM_PUBLIC_KEY not found")
-    .replace("\\n", "\n");
+    .expect("CLERK_PEM_PUBLIC_KEY not found");
+    // .replace("\\n", "\n");
   let decode = decode::<Claims>(
     &jwt.to_str().unwrap().trim_start_matches("Bearer "),
     &DecodingKey::from_rsa_pem(key.as_bytes()).unwrap(),
