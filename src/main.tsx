@@ -1,9 +1,17 @@
-import './app.css'
+import "./app.css";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { rspc, client, queryClient } from "./utils/rspc";
-import { dark } from '@clerk/themes';
-import { ClerkProvider, RedirectToSignIn, SignIn, SignUp, SignedIn, SignedOut, UserProfile} from "@clerk/clerk-react";
+import { dark } from "@clerk/themes";
+import {
+  ClerkProvider,
+  RedirectToSignIn,
+  SignIn,
+  SignUp,
+  SignedIn,
+  SignedOut,
+  UserProfile,
+} from "@clerk/clerk-react";
 import {
   Outlet,
   RouterProvider,
@@ -11,25 +19,31 @@ import {
   Route,
   Link,
   RouterContext,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Layout } from './components/layout';
-import { MantineProvider, ColorSchemeProvider, ColorScheme, Center, Stack, Container, Text} from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
-import { SearchProvider } from './components/modals/search';
-
+} from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Layout } from "./components/layout";
+import {
+  MantineProvider,
+  ColorSchemeProvider,
+  ColorScheme,
+  Center,
+  Stack,
+  Container,
+  Text,
+} from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
+import { SearchProvider } from "./components/modals/search";
 
 if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key")
+  throw new Error("Missing Publishable Key");
 }
 
-const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY
+const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 
 const routerContext = new RouterContext<{
-  queryClient: typeof queryClient
-}>()
-
+  queryClient: typeof queryClient;
+}>();
 
 const rootRoute = routerContext.createRootRoute({
   component: () => {
@@ -39,71 +53,76 @@ const rootRoute = routerContext.createRootRoute({
         <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
         <TanStackRouterDevtools position="bottom-left" />
       </>
-    )
+    );
   },
-})
+});
 
 const indexRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/',
+  path: "/",
   component: () => {
-
-    const {status, error, data: linkSummary} = rspc.useQuery(["links.getSummary", null]);
+    const {
+      status,
+      error,
+      data: linkSummary,
+    } = rspc.useQuery(["links.getSummary", null]);
     if (status === "loading" || status === "error") {
-      return <Center><Text> NO </Text></Center>
+      return (
+        <Center>
+          <Text> NO </Text>
+        </Center>
+      );
     } else {
       return (
         <div className="p-2">
           <Stack>
-            <Container size="" bg='red'>
-              {linkSummary?.map(({date, count}) => {
-                <Text>{date, count}</Text>
+            <Container size="" bg="red">
+              {linkSummary?.map(({ date, count }) => {
+                <Text>{(date, count)}</Text>;
               })}
             </Container>
-            <Container size="30rem" bg='blue'>
+            <Container size="30rem" bg="blue">
               Hello
             </Container>
           </Stack>
         </div>
-    )
-  }
-}})
+      );
+    }
+  },
+});
 
 const versionRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: 'version',
+  path: "version",
   component: () => {
-
     return (
       <div className="p-2 flex gap-2">
-        <ul className="list-disc pl-4">
-        </ul>
+        <ul className="list-disc pl-4"></ul>
         <hr />
         <Outlet />
       </div>
-    )
+    );
   },
-  errorComponent: () => 'Oh crap!',
-})
-
+  errorComponent: () => "Oh crap!",
+});
 
 const versionIndexRoute = new Route({
   getParentRoute: () => versionRoute,
-  path: '/',
+  path: "/",
   component: () => {
-    const versionQuery = rspc.useQuery(['version'])
+    const versionQuery = rspc.useQuery(["version"]);
 
     return (
       <>
         <div>{versionQuery.data}</div>
       </>
-    )
+    );
   },
-})
+});
 
 const signRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: 'auth/sign_in',
+  path: "auth/sign_in",
   component: () => {
     return (
       <div className="grid w-full h-full place-items-center">
@@ -113,77 +132,76 @@ const signRoute = new Route({
           </Center>
         </div>
       </div>
-    )
-  }
-})
+    );
+  },
+});
 
 export const meRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: 'me',
+  path: "me",
   component: () => {
     return (
       <>
-      <SignedIn>
-      <div className="w-full bg-base-200">
-          <Center>
-            <UserProfile />
-          </Center>
-      </div>
-      </SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>     
+        <SignedIn>
+          <div className="w-full bg-base-200">
+            <Center>
+              <UserProfile />
+            </Center>
+          </div>
+        </SignedIn>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
       </>
-    )
-  }
-})
+    );
+  },
+});
 
 export const tagsRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: 'tags',
+  path: "tags",
   component: () => {
     return (
       <>
-      <SignedIn>
-      <div className="w-full bg-base-200">
-        <div className="w-full max-w-7xl p-4 mx-auto">
-          <h1> Test Tags</h1>
-        </div>
-      </div>
-      </SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>     
+        <SignedIn>
+          <div className="w-full bg-base-200">
+            <div className="w-full max-w-7xl p-4 mx-auto">
+              <h1> Test Tags</h1>
+            </div>
+          </div>
+        </SignedIn>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
       </>
-    )
-  }
-})
-
+    );
+  },
+});
 
 export const collectionRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: 'collections',
+  path: "collections",
   component: () => {
     return (
       <>
-      <SignedIn>
-      <div className="w-full bg-base-200">
-        <div className="w-full max-w-7xl p-4 mx-auto">
-          <h1> Test Collections</h1>
-        </div>
-      </div>
-      </SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>     
+        <SignedIn>
+          <div className="w-full bg-base-200">
+            <div className="w-full max-w-7xl p-4 mx-auto">
+              <h1> Test Collections</h1>
+            </div>
+          </div>
+        </SignedIn>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
       </>
-    )
-  }
-})
+    );
+  },
+});
 
 const registerRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: 'auth/register',
+  path: "auth/register",
   component: () => {
     return (
       <div className="grid w-full h-full place-items-center">
@@ -191,9 +209,9 @@ const registerRoute = new Route({
           <SignUp />
         </div>
       </div>
-    )
-  }
-})
+    );
+  },
+});
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -202,52 +220,53 @@ const routeTree = rootRoute.addChildren([
   registerRoute,
   meRoute,
   tagsRoute,
-  collectionRoute
-])
+  collectionRoute,
+]);
 
 const router = new Router({
   routeTree,
-  defaultPreload: 'intent',
+  defaultPreload: "intent",
   context: {
     queryClient,
   },
-})
+});
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
 
-
-
 function App() {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
-    key: 'mantine-color-scheme',
-    defaultValue: 'light',
+    key: "mantine-color-scheme",
+    defaultValue: "light",
     getInitialValueInEffect: true,
   });
 
   const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
-  
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   return (
     <rspc.Provider client={client} queryClient={queryClient}>
-      <ClerkProvider publishableKey={clerkPubKey} >      
-        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            /** Put your mantine theme override here */
-            colorScheme: colorScheme,
-          }}
+      <ClerkProvider publishableKey={clerkPubKey}>
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
         >
-          <SearchProvider>
-            <RouterProvider router={router} />
-          </SearchProvider>
-        </MantineProvider>
-      </ColorSchemeProvider>
+          <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            theme={{
+              /** Put your mantine theme override here */
+              colorScheme: colorScheme,
+            }}
+          >
+            <SearchProvider>
+              <RouterProvider router={router} />
+            </SearchProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
       </ClerkProvider>
     </rspc.Provider>
   );
@@ -256,5 +275,5 @@ function App() {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

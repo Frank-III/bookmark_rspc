@@ -1,8 +1,8 @@
 module.exports = {
-  arrowParens: 'always',
+  arrowParens: "always",
   singleQuote: true,
   jsxSingleQuote: true,
   tabWidth: 2,
   semi: true,
-  plugins: ['./node_modules/prettier-plugin-rust'],
+  plugins: ["./node_modules/prettier-plugin-rust"],
 };

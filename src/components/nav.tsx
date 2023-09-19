@@ -1,4 +1,4 @@
-import { useUser } from '@clerk/clerk-react';
+import { useUser } from "@clerk/clerk-react";
 
 import {
   createStyles,
@@ -21,7 +21,7 @@ import {
   Center,
   Avatar,
   ScrollArea,
-} from '@mantine/core';
+} from "@mantine/core";
 import {
   IconAlertCircle,
   IconPinned,
@@ -31,13 +31,13 @@ import {
   IconSearch,
   IconPlus,
   IconSelector,
-} from '@tabler/icons-react';
-import { UserButton } from './buttons/userbutton';
-import { rspc } from '../utils/rspc';
-import { LinksGroup } from './collapsible_links';
-import { ReactNode, useState } from 'react';
-import { Link } from '@tanstack/react-router';
-import { User } from 'lucide-react';
+} from "@tabler/icons-react";
+import { UserButton } from "./buttons/userbutton";
+import { rspc } from "../utils/rspc";
+import { LinksGroup } from "./collapsible_links";
+import { ReactNode, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { User } from "lucide-react";
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -49,9 +49,11 @@ const useStyles = createStyles((theme) => ({
     marginRight: `calc(${theme.spacing.md} * -1)`,
     marginBottom: theme.spacing.md,
 
-    '&:not(:last-of-type)': {
+    "&:not(:last-of-type)": {
       borderBottom: `${rem(1)} solid ${
-        theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[4]
+          : theme.colors.gray[3]
       }`,
     },
   },
@@ -59,20 +61,26 @@ const useStyles = createStyles((theme) => ({
   searchCode: {
     fontWeight: 700,
     fontSize: rem(10),
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[7]
+        : theme.colors.gray[0],
     border: `${rem(1)} solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
+      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2]
     }`,
   },
 
   user: {
-    display: 'block',
-    width: '100%',
+    display: "block",
+    width: "100%",
     padding: theme.spacing.md,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
 
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[8]
+          : theme.colors.gray[0],
     },
   },
 
@@ -83,45 +91,59 @@ const useStyles = createStyles((theme) => ({
   },
 
   mainLink: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
     fontSize: theme.fontSizes.xs,
     padding: `${rem(8)} ${theme.spacing.xs}`,
     paddingRight: `${rem(12)}`,
     borderRadius: theme.radius.sm,
     fontWeight: 500,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[0]
+        : theme.colors.gray[7],
 
     // '&:hover': {
     //   backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
     //   color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
     // },
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[0],
+      color: theme.colorScheme === "dark" ? theme.white : theme.black,
     },
   },
 
   mainLinkActive: {
-    '&': {
-      backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
-      [`& .${getStylesRef('icon')}`]: {
-        color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+    "&": {
+      backgroundColor: theme.fn.variant({
+        variant: "light",
+        color: theme.primaryColor,
+      }).background,
+      color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
+        .color,
+      [`& .${getStylesRef("icon")}`]: {
+        color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
+          .color,
       },
     },
   },
 
   mainLinkInner: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     flex: 1,
   },
 
   mainLinkIcon: {
     marginRight: theme.spacing.sm,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[2]
+        : theme.colors.gray[6],
   },
 
   mainLinkBadge: {
@@ -129,7 +151,7 @@ const useStyles = createStyles((theme) => ({
     padding: 0,
     width: rem(20),
     height: rem(20),
-    pointerEvents: 'none',
+    pointerEvents: "none",
   },
 
   collections: {
@@ -145,18 +167,24 @@ const useStyles = createStyles((theme) => ({
   },
 
   collectionLink: {
-    display: 'block',
+    display: "block",
     padding: `${rem(8)} ${theme.spacing.xs}`,
-    textDecoration: 'none',
+    textDecoration: "none",
     borderRadius: theme.radius.sm,
     fontSize: theme.fontSizes.xs,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[0]
+        : theme.colors.gray[7],
     lineHeight: 1,
     fontWeight: 500,
 
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[0],
+      color: theme.colorScheme === "dark" ? theme.white : theme.black,
     },
   },
 }));
@@ -167,53 +195,62 @@ const useStyles = createStyles((theme) => ({
 //   { icon: IconUser, href: meRoute.to, label: 'Me' },
 // ];
 
-
 const links = [
-  { icon: IconBookmark, href: "/tags", label: 'Tags',  },
-  { icon: IconLuggage, href:"/collections", label: 'Collections',  },
-  { icon: IconUser, href: "/me", label: 'Me' },
-] as const ;
+  { icon: IconBookmark, href: "/tags", label: "Tags" },
+  { icon: IconLuggage, href: "/collections", label: "Collections" },
+  { icon: IconUser, href: "/me", label: "Me" },
+] as const;
 
-interface NavbarSearchProps extends Omit<NavbarProps,  "children"> {}
+interface NavbarSearchProps extends Omit<NavbarProps, "children"> {}
 
-export function NavbarSearch({...others}: NavbarSearchProps) {
-
-  const { isSignedIn ,user } = useUser();
+export function NavbarSearch({ ...others }: NavbarSearchProps) {
+  const { isSignedIn, user } = useUser();
   const { classes, cx } = useStyles();
 
-  const { status, error, data: pinnedCollections } = rspc.useQuery(["collections.getPinned"], {enabled: isSignedIn})
+  const {
+    status,
+    error,
+    data: pinnedCollections,
+  } = rspc.useQuery(["collections.getPinned"], { enabled: isSignedIn });
 
   const mainLinks = links.map((link) => (
-      <Link to={link.href} key={link.label} activeProps={{className: classes.mainLinkActive}} className={classes.mainLink}>
-        <UnstyledButton key={link.label} className={classes.mainLink}>
-          <div className={classes.mainLinkInner}>
-            <Group position="apart">
-              <link.icon size={20} className={classes.mainLinkIcon} stroke={1.5} />
-              <Text size={"20"}>{link.label}</Text>
-            </Group>
-          </div>
-          {/* {link.notifications && (
+    <Link
+      to={link.href}
+      key={link.label}
+      activeProps={{ className: classes.mainLinkActive }}
+      className={classes.mainLink}
+    >
+      <UnstyledButton key={link.label} className={classes.mainLink}>
+        <div className={classes.mainLinkInner}>
+          <Group position="apart">
+            <link.icon
+              size={20}
+              className={classes.mainLinkIcon}
+              stroke={1.5}
+            />
+            <Text size={"20"}>{link.label}</Text>
+          </Group>
+        </div>
+        {/* {link.notifications && (
             <Badge size="sm" variant="filled" className={classes.mainLinkBadge}>
               {link.notifications}
             </Badge>
           )} */}
-        </UnstyledButton>
-      </Link>
-    ));
-
-  const collectionLinks = pinnedCollections?.map(({collection}) => (
-    {
-      color: collection.color,
-      name: collection.name,
-      link: `/collections/${collection.id}`
-    }
+      </UnstyledButton>
+    </Link>
   ));
+
+  const collectionLinks = pinnedCollections?.map(({ collection }) => ({
+    color: collection.color,
+    name: collection.name,
+    link: `/collections/${collection.id}`,
+  }));
 
   const collectionLinksGroup = {
     icon: IconPinned,
     label: "Pinned Collections",
-    links: collectionLinks
-  }
+    links: collectionLinks,
+  };
 
   return (
     <Navbar width={{ sm: 300 }} p="md" className={classes.navbar} {...others}>
@@ -222,17 +259,21 @@ export function NavbarSearch({...others}: NavbarSearchProps) {
           <Link to="/auth/sign_in">
             <UnstyledButton className={classes.user}>
               <Group>
-                <Avatar radius="xl" color="blue">U</Avatar>
+                <Avatar radius="xl" color="blue">
+                  U
+                </Avatar>
                 Sign In
               </Group>
             </UnstyledButton>
           </Link>
         ) : (
-          <UserButton user={{
-            avatar: user?.imageUrl, 
-            name: user.username,
-            email: user.fullName}}>
-          </UserButton>
+          <UserButton
+            user={{
+              avatar: user?.imageUrl,
+              name: user.username,
+              email: user.fullName,
+            }}
+          ></UserButton>
         )}
       </Navbar.Section>
 
@@ -242,7 +283,7 @@ export function NavbarSearch({...others}: NavbarSearchProps) {
         icon={<IconSearch size="0.8rem" stroke={1.5} />}
         rightSectionWidth={70}
         rightSection={<Code className={classes.searchCode}>Ctrl + K</Code>}
-        styles={{ rightSection: { pointerEvents: 'none' } }}
+        styles={{ rightSection: { pointerEvents: "none" } }}
         mb="sm"
       />
 
@@ -250,7 +291,7 @@ export function NavbarSearch({...others}: NavbarSearchProps) {
         <div className={classes.mainLinks}>{mainLinks}</div>
       </Navbar.Section>
 
-      <Navbar.Section className={classes.section} >
+      <Navbar.Section className={classes.section}>
         <Group className={classes.collectionsHeader} position="apart">
           <Text size="xs" weight={500} color="dimmed">
             Collections
@@ -261,16 +302,24 @@ export function NavbarSearch({...others}: NavbarSearchProps) {
             </ActionIcon>
           </Tooltip>
         </Group>
-          {/* TODO: make it  */}
-          <div className={classes.collections}>
-          {status == "success" ? 
-            (<LinksGroup {...collectionLinksGroup}/>) :
-            status == "loading" ?  (<Center mt="lg"><Loader variant='dots'/></Center>) :
-            (<Alert icon={<IconAlertCircle size="1rem" />} title="Bummer!" color="yellow">
+        {/* TODO: make it  */}
+        <div className={classes.collections}>
+          {status == "success" ? (
+            <LinksGroup {...collectionLinksGroup} />
+          ) : status == "loading" ? (
+            <Center mt="lg">
+              <Loader variant="dots" />
+            </Center>
+          ) : (
+            <Alert
+              icon={<IconAlertCircle size="1rem" />}
+              title="Bummer!"
+              color="yellow"
+            >
               You may want to Log in or Register Now!
-            </Alert>) 
-          }
-          </div>
+            </Alert>
+          )}
+        </div>
       </Navbar.Section>
     </Navbar>
   );

@@ -9,7 +9,7 @@ const fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
   const token = useJwtStore.getState().jwt;
   const resp = await globalThis.fetch(input, {
     ...init,
-    credentials: 'include',
+    credentials: "include",
     headers: {
       ...init?.headers,
       authorization: `Bearer ${token}`,
@@ -35,7 +35,7 @@ const queryClient = new QueryClient({
         if (err.code === 401) {
           useJwtStore.getState().setExpired(true);
         }
-        return 
+        return;
       }
       // toast.error('Something went wrong, please try again later.');
     },
@@ -44,7 +44,7 @@ const queryClient = new QueryClient({
     onError: (err) => {
       if (err instanceof RSPCError) {
         if (err.code === 401) useJwtStore.getState().setExpired(true);
-        return 
+        return;
       }
       // toast.error('Something went wrong, please try again later.');
     },

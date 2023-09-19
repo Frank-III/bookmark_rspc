@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 
 type JwtStore = {
   jwt: string | null;
@@ -14,5 +14,5 @@ export const useJwtStore = create<JwtStore>()(
     setJwt: (jwt) => set({ jwt, expired: false }),
     expired: false,
     setExpired: (expired) => set({ expired, jwt: null }),
-  }))
+  })),
 );
