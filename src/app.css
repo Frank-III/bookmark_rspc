@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -9,63 +9,63 @@
 
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
- 
+
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
- 
+
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
- 
+
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
- 
+
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
- 
+
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
- 
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
- 
+
     --radius: 0.5rem;
   }
- 
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
- 
+
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
- 
+
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
- 
+
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
- 
+
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
- 
+
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
- 
+
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
- 
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
- 
+
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
@@ -76,77 +76,151 @@
 }
 
 .gradient-blur {
-    z-index: 5;
-    pointer-events: none
+  z-index: 5;
+  pointer-events: none;
 }
 
-.gradient-blur:after,.gradient-blur:before,.gradient-blur>div {
-    position: absolute;
-    inset: 0
+.gradient-blur:after,
+.gradient-blur:before,
+.gradient-blur > div {
+  position: absolute;
+  inset: 0;
 }
 
 .gradient-blur:before {
-    content: "";
-    z-index: 1;
-    -webkit-backdrop-filter: blur(.5px);
-    backdrop-filter: blur(.5px);
-    -webkit-mask: linear-gradient(180deg,transparent 0,#000 12.5%,#000 25%,transparent 37.5%);
-    mask: linear-gradient(180deg,transparent 0,#000 12.5%,#000 25%,transparent 37.5%)
+  content: '';
+  z-index: 1;
+  -webkit-backdrop-filter: blur(0.5px);
+  backdrop-filter: blur(0.5px);
+  -webkit-mask: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 12.5%,
+    #000 25%,
+    transparent 37.5%
+  );
+  mask: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 12.5%,
+    #000 25%,
+    transparent 37.5%
+  );
 }
 
-.gradient-blur>div:first-of-type {
-    z-index: 2;
-    -webkit-backdrop-filter: blur(1px);
-    backdrop-filter: blur(1px);
-    -webkit-mask: linear-gradient(180deg,transparent 12.5%,#000 25%,#000 37.5%,transparent 50%);
-    mask: linear-gradient(180deg,transparent 12.5%,#000 25%,#000 37.5%,transparent 50%)
+.gradient-blur > div:first-of-type {
+  z-index: 2;
+  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(1px);
+  -webkit-mask: linear-gradient(
+    180deg,
+    transparent 12.5%,
+    #000 25%,
+    #000 37.5%,
+    transparent 50%
+  );
+  mask: linear-gradient(
+    180deg,
+    transparent 12.5%,
+    #000 25%,
+    #000 37.5%,
+    transparent 50%
+  );
 }
 
-.gradient-blur>div:nth-of-type(2) {
-    z-index: 3;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
-    -webkit-mask: linear-gradient(180deg,transparent 25%,#000 37.5%,#000 50%,transparent 62.5%);
-    mask: linear-gradient(180deg,transparent 25%,#000 37.5%,#000 50%,transparent 62.5%)
+.gradient-blur > div:nth-of-type(2) {
+  z-index: 3;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  -webkit-mask: linear-gradient(
+    180deg,
+    transparent 25%,
+    #000 37.5%,
+    #000 50%,
+    transparent 62.5%
+  );
+  mask: linear-gradient(
+    180deg,
+    transparent 25%,
+    #000 37.5%,
+    #000 50%,
+    transparent 62.5%
+  );
 }
 
-.gradient-blur>div:nth-of-type(3) {
-    z-index: 4;
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
-    -webkit-mask: linear-gradient(180deg,transparent 37.5%,#000 50%,#000 62.5%,transparent 75%);
-    mask: linear-gradient(180deg,transparent 37.5%,#000 50%,#000 62.5%,transparent 75%)
+.gradient-blur > div:nth-of-type(3) {
+  z-index: 4;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  -webkit-mask: linear-gradient(
+    180deg,
+    transparent 37.5%,
+    #000 50%,
+    #000 62.5%,
+    transparent 75%
+  );
+  mask: linear-gradient(
+    180deg,
+    transparent 37.5%,
+    #000 50%,
+    #000 62.5%,
+    transparent 75%
+  );
 }
 
-.gradient-blur>div:nth-of-type(4) {
-    z-index: 5;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    -webkit-mask: linear-gradient(180deg,transparent 50%,#000 62.5%,#000 75%,transparent 87.5%);
-    mask: linear-gradient(180deg,transparent 50%,#000 62.5%,#000 75%,transparent 87.5%)
+.gradient-blur > div:nth-of-type(4) {
+  z-index: 5;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  -webkit-mask: linear-gradient(
+    180deg,
+    transparent 50%,
+    #000 62.5%,
+    #000 75%,
+    transparent 87.5%
+  );
+  mask: linear-gradient(
+    180deg,
+    transparent 50%,
+    #000 62.5%,
+    #000 75%,
+    transparent 87.5%
+  );
 }
 
-.gradient-blur>div:nth-of-type(5) {
-    z-index: 6;
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    -webkit-mask: linear-gradient(180deg,transparent 62.5%,#000 75%,#000 87.5%,transparent);
-    mask: linear-gradient(180deg,transparent 62.5%,#000 75%,#000 87.5%,transparent)
+.gradient-blur > div:nth-of-type(5) {
+  z-index: 6;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  -webkit-mask: linear-gradient(
+    180deg,
+    transparent 62.5%,
+    #000 75%,
+    #000 87.5%,
+    transparent
+  );
+  mask: linear-gradient(
+    180deg,
+    transparent 62.5%,
+    #000 75%,
+    #000 87.5%,
+    transparent
+  );
 }
 
-.gradient-blur>div:nth-of-type(6) {
-    z-index: 7;
-    -webkit-backdrop-filter: blur(32px);
-    backdrop-filter: blur(32px);
-    -webkit-mask: linear-gradient(180deg,transparent 75%,#000 87.5%,#000);
-    mask: linear-gradient(180deg,transparent 75%,#000 87.5%,#000)
+.gradient-blur > div:nth-of-type(6) {
+  z-index: 7;
+  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+  -webkit-mask: linear-gradient(180deg, transparent 75%, #000 87.5%, #000);
+  mask: linear-gradient(180deg, transparent 75%, #000 87.5%, #000);
 }
 
 .gradient-blur:after {
-    content: "";
-    z-index: 8;
-    -webkit-backdrop-filter: blur(64px);
-    backdrop-filter: blur(64px);
-    -webkit-mask: linear-gradient(180deg,transparent 87.5%,#000);
-    mask: linear-gradient(180deg,transparent 87.5%,#000)
+  content: '';
+  z-index: 8;
+  -webkit-backdrop-filter: blur(64px);
+  backdrop-filter: blur(64px);
+  -webkit-mask: linear-gradient(180deg, transparent 87.5%, #000);
+  mask: linear-gradient(180deg, transparent 87.5%, #000);
 }
