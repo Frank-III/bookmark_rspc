@@ -8,8 +8,8 @@ import { Boxes, PanelLeft, Plus, Tag, User, Search} from 'lucide-react';
 import React, { ForwardRefExoticComponent, ReactElement, ReactNode } from 'react';
 
 const privateLinks = [
-  {href:"/tags", label: "Tags", icon:<Tag/>} ,
-  {href:"/collections", label: "Collections", icon: <Boxes/> } ,
+  {href:"/tags", label: "Tags", icon:<Tag/>},
+  {href:"/collections", label: "Collections", icon: <Boxes/> },
   {href:"/me", label: "Me", icon: <User/>} ,
 ] as const;
 
