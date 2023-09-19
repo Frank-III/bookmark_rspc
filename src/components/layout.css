@@ -1,3 +1,10 @@
+.hidden-toggle {
+  opacity: 0;
+  width: 0;
+  margin-right: 8px;
+}
+
+
 .gradient-blur {
   z-index: 5;
   pointer-events: none;
