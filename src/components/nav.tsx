@@ -6,6 +6,7 @@ import {
 import { useUser } from '@clerk/clerk-react';
 import { Boxes, PanelLeft, Plus, Tag, User, Search} from 'lucide-react';
 import React, { ForwardRefExoticComponent, ReactElement, ReactNode } from 'react';
+import { rspc } from '../utils/rspc';
 
 const privateLinks = [
   {href:"/tags", label: "Tags", icon:<Tag/>},
@@ -39,6 +40,8 @@ export function Links({links}: LinksProps) {
 
 export function Nav() {
   const { user } = useUser();
+
+  const { status, data: collections } = rspc.useQuery(["collections.getPinned"], {enabled: !!user})
 
   return (
     <div className='flex h-full w-[280px] flex-col items-center justify-between border-r border-gray-200 bg-white'>
@@ -78,6 +81,10 @@ export function Nav() {
             <button className='relative z-10 flex h-4 w-4 items-center justify-center rounded-md bg-gray-100 transition hover:bg-gray-200'>
               <Plus />
             </button>
+          </div>
+          <div className="flex w-full flex-col space-y-0.5">
+            {status === "loading" ? }
+
           </div>
         </div>
       </div>
