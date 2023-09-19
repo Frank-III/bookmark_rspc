@@ -14,5 +14,5 @@ export const useJwtStore = create<JwtStore>()(
     setJwt: (jwt) => set({ jwt, expired: false }),
     expired: false,
     setExpired: (expired) => set({ expired, jwt: null }),
-  }))
+  })),
 );
