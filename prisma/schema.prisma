@@ -17,11 +17,16 @@ model User {
   username   String    @unique(map: "customers_username_unique") @db.VarChar(255)
   name       String    @db.VarChar(255)
   email      String    @unique(map: "customers_email_unique") @db.VarChar(255)
+  avatar     String?   @db.VarChar(255)
+  bio        String?   @db.VarChar(255)
 
-  collections Collection[]
-  tags        Tag[]
+  links       Link[]
+  connectedTG Boolean      @default(false)
+  collections Collection[] @relation("UsersAndCollections")
 
-  pinned_links      Link[]
+  pinnedCollections PinnedUserCollections[]
+  tags              Tag[]
+
   collectionsJoined UsersAndCollections[]
 }
 
@@ -41,21 +46,27 @@ model Collection {
   color       String  @default("#0ea5e9")
   isPublic    Boolean @default(false)
 
-  owner   User   @relation(fields: [ownerId], references: [id])
+  owner   User   @relation("UsersAndCollections", fields: [ownerId], references: [id])
   ownerId String
 
-  members   UsersAndCollections[]
-  links     Link[]
-  createdAt DateTime              @default(now())
+  members  UsersAndCollections[]
+  pinnedBy PinnedUserCollections[]
+
+  links Link[]
+
+  archivedLinks Int @default(0)
+  totalLinks    Int @default(autoincrement()) 
+
+  createdAt DateTime @default(now()) @db.Date
 
   @@unique([name, ownerId])
 }
 
 model UsersAndCollections {
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  collection   Collection @relation(fields: [collectionId], references: [id])
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   collectionId Int
 
   canCreate Boolean
@@ -65,13 +76,25 @@ model UsersAndCollections {
   @@id([userId, collectionId])
 }
 
+model PinnedUserCollections {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId Int
+
+  @@id([userId, collectionId])
+}
+
 model Link {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   url         String
-  description String @default("")
+  description String  @default("")
+  archived    Boolean @default(false)
 
-  pinnedBy User[]
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String
 
   collection   Collection @relation(fields: [collectionId], references: [id])
   collectionId Int
@@ -89,4 +112,15 @@ model Tag {
   ownerId String
 
   @@unique([name, ownerId])
+}
+
+// TODO: daily stats
+model  DailyStats {
+  id         Int     @id @default(autoincrement())
+  date       DateTime @default(now()) @db.Date
+
+  // links   Link[] have to create another table
+  totallinks Int
+  archived Int
+  unarchived Int
 }
