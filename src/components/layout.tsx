@@ -12,6 +12,7 @@ import { useAuth } from '@clerk/clerk-react';
 import { Nav } from './nav';
 import React from 'react';
 import './layout.css'
+import { Plus } from 'lucide-react';
 
 export function Layout() {
   const isLoading = useIsFetching({
@@ -39,6 +40,14 @@ export function Layout() {
             <h1 className='whitespace-nowrap text-base font-semibold text-gray-900'>Bookmarks</h1>
           </div>
         </Link>
+        <div className="flex flex-row items-center space-x-2">
+          <button className='bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  auto shrink-0 h-8 rounded-lg px-2 text-sm min-w-[60px] relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed inline-block sm:hidden'>
+            <div className='relative flex items-center justify-center'>
+              <Plus />
+            </div>
+            <span className='relative whitespace-nowrap'>Add</span>
+          </button>
+        </div>
       </div>
     )
 
