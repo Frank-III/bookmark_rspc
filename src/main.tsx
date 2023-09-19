@@ -31,7 +31,7 @@ const rootRoute = routerContext.createRootRoute({
   component: () => {
     return (
       <>
-        <Layout padding="4"/>
+        <Layout />
         <TanStackRouterDevtools position="bottom-left" />
       </>
     )
