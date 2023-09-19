@@ -4,10 +4,11 @@ import {
   Link,
 } from '@tanstack/react-router'
 import { useUser } from '@clerk/clerk-react';
-import { Boxes, PanelLeft, Plus, Tag, User, Search} from 'lucide-react';
+import { Boxes, PanelLeft, Plus, Tag, User, Search, Loader2} from 'lucide-react';
 import React, { ForwardRefExoticComponent, ReactElement, ReactNode } from 'react';
 import { rspc } from '../utils/rspc';
 import ButtonLoading from './buttons/button_loading';
+import { CollectionPopover } from './buttons/collection_popover';
 
 const privateLinks = [
   {href:"/tags", label: "Tags", icon:<Tag/>},
@@ -39,21 +40,30 @@ export function Links({links}: LinksProps) {
 }
 
 
+function UserButton () {
+
+}
+
 export function Nav() {
   const { user } = useUser();
 
-  const { status, data: collections } = rspc.useQuery(["collections.getPinned"], {enabled: !!user})
+  const { status, data: collections, isFetching} = rspc.useQuery(["collections.getPinned"], {enabled: !!user})
 
-  const pinnedCollections = () => {
+  const PinnedCollections = () => {
     switch (status) {
       case "loading":
-        return <ButtonLoading />
+        return isFetching ? (
+        <div className='flex w-full flex-row items-center mt-4 justify-center'>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        </div>) : (<div>Error</div>)
         break
       case "error":
         return <div>Error</div>
         break
       case "success":
-        return collections?.map(({collection}) => {
+        return ( 
+        <>
+        {collections?.map(({collection}) => {
           const {id, name, color } = collection
           return (
             <Link to={`/collections/${id}`} className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition bg-gray-100 font-semibold text-gray-900'>
@@ -63,11 +73,12 @@ export function Nav() {
                 </div>
                 <p className='truncate text-sm'>{name}</p>
               </div>
-              
+              <CollectionPopover/>
             </Link>
           )
-
-        }
+        })}
+        </>
+        )
   }}
 
   return (
@@ -110,7 +121,7 @@ export function Nav() {
             </button>
           </div>
           <div className="flex w-full flex-col space-y-0.5">
-
+            <PinnedCollections />
           </div>
         </div>
       </div>

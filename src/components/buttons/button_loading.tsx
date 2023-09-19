@@ -1,10 +1,12 @@
 import { Loader2 } from "lucide-react"
 
-import { Button } from "../ui/button"
+import { Button, ButtonProps } from "../ui/button"
 
-export default function ButtonLoading() {
+interface ButtonLoadingProps extends ButtonProps{} 
+
+export default function ButtonLoading({className}: ButtonLoadingProps) {
   return (
-    <Button disabled>
+    <Button disabled className={className}>
       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       Please wait
     </Button>

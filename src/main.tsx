@@ -45,26 +45,11 @@ const indexRoute = new Route({
   path: '/',
   component: () => {
 
-    const {status, error, data: linkSummary} = rspc.useQuery(["links.getSummary", null]);
-    if (status === "loading" || status === "error") {
-      return <Center><Text> NO </Text></Center>
-    } else {
       return (
         <div className="p-2">
-          <Stack>
-            <Container size="" bg='red'>
-              {linkSummary?.map(({date, count}) => {
-                <Text>{date, count}</Text>
-              })}
-            </Container>
-            <Container size="30rem" bg='blue'>
-              Hello
-            </Container>
-          </Stack>
-        </div>
-    )
+        </div>)
   }
-}})
+})
 
 const versionRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -104,11 +89,6 @@ const signRoute = new Route({
   component: () => {
     return (
       <div className="grid w-full h-full place-items-center">
-        <div className="w-full max-w-md p-4 h-fit rounded-xl md:py-10">
-          <Center>
-            <SignIn />
-          </Center>
-        </div>
       </div>
     )
   }
@@ -122,9 +102,6 @@ export const meRoute = new Route({
       <>
       <SignedIn>
       <div className="w-full bg-base-200">
-          <Center>
-            <UserProfile />
-          </Center>
       </div>
       </SignedIn>
       <SignedOut>
@@ -219,32 +196,11 @@ declare module '@tanstack/react-router' {
 
 
 function App() {
-  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
-    key: 'mantine-color-scheme',
-    defaultValue: 'light',
-    getInitialValueInEffect: true,
-  });
-
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
   
   return (
     <rspc.Provider client={client} queryClient={queryClient}>
       <ClerkProvider publishableKey={clerkPubKey} >      
-        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            /** Put your mantine theme override here */
-            colorScheme: colorScheme,
-          }}
-        >
-          <SearchProvider>
             <RouterProvider router={router} />
-          </SearchProvider>
-        </MantineProvider>
-      </ColorSchemeProvider>
       </ClerkProvider>
     </rspc.Provider>
   );
