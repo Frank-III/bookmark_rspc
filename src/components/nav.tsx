@@ -7,6 +7,7 @@ import { useUser } from '@clerk/clerk-react';
 import { Boxes, PanelLeft, Plus, Tag, User, Search} from 'lucide-react';
 import React, { ForwardRefExoticComponent, ReactElement, ReactNode } from 'react';
 import { rspc } from '../utils/rspc';
+import ButtonLoading from './buttons/button_loading';
 
 const privateLinks = [
   {href:"/tags", label: "Tags", icon:<Tag/>},
@@ -42,6 +43,32 @@ export function Nav() {
   const { user } = useUser();
 
   const { status, data: collections } = rspc.useQuery(["collections.getPinned"], {enabled: !!user})
+
+  const pinnedCollections = () => {
+    switch (status) {
+      case "loading":
+        return <ButtonLoading />
+        break
+      case "error":
+        return <div>Error</div>
+        break
+      case "success":
+        return collections?.map(({collection}) => {
+          const {id, name, color } = collection
+          return (
+            <Link to={`/collections/${id}`} className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition bg-gray-100 font-semibold text-gray-900'>
+              <div className='flex flex-row items-center justify-start truncate'>
+                <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
+                  Color
+                </div>
+                <p className='truncate text-sm'>{name}</p>
+              </div>
+              
+            </Link>
+          )
+
+        }
+  }}
 
   return (
     <div className='flex h-full w-[280px] flex-col items-center justify-between border-r border-gray-200 bg-white'>
@@ -83,7 +110,6 @@ export function Nav() {
             </button>
           </div>
           <div className="flex w-full flex-col space-y-0.5">
-            {status === "loading" ? }
 
           </div>
         </div>
