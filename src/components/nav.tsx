@@ -277,15 +277,19 @@ export function NavbarSearch({ ...others }: NavbarSearchProps) {
         )}
       </Navbar.Section>
 
-      <TextInput
-        placeholder="Search"
-        size="xs"
-        icon={<IconSearch size="0.8rem" stroke={1.5} />}
-        rightSectionWidth={70}
-        rightSection={<Code className={classes.searchCode}>Ctrl + K</Code>}
-        styles={{ rightSection: { pointerEvents: "none" } }}
-        mb="sm"
-      />
+      <div className="mb-2 flex w-full flex-row space-x-2 px-2">
+        <UnstyledButton className="w-full h-8 rounded-lg px-2 text-sm min-w-[60px] relative flex flex-row items-center justify-center space-x-1 font-medium">
+          <div className="flex items-center relative">
+            <IconSearch size={16} />
+            <span>Search</span>
+          </div>
+        </UnstyledButton>
+        <UnstyledButton className="auto shrink-0 h-8 rounded-lg px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium">
+          <div className="relative flex items-center justify-center">
+            <IconPlus size={16} />
+          </div>
+        </UnstyledButton>
+      </div>
 
       <Navbar.Section className={classes.section}>
         <div className={classes.mainLinks}>{mainLinks}</div>
