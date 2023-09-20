@@ -1,3 +1,4 @@
+#![allow(unused)]
 use axum::{
   http::{ header::AUTHORIZATION, Method },
   http::{ header::{ ACCEPT, CONTENT_TYPE }, HeaderValue },
