@@ -213,6 +213,7 @@ export function NavbarSearch({ ...others }: NavbarSearchProps) {
     data: pinnedCollections,
   } = rspc.useQuery(["collections.getPinned"], { enabled: isSignedIn });
 
+  console.log(classes.mainLinkActive)
   const mainLinks = links.map((link) => (
     <Link
       to={link.href}
