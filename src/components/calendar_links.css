@@ -1,0 +1,16 @@
+  link: {
+    color: theme.colors.blue[7],
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  }
+  ,
+
+.link {
+    color: var(--mantine-color-blue-7);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+}

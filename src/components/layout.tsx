@@ -81,7 +81,7 @@ export function Layout() {
   const HeaderBar = () => {
     return (
       <Header height={56} className={headerClasses.header} mb={120}>
-        <div className={headerClasses.inner}>
+        <div className="h-[3.5rem] flex justify-between items-center">
           <Group>
             <MediaQuery largerThan="sm" styles={{ display: "none" }}>
               <Burger

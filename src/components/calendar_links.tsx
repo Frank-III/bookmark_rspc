@@ -20,8 +20,6 @@ interface DateLinksProps {
 }
 
 const linkStyle = createStyles((theme) => ({
-  header: {},
-
   link: {
     color: theme.colors.blue[7],
     textDecoration: "none",
@@ -41,7 +39,7 @@ export function CalendarLinks({ date, links }: DateLinksProps) {
             <Text
               className=""
               size="lg"
-              sx={{ fontFamily: "Greycliff CF, sans-serif" }}
+              style={{ fontFamily: "Greycliff CF, sans-serif" }}
               variant="gradient"
               gradient={{ from: "pink", to: "yellow", deg: 45 }}
               fw={800}
@@ -51,7 +49,7 @@ export function CalendarLinks({ date, links }: DateLinksProps) {
           </ThemeIcon>
           <div>
             <Text
-              sx={{ fontFamily: "Greycliff CF, sans-serif" }}
+              style={{ fontFamily: "Greycliff CF, sans-serif" }}
               ta="center"
               fz="xl"
               fw={700}
@@ -78,6 +76,9 @@ export function CalendarLinks({ date, links }: DateLinksProps) {
         </ScrollArea>
       ) : (
         <Center
+          // styles={{
+          //   color: 'light-dark(var(--mantine-color-gray-7), var(--mantine-color-gray-2)))'
+          // }}
           sx={(theme) => ({
             color:
               theme.colorScheme === "dark" ? theme.white : theme.colors.gray[7],

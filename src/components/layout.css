@@ -1,0 +1,8 @@
+.header {
+    padding-left: var(--mantine-spacing-md);
+    padding-right: var(--mantine-spacing-md);
+}
+
+.logo {
+    color: light-dark(var(--mantine-color-white), var(--mantine-color-blue-7));
+}
