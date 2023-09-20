@@ -23,6 +23,7 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Layout } from './components/layout';
+import { Toaster } from 'sonner';
 
 if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key');
@@ -39,6 +40,7 @@ const rootRoute = routerContext.createRootRoute({
     return (
       <>
         <Layout />
+        <Toaster richColors position='top-center' />
         <ReactQueryDevtools position='bottom-right' initialIsOpen={false} />
         <TanStackRouterDevtools position='bottom-left' />
       </>
