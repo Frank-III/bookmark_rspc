@@ -61,7 +61,7 @@ pub(crate) fn new() -> PublicRouter {
                         ));
                     }
                 };
-
+                tracing::info!("User role: {:?}", role);
                 Ok(mw.with_ctx(PrivateCtx {
                     db: old_ctx.db,
                     role: role.clone(),

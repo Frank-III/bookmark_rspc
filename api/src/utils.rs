@@ -34,7 +34,7 @@ pub(crate) fn get_user(token: Option<HeaderValue>) -> Option<Role> {
     iat: usize,
     iss: String,
     nbf: usize,
-    sid: String,
+    // sid: String,
     sub: String,
     role: Option<String>,
   }
@@ -51,6 +51,7 @@ pub(crate) fn get_user(token: Option<HeaderValue>) -> Option<Role> {
     &DecodingKey::from_rsa_pem(key.as_bytes()).unwrap(),
     &Validation::new(Algorithm::RS256)
   );
+
 
   let role: Role = match decode {
     Ok(token) =>

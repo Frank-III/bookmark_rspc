@@ -60,7 +60,7 @@ enum Data {
     profile_image_url: String,
     public_metadata: serde_json::Value,
     updated_at: u64,
-    username: String,
+    username: Option<String>,
   },
 }
 
@@ -81,12 +81,14 @@ async fn users_handler(
     println!("Webhook secret not found");
     StatusCode::INTERNAL_SERVER_ERROR
   })?;
+  println!("{body:#?}");
   let payload: Payload = serde_json::from_slice(&body).unwrap();
 
   wh.verify(&body, &headers).map_err(|_| {
     println!("Webhook verification failed");
     StatusCode::UNAUTHORIZED
   })?;
+  println!("parse payload success");
 
   match payload.data {
     Data::CreatedOrUpdated {
@@ -105,7 +107,7 @@ async fn users_handler(
 
         let user = db
           .user()
-          .create(id, username, name, email.to_string(), vec![prisma::user::avatar::set(Some(image_url))])
+          .create(id, username.unwrap(), name, email.to_string(), vec![prisma::user::avatar::set(Some(image_url))])
           .exec().await;
         match user {
           Ok(_) => println!("User created"),
@@ -114,7 +116,9 @@ async fn users_handler(
       } else if payload.r#type == "user.updated" {
         let user = db.user().delete(prisma::user::id::equals(id.clone())).exec().await;
         match user {
-          Ok(_) => println!("User deleted"),
+          Ok(_) => {
+            println!("User deleted");
+          },
           Err(_) => println!("User not deleted"),
         }
 
@@ -124,7 +128,7 @@ async fn users_handler(
         if public_metadata["role"] == "admin" {
           let admin = db
             .admins()
-            .create(id, username, name, email.to_string(), vec![])
+            .create(id, username.unwrap(), name, email.to_string(), vec![])
             .exec().await;
 
           match admin {
