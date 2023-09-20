@@ -189,6 +189,7 @@ declare module '@tanstack/react-router' {
 }
 
 function App() {
+  const clerkappearance = {};
   return (
     <rspc.Provider client={client} queryClient={queryClient}>
       <ClerkProvider publishableKey={clerkPubKey}>

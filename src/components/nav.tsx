@@ -18,6 +18,7 @@ import React, {
 import { rspc } from '../utils/rspc';
 import ButtonLoading from './buttons/button_loading';
 import { CollectionPopover } from './buttons/collection_popover';
+// import { UserButton } from './buttons/user_button';
 
 const privateLinks = [
   { href: '/tags', label: 'Tags', icon: <Tag /> },
@@ -29,8 +30,6 @@ interface LinksProps {
   links: typeof privateLinks;
 }
 
-function 
-
 export function Links({ links }: LinksProps) {
   return (
     <div className='flex w-full flex-col space-y-0.5'>
@@ -38,7 +37,7 @@ export function Links({ links }: LinksProps) {
         <Link
           to={href}
           activeProps={{ style: { backgroundColor: 'rgb(243 244 246)' } }}
-          id={'link' + href}
+          key={`link${href}`}
           className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900'
         >
           <button>
@@ -60,7 +59,7 @@ export function Nav() {
 
   const UserButton = () => {
     return (
-      <div className='hover:bg-gray-200/50 group flex w-full flex-row items-center justify-between space-x-2 rounded-lg p-2'>
+      <div className='hover:bg-gray-200/50 group flex w-full flex-row items-center justify-between space-x-2 rounded-lg p-2 space-y-3'>
         <div className='flex flex-row items-center justify-start space-x-2'>
           {isSignedIn ? (
             <>
@@ -70,19 +69,22 @@ export function Nav() {
               </span>
             </>
           ) : (
-            <Link to='/auth/sign_in'>Sign In</Link>
+            <Link to='/auth/sign_in' key='sign-in'>
+              Sign In
+            </Link>
           )}
         </div>
       </div>
     );
   };
+
   const {
     status,
     data: collections,
     isFetching,
-  } = rspc.useQuery(['collections.getPinned'], { enabled: !!user });
+  } = rspc.useQuery(['collections.getByUser'], { enabled: !!user });
 
-  const PinnedCollections = () => {
+  const PinndCollections = () => {
     // const collections = [{collection:{id:"1", name:"test", color:"red"}}]
     switch (status) {
       case 'loading':
@@ -98,6 +100,7 @@ export function Nav() {
         return <div>Error</div>;
         break;
       case 'success':
+        // collections.sort((a, b) => {return a.})
         return (
           <>
             {collections.length == 0 ? (
@@ -107,12 +110,13 @@ export function Nav() {
                 </span>
               </div>
             ) : (
-              collections?.map(({ collection }) => {
+              collections?.map((collection) => {
                 const { id, name, color } = collection;
                 return (
                   <Link
                     to={`/collections/${id}`}
                     className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition bg-gray-100 font-semibold text-gray-900'
+                    key={`to-collection${id}`}
                   >
                     <div className='flex flex-row items-center justify-start truncate'>
                       <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
@@ -137,7 +141,7 @@ export function Nav() {
           <UserButton />
           {/* TODO: add onClick */}
           <button className='flex items-center justify-center rounded-md p-0.5 text-gray-500 transition hover:bg-gray-200/50 hover:text-gray-700'>
-            <PanelLeft size={20}/>
+            <PanelLeft size={20} />
           </button>
         </div>
         <div className='mt-4 flex w-full flex-row space-x-2 px-2'>
@@ -163,15 +167,18 @@ export function Nav() {
           <div className='sticky -top-2 z-10 flex w-full flex-row items-center justify-between px-2 pt-2'>
             <div className='pointer-events-none absolute left-0 top-0 z-0 h-10 w-full bg-gradient-to-b from-white via-white'></div>
             <p className='relative z-10 text-xs font-medium text-gray-500'>
-              Pinned
+              Collections
             </p>
             <button className='relative z-10 flex h-4 w-4 items-center justify-center rounded-md bg-gray-100 transition hover:bg-gray-200'>
               <Plus />
             </button>
           </div>
           <div className='flex w-full flex-col space-y-0.5'>
-            <PinnedCollections />
+            <PinndCollections />
           </div>
+          {/* <div className='flex w-full flex-col space-y-0.5'>
+            <CollectionLinks />
+          </div> */}
         </div>
       </div>
     </div>
