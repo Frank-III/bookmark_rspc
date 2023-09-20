@@ -27,7 +27,7 @@ export function Layout() {
   React.useEffect(() => {
     if (isSignedIn && !isExpired) return;
     const token = async () => {
-      return await getToken({template: 'with_role'});
+      return await getToken({ template: 'with_role' });
     };
     token().then((res) => setToken(res));
   }, [isSignedIn, isExpired]);
