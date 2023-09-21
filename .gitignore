@@ -23,3 +23,5 @@ target/*
 *.sln
 *.sw?
 
+api/src/prisma.rs
+./bindings.ts
