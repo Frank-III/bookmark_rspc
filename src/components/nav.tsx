@@ -19,6 +19,7 @@ import React, {
 import { rspc } from '../utils/rspc';
 import ButtonLoading from './buttons/button_loading';
 import { CollectionPopover } from './buttons/collection_popover';
+import { CollectionLinks } from './links/collection_links';
 // import { UserButton } from './buttons/user_button';
 
 const privateLinks = [
@@ -26,13 +27,6 @@ const privateLinks = [
   { href: '/collections', label: 'Collections', icon: <Boxes /> },
   { href: '/me', label: 'Me', icon: <User /> },
 ] as const;
-
-const fakedCollections = [
-  { color: 'red', name: 'test1', id: '1' },
-  { color: 'blue', name: 'test2', id: '2' },
-  { color: 'green', name: 'test3', id: '3' },
-  { color: 'gray', name: 'test4', id: '4' },
-];
 
 interface LinksProps {
   links: typeof privateLinks;
@@ -86,90 +80,6 @@ export function Nav() {
     );
   };
 
-  const {
-    status,
-    data: collections,
-    isFetching,
-  } = rspc.useQuery(['collections.getByUser'], { enabled: !!user });
-
-  const PinndCollections = () => {
-    // const collections = [{collection:{id:"1", name:"test", color:"red"}}]
-    switch (status) {
-      case 'loading':
-        return isFetching ? (
-          <div className='flex w-full flex-col space-y-0.5'>
-            <div className='flex w-full flex-row items-center mt-4 justify-center'>
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-            </div>
-          </div>
-        ) : (
-          <div>Error</div>
-        );
-        break;
-      case 'error':
-        return <div>Error</div>;
-        break;
-      case 'success':
-        // collections.sort((a, b) => {return a.})
-        return collections.length == 0 ? (
-          <div className='relative flex w-full flex-col space-y-2 px-2'>
-            <div className=' pointer-events-none opacity-40 blur-sm'>
-              {fakedCollections.map((collection, index) => (
-                <a href='#' key={`random-${index}`}>
-                  <button className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900'>
-                    <div className='flex flex-row items-center justify-start truncate'>
-                      <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-                        <Dot color={collection.color} size={'auto'} />
-                      </div>
-                      <p className='truncate text-sm'>{collection.name}</p>
-                    </div>
-                  </button>
-                </a>
-              ))}
-            </div>
-            <div className='absolute h-full w-full bg-gradient-to-t from-white to-transparent'></div>
-            <div className='absolute left-1/2 top-2 mx-auto flex max-w-[150px] -translate-x-1/2 flex-col items-center justify-center text-center'>
-              <GalleryVerticalEnd size={24} />
-              <h4 className='mb-1 mt-3 text-sm font-medium text-gray-900'>
-                No Collections
-              </h4>
-              <p className='mb-3 text-xs text-gray-500'>
-                Create a collection to organize your writing.
-              </p>
-              <div className='mx-auto'>
-                <button className='bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  auto shrink-0 h-8 rounded-lg px-2 text-sm min-w-[60px] relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
-                  <span className='relative whitespace-nowrap'>
-                    Create Collection
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className='flex w-full flex-col space-y-0.5'>
-            {collections?.map((collection) => {
-              const { id, name, color } = collection;
-              return (
-                <Link
-                  to={`/collections/${id}`}
-                  className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition bg-gray-100 font-semibold text-gray-900'
-                  key={`to-collection${id}`}
-                >
-                  <div className='flex flex-row items-center justify-start truncate'>
-                    <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-                      <Dot color={color} size={'auto'} />
-                    </div>
-                    <p className='truncate text-sm'>{name}</p>
-                  </div>
-                  <CollectionPopover />
-                </Link>
-              );
-            })}
-          </div>
-        );
-        break;
-    }
-  };
   return (
     <div className='left-sidebar flex h-full w-[280px] flex-col items-center justify-between border-r border-gray-200 bg-white'>
       <div className='flex h-full w-full flex-auto flex-col overflow-hidden'>
@@ -187,7 +97,7 @@ export function Nav() {
               <span className='relative whitespace-nowrap'>Search</span>
             </div>
           </button>
-          <button className='bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  auto shrink-0 h-8 rounded-lg px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
+          <button className='rounded-lg bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  auto shrink-0 ounded-lg px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
             <div className='relative flex items-center justify-center'>
               <Plus />
             </div>
@@ -209,7 +119,7 @@ export function Nav() {
               <Plus />
             </button>
           </div>
-          <PinndCollections />
+          <CollectionLinks pinned={false}/>
           {/* <div className='flex w-full flex-col space-y-0.5'>
             <CollectionLinks />
           </div> */}

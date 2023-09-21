@@ -5,7 +5,7 @@ import Select, {
   components,
 } from 'react-select';
 import { cn } from '../../utils';
-import { buttonVariants } from '../ui/button';
+import { buttonVariants } from './button';
 import { ChevronDownIcon, XSquare } from 'lucide-react';
 
 const DropdownIndicator = (props: DropdownIndicatorProps) => {
