@@ -13,6 +13,7 @@ import { Nav } from './nav';
 import React from 'react';
 import './layout.css';
 import { PanelLeft, Plus } from 'lucide-react';
+import { CalenderView } from './calender_view';
 
 export function Layout() {
   const isLoading = useIsFetching({
@@ -85,6 +86,7 @@ export function Layout() {
       </div>
       <div className='overflow-hidden w-[280px] min-w-[280px]'>
         {/* <C/> */}
+        <CalenderView />
       </div>
     </main>
   );

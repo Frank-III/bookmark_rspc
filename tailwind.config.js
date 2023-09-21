@@ -2,12 +2,14 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-  darkMode: ['data-class'],
+  // darkMode: ['data-class'],
+  // presets: [require("@medusajs/ui-preset")],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
+    // './node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     container: {
