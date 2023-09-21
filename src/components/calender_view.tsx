@@ -13,9 +13,11 @@ function DailySummary({ date, total }: { date: Date; total: number }) {
       </div>
       <div className='flex flex-col items-center m-auto justify-items-center'>
         <div className=''>
-        <p className='text-md'>Sep 20, 2023</p>
+          <p className='text-md'>Sep 20, 2023</p>
         </div>
-        <p className='text-xs'>You added <a className='border border-gray-200'>0</a> links this day</p>
+        <p className='text-xs'>
+          You added <a className='border border-gray-200'>0</a> links this day
+        </p>
       </div>
     </div>
   );
@@ -42,11 +44,18 @@ function DailyLink() {
 }
 
 export function CalenderView() {
-
   const { getToken, isSignedIn, userId } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [date, setDate] = React.useState<Date | undefined>();
-  const { status: dateLinkStatus, error, data: dateLinks, isFetching, } =  rspc.useQuery(["links.getByDate", selectedDate?.toISOString()?.slice(0,10)], {enabled: isSignedIn && !!selectedDate})
+  const {
+    status: dateLinkStatus,
+    error,
+    data: dateLinks,
+    isFetching,
+  } = rspc.useQuery(
+    ['links.getByDate', selectedDate?.toISOString()?.slice(0, 10)],
+    { enabled: isSignedIn && !!selectedDate },
+  );
 
   return (
     <div className='right-sidebar flex h-full w-[280px] flex-col items-center justify-between border-l border-gray-200 bg-white'>
