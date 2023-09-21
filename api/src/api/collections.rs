@@ -54,4 +54,36 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
             Ok(pinned_collection)
         })
     })
+    .mutation("create", |t| {
+
+        #[derive(Deserialize, Type)]
+        struct CreateCollectionParams {
+            name: String,
+            color: String,
+            pinned: Option<bool>,
+            public: Option<bool>,
+        }
+
+        
+        t(|ctx: PrivateCtx, CreateCollectionParams {name, color, pinned, public}| async move {
+            let new_collection = ctx.db
+            .collection()
+            .create(name, prisma::user::id::equals(ctx.user_id.clone()), vec![
+                prisma::collection::color::set(color),
+                prisma::collection::is_public::set(public.unwrap_or(false)),
+            ]).exec().await?;
+            if pinned.unwrap_or(false) {
+                ctx.db
+                .pinned_user_collections()
+                .create(
+                    prisma::user::id::equals(ctx.user_id), 
+                    prisma::collection::id::equals(new_collection.id),
+                    vec![]
+                )
+                .exec().await?;
+            }
+
+            Ok(new_collection)
+        })
+    })
 }
