@@ -41,7 +41,7 @@ export function Links({ links }: LinksProps) {
           to={href}
           activeProps={{ style: { backgroundColor: 'rgb(243 244 246)' } }}
           key={`link${href}`}
-          className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+          className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-normal'
         >
           <button>
             <div className='flex flex-row items-center justify-start truncate'>
@@ -127,6 +127,10 @@ export function Nav() {
             <CollectionLinks />
           </div> */}
         </div>
+      </div>
+      <div className='flex w-full flex-col'>
+        {/* <button className='group flex w-full flex-col items-start justify-start p-4 text-left transition hover:bg-gray-200/50 rounded-md border-card'>
+        </button> */}
       </div>
     </div>
   );

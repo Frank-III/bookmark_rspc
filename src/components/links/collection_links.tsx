@@ -16,11 +16,12 @@ export function CollectionLink({ id, name, color }: CollectionLinkProps) {
     <Link
       to={`/collections/${id}`}
       key={`to-collection${id}`}
-      className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition bg-gray-100 font-semibold text-gray-900'
+      className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition  font-semibold text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+      activeProps={{ style: { backgroundColor: 'rgb(243 244 246)' } }}
     >
       <div className='flex flex-row items-center justify-start truncate'>
         <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-          <Dot color={color} size={'auto'} />
+          <Dot color={color} size={30} />
         </div>
         <p className='truncate text-sm'>{name}</p>
       </div>
