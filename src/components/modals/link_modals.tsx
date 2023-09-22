@@ -32,3 +32,25 @@ export function NewLink({ children }: NewLinkProps) {
     </Dialog>
   );
 }
+
+
+interface TabLinkCollectionProps {
+  children: React.ReactNode;
+}
+
+export function TabLinkCollection({ children }: TabLinkCollectionProps) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className='sm:max-w-[450px]'>
+        <DialogHeader>
+          <DialogTitle>New Link</DialogTitle>
+          <DialogDescription>
+            Add a new link to your collection
+          </DialogDescription>
+        </DialogHeader>
+        <NewLinkForm />
+      </DialogContent>
+    </Dialog>
+  )
+}

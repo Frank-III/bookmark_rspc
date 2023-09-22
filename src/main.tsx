@@ -61,7 +61,7 @@ const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
   component: () => {
-    return <div className='p-2'></div>;
+    return <div className='p-2'>Hello</div>;
   },
 });
 
