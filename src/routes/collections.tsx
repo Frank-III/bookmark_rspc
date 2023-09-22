@@ -4,7 +4,7 @@ import { FileRoute } from '@tanstack/react-router'
 import { NewCollection } from '../components/modals/collection_modals';
 import { Button } from '../components/ui/button';
 
-export const route = new FileRoute('collections').createRoute({
+export const route = new FileRoute('/collections').createRoute({
   component: () => {
     return (
       <>

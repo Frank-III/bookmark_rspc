@@ -1,12 +1,17 @@
 import * as React from 'react'
-import { Link, Outlet, RootRoute } from '@tanstack/react-router'
+import { Link, Outlet, RootRoute, RouterContext } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Layout } from '../components/layout';
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-react';
 import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { queryClient } from '../utils/rspc';
 
-export const route = new RootRoute({
+const routerContext = new RouterContext<{
+  queryClient: typeof queryClient;
+}>();
+
+export const route = routerContext.createRootRoute({
   component: () => {
     return (
       <>
