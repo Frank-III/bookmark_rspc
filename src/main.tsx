@@ -24,6 +24,9 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Layout } from './components/layout';
 import { Toaster } from 'sonner';
+import { NewLink } from './components/modals/link_modals';
+import { NewCollection } from './components/modals/collection_modals';
+import { Button } from './components/ui/button';
 
 if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key');
@@ -120,6 +123,7 @@ export const tagsRoute = new Route({
           <div className='w-full bg-base-200'>
             <div className='w-full max-w-7xl p-4 mx-auto'>
               <h1> Test Tags</h1>
+              <NewLink />
             </div>
           </div>
         </SignedIn>
@@ -141,6 +145,9 @@ export const collectionRoute = new Route({
           <div className='w-full bg-base-200'>
             <div className='w-full max-w-7xl p-4 mx-auto'>
               <h1> Test Collections</h1>
+              <NewCollection>
+                <Button variant='outline'>New Collection</Button>
+              </NewCollection>
             </div>
           </div>
         </SignedIn>

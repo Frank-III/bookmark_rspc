@@ -20,6 +20,7 @@ import { rspc } from '../utils/rspc';
 import ButtonLoading from './buttons/button_loading';
 import { CollectionPopover } from './buttons/collection_popover';
 import { CollectionLinks } from './links/collection_links';
+import { NewCollection } from './modals/collection_modals';
 // import { UserButton } from './buttons/user_button';
 
 const privateLinks = [
@@ -115,9 +116,11 @@ export function Nav() {
             <p className='relative z-10 text-xs font-medium text-gray-500'>
               Collections
             </p>
-            <button className='relative z-10 flex h-4 w-4 items-center justify-center rounded-md bg-gray-100 transition hover:bg-gray-200'>
-              <Plus />
-            </button>
+            <NewCollection>
+              <button className='relative z-10 flex h-4 w-4 items-center justify-center rounded-md bg-gray-100 transition hover:bg-gray-200'>
+                <Plus />
+              </button>
+            </NewCollection>
           </div>
           <CollectionLinks pinned={false}/>
           {/* <div className='flex w-full flex-col space-y-0.5'>
