@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { Collection, PinnedCollections } from '../../../bindings';
 import { CollectionPopover } from '../buttons/collection_popover';
-import { Dot, GalleryVerticalEnd, Loader2, Pin } from 'lucide-react';
+import { Dot, GalleryVerticalEnd, Loader2, Pin, SquareDot } from 'lucide-react';
 import { rspc } from '../../utils/rspc';
 import { useUser } from '@clerk/clerk-react';
 
@@ -21,7 +21,8 @@ export function CollectionLink({ id, name, color }: CollectionLinkProps) {
     >
       <div className='flex flex-row items-center justify-start truncate'>
         <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-          <Dot color={color} size={30} />
+          <SquareDot color={color} size={30}/>
+          {/* <Dot color={color} size={30} /> */}
         </div>
         <p className='truncate text-sm'>{name}</p>
       </div>

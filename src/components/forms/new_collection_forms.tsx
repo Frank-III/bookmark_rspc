@@ -98,7 +98,6 @@ export function NewCollectionForm() {
               <FormControl>
                 <Input placeholder='Collection Name' {...field} />
               </FormControl>
-              <FormDescription>This is the link name</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -107,7 +106,7 @@ export function NewCollectionForm() {
           control={form.control}
           name='pinned'
           render={({ field }) => (
-            <FormItem>
+            <FormItem className='flex flex-row items-center pt-1 space-x-2'>
               <FormLabel>Pin Collection</FormLabel>
               <FormControl>
                 <Switch
@@ -125,13 +124,13 @@ export function NewCollectionForm() {
           control={form.control}
           name='public'
           render={({ field }) => (
-            <FormItem className='flex flex-col'>
+            <FormItem className='flex items-center space-x-2 flex-row pt-1 pb-3'>
               <FormLabel>Public</FormLabel>
               <FormControl>
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  aria-readonly
+                  // aria-readonly
                 />
               </FormControl>
               {/* <FormDescription>
