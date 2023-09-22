@@ -12,7 +12,7 @@ export type Procedures = {
         { key: "version", input: never, result: string },
     mutations: 
         { key: "collections.addPinned", input: number, result: PinnedUserCollections } | 
-        { key: "collections.create", input: CreateCollectionParams, result: Collection } | 
+        { key: "collections.create", input: CreateCollectionArgs, result: Collection } | 
         { key: "links.create", input: CreateLinkArgs, result: Link } | 
         { key: "tags.create", input: CreateTagArgs, result: Tag } | 
         { key: "tags.edit", input: UpdateTagArgs, result: Tag },
@@ -29,6 +29,8 @@ export type CreateLinkArgs = { link_name: string; url: string; description: stri
 
 export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
 
+export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
+
 export type PinnedUserCollections = { userId: string; collectionId: number }
 
 export type ArchiveStatData = { total: number; archived: number; not_archived: number }
@@ -38,7 +40,5 @@ export type SummariesData = { date: string; count: number }
 export type UpdateTagArgs = { tag_id: number; tag_name: string }
 
 export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; archivedLinks: number; totalLinks: number; createdAt: string }
-
-export type CreateCollectionParams = { name: string; color: string; pinned: boolean | null; public: boolean | null }
 
 export type User = { id: string; created_at: string | null; updated_at: string | null; username: string; name: string; email: string; avatar: string | null; bio: string | null; connectedTG: boolean }

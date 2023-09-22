@@ -5,6 +5,30 @@ import { Dot, GalleryVerticalEnd, Loader2, Pin } from 'lucide-react';
 import { rspc } from '../../utils/rspc';
 import { useUser } from '@clerk/clerk-react';
 
+interface CollectionLinkProps {
+  id: number;
+  name: string;
+  color: string;
+}
+
+export function CollectionLink({ id, name, color }: CollectionLinkProps) {
+  return (
+    <Link
+      to={`/collections/${id}`}
+      key={`to-collection${id}`}
+      className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition bg-gray-100 font-semibold text-gray-900'
+    >
+      <div className='flex flex-row items-center justify-start truncate'>
+        <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
+          <Dot color={color} size={'auto'} />
+        </div>
+        <p className='truncate text-sm'>{name}</p>
+      </div>
+      <CollectionPopover />
+    </Link>
+  );
+}
+
 export interface CollectionLinksProps {
   pinned: boolean;
 }
@@ -16,16 +40,17 @@ const fakedCollections = [
   { color: 'gray', name: 'test4', id: '4' },
 ];
 
-export function CollectionLinks({
-  pinned,
-}: CollectionLinksProps) {
+export function CollectionLinks({ pinned }: CollectionLinksProps) {
   const { isSignedIn, user } = useUser();
 
   const {
     status,
     data: collections,
     isFetching,
-  } = rspc.useQuery(pinned ? ["collections.getByUser"] : ["collections.getPinned"], { enabled: !!user });
+  } = rspc.useQuery(
+    pinned ? ['collections.getByUser'] : ['collections.getPinned'],
+    { enabled: !!user },
+  );
 
   // const collections = [{collection:{id:"1", name:"test", color:"red"}}]
   {
@@ -40,15 +65,15 @@ export function CollectionLinks({
         ) : (
           <div>Error</div>
         );
-        break;
       case 'error':
         //TODO: better Errors
         return <div>Error</div>;
-        break;
       case 'success':
         // collections.sort((a, b) => {return a.})
         //TODO: better way?
-        const collects = collections?.map((c) => 'collection' in c ? c.collection : c);
+        const collects = collections?.map((c) =>
+          'collection' in c ? c.collection : c,
+        );
         return collects.length == 0 ? (
           <div className='relative flex w-full flex-col space-y-2 px-2'>
             <div className=' pointer-events-none opacity-40 blur-sm'>
@@ -85,27 +110,9 @@ export function CollectionLinks({
           </div>
         ) : (
           <div className='flex w-full flex-col space-y-0.5'>
-            {collects?.map((collection) => {
-              const { id, name, color } = collection;
-              return (
-                <Link
-                  to={`/collections/${id}`}
-                  className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition bg-gray-100 font-semibold text-gray-900'
-                  key={`to-collection${id}`}
-                >
-                  <div className='flex flex-row items-center justify-start truncate'>
-                    <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-                      <Dot color={color} size={'auto'} />
-                    </div>
-                    <p className='truncate text-sm'>{name}</p>
-                  </div>
-                  <CollectionPopover />
-                </Link>
-              );
-            })}
+            {collects?.map((collection) => <CollectionLink {...collection} />)}
           </div>
         );
-        break;
     }
-  };
+  }
 }
