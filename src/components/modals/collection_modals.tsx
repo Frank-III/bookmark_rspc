@@ -1,5 +1,5 @@
-import { NewCollectionForm } from "../forms/new_collection_forms"
-import { Button } from "../ui/button"
+import { NewCollectionForm } from '../forms/new_collection_forms';
+import { Button } from '../ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,23 +8,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog"
-import { Input } from "../ui/input"
-import { Label } from "../ui/label"
+} from '../ui/dialog';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 
 interface NewCollectionProps {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
-export function NewCollection({children}: NewCollectionProps) {
+export function NewCollection({ children }: NewCollectionProps) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <NewCollectionForm/>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className='sm:max-w-[425px]'>
+        <NewCollectionForm />
       </DialogContent>
     </Dialog>
-  )
+  );
 }

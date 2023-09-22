@@ -43,6 +43,12 @@ const rootRoute = routerContext.createRootRoute({
     return (
       <>
         <Layout />
+        <SignedIn>
+          <div className='w-full bg-base-200'></div>
+        </SignedIn>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
         <Toaster richColors position='top-center' />
         <ReactQueryDevtools position='bottom-right' initialIsOpen={false} />
         <TanStackRouterDevtools position='bottom-left' />
@@ -102,12 +108,7 @@ export const meRoute = new Route({
   component: () => {
     return (
       <>
-        <SignedIn>
-          <div className='w-full bg-base-200'></div>
-        </SignedIn>
-        <SignedOut>
-          <RedirectToSignIn />
-        </SignedOut>
+        <div className='w-full bg-base-200'></div>
       </>
     );
   },
@@ -119,17 +120,14 @@ export const tagsRoute = new Route({
   component: () => {
     return (
       <>
-        <SignedIn>
-          <div className='w-full bg-base-200'>
-            <div className='w-full max-w-7xl p-4 mx-auto'>
-              <h1> Test Tags</h1>
-              <NewLink />
-            </div>
+        <div className='w-full bg-base-200'>
+          <div className='w-full max-w-7xl p-4 mx-auto'>
+            <h1> Test Tags</h1>
+            <NewLink>
+              <Button variant='outline'>New Link</Button>
+            </NewLink>
           </div>
-        </SignedIn>
-        <SignedOut>
-          <RedirectToSignIn />
-        </SignedOut>
+        </div>
       </>
     );
   },
@@ -141,19 +139,14 @@ export const collectionRoute = new Route({
   component: () => {
     return (
       <>
-        <SignedIn>
-          <div className='w-full bg-base-200'>
-            <div className='w-full max-w-7xl p-4 mx-auto'>
-              <h1> Test Collections</h1>
-              <NewCollection>
-                <Button variant='outline'>New Collection</Button>
-              </NewCollection>
-            </div>
+        <div className='w-full bg-base-200'>
+          <div className='w-full max-w-7xl p-4 mx-auto'>
+            <h1> Test Collections</h1>
+            <NewCollection>
+              <Button variant='outline'>New Collection</Button>
+            </NewCollection>
           </div>
-        </SignedIn>
-        <SignedOut>
-          <RedirectToSignIn />
-        </SignedOut>
+        </div>
       </>
     );
   },

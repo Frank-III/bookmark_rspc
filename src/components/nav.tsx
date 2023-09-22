@@ -122,7 +122,7 @@ export function Nav() {
               </button>
             </NewCollection>
           </div>
-          <CollectionLinks pinned={false}/>
+          <CollectionLinks pinned={false} />
           {/* <div className='flex w-full flex-col space-y-0.5'>
             <CollectionLinks />
           </div> */}

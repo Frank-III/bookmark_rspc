@@ -34,9 +34,7 @@ export function NewCollectionForm() {
   ]);
   const addCollection = rspc.useMutation(['collections.create'], {
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        'collections.getByUser',
-      ]);
+      queryClient.invalidateQueries(['collections.getByUser']);
     },
   });
   const formSchema = z.object({
@@ -59,7 +57,7 @@ export function NewCollectionForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      color : "#000000",
+      color: '#000000',
       pinned: false,
       public: true,
     },
@@ -112,10 +110,11 @@ export function NewCollectionForm() {
             <FormItem>
               <FormLabel>Pin Collection</FormLabel>
               <FormControl>
-                <Switch 
+                <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  aria-readonly/>
+                  aria-readonly
+                />
               </FormControl>
               {/* <FormDescription></FormDescription> */}
               <FormMessage />
@@ -128,12 +127,13 @@ export function NewCollectionForm() {
           render={({ field }) => (
             <FormItem className='flex flex-col'>
               <FormLabel>Public</FormLabel>
-                <FormControl>
-                  <Switch 
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    aria-readonly/>
-                </FormControl>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  aria-readonly
+                />
+              </FormControl>
               {/* <FormDescription>
                 The collection you want to add the link to
               </FormDescription> */}

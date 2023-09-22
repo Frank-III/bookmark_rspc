@@ -54,7 +54,7 @@ const queryClient = new QueryClient({
       );
     },
     onSuccess: (_data, _variables, _context, mutation) => {
-      // toast.success(mutation?.meta?.message as string);
+      toast.success(mutation?.meta?.message as string);
     },
   }),
 });
