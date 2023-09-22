@@ -21,13 +21,13 @@ export function CollectionPopover() {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-[220px]'>
-        <DropdownMenuItem>
+        <DropdownMenuItem key="edit">
           Edit Collection
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem key="remove-pin">
           Remove Pinned
         </DropdownMenuItem>
-        <DropdownMenuItem className='data-[highlighted]:bg-red-500'>
+        <DropdownMenuItem className='data-[highlighted]:bg-red-500' key="delete">
           Delete Collection
         </DropdownMenuItem>
         <DropdownMenuSeparator />
