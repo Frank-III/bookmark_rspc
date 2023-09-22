@@ -1,3 +1,4 @@
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -27,7 +28,11 @@ import {
 } from '../ui/command';
 import { Switch } from '../ui/switch';
 
-export function NewCollectionForm() {
+interface EditCollectionProps {
+  key: number;
+}
+
+export function EditCllectionForm({key}: EditCollectionProps) {
   const queryClient = rspc.useContext().queryClient;
   const addCollection = rspc.useMutation(['collections.create'], {
     onSuccess: () => {
