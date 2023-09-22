@@ -40,6 +40,18 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
             Ok(pinned_collections)
         })
     })
+    .query("getById", |t| {
+        t(|ctx: PrivateCtx, id: i32| async move {
+            let collection = ctx.db
+            .collection()
+            .find_first(vec![
+                prisma::collection::id::equals(id),
+                // prisma::collection::owner_id::equals(ctx.user_id)
+            ])
+            .exec().await?;
+            Ok(collection)
+        })
+    })
     .mutation("addPinned", |t| {
         
         t(|ctx: PrivateCtx, collection_id| async move {
@@ -84,6 +96,26 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
             }
 
             Ok(new_collection)
+        })
+    })
+    .mutation("editCollection", |t| {
+
+        #[derive(Deserialize, Type)]
+        struct EditCollectionArgs {
+            id: i32,
+            name: Option<String>,
+            color: Option<String>,
+            pinned: Option<bool>,
+            public: Option<bool>,
+        }
+
+        t(|ctx: PrivateCtx, EditCollectionArgs {id, name, color, pinned, public}| async move {
+            //TODO: create a macro to generate the set value vector
+            let updated_collection = ctx.db.collection().update(
+                prisma::collection::id::equals(id),
+                vec![]
+            ).exec().await?;
+            Ok(updated_collection)
         })
     })
 }

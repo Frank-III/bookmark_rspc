@@ -26,3 +26,17 @@ export function NewCollection({ children }: NewCollectionProps) {
     </Dialog>
   );
 }
+
+interface EditCollectionProps {
+  key: number;
+  children: React.ReactNode;
+}
+
+export function EditCollection({ key, children }: EditCollectionProps) {
+  <Dialog>
+    <DialogTrigger asChild>{children}</DialogTrigger>
+    <DialogContent className='sm:max-w-[425px]'>
+      <EditCollectionForm key={key} />
+    </DialogContent>
+  </Dialog>
+}

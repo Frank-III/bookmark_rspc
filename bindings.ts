@@ -2,6 +2,7 @@
 
 export type Procedures = {
     queries: 
+        { key: "collections.getById", input: number, result: Collection | null } | 
         { key: "collections.getByUser", input: never, result: Collection[] } | 
         { key: "collections.getPinned", input: never, result: PinnedCollections[] } | 
         { key: "links.archiveStatByDate", input: string | null, result: ArchiveStatData } | 
@@ -29,11 +30,11 @@ export type CreateLinkArgs = { link_name: string; url: string; description: stri
 
 export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
 
-export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
-
 export type PinnedUserCollections = { userId: string; collectionId: number }
 
 export type ArchiveStatData = { total: number; archived: number; not_archived: number }
+
+export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
 
 export type SummariesData = { date: string; count: number }
 
