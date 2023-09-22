@@ -8,7 +8,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { NewLink } from '../components/modals/link_modals';
 import { Button } from '../components/ui/button';
 
-export const route = new FileRoute('tags').createRoute({
+export const route = new FileRoute('/tags').createRoute({
   component: () => {
     return (
       <>
@@ -24,4 +24,4 @@ export const route = new FileRoute('tags').createRoute({
     );
   },
   },
-})
+)
