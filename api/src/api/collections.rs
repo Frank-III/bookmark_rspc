@@ -11,7 +11,7 @@ use rspc::{Error, ErrorCode, RouterBuilder, Type};
 use serde::{Deserialize, Serialize};
 use svix::webhooks::Webhook;
 
-use crate::prisma::{self, PrismaClient, user::pinned_collections, link::collection_id};
+use crate::prisma::{self, PrismaClient, user::pinned_collections, link::collection_id, pinned_user_collections::user_id};
 
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
     PrivateRouter::new()
@@ -105,16 +105,32 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
             id: i32,
             name: Option<String>,
             color: Option<String>,
-            pinned: Option<bool>,
-            public: Option<bool>,
+            pinned: bool,
+            public: bool,
         }
 
         t(|ctx: PrivateCtx, EditCollectionArgs {id, name, color, pinned, public}| async move {
             //TODO: create a macro to generate the set value vector
             let updated_collection = ctx.db.collection().update(
                 prisma::collection::id::equals(id),
-                vec![]
+                vec![
+                    prisma::collection::name::set(name),
+                    prisma::collection::color::set(color),
+                    prisma::collection::is_public::set(public),
+                ],
             ).exec().await?;
+            if pinned {
+                ctx.db
+                .pinned_user_collections()
+                .upsert(
+                    vec![
+                        prisma::pinned_user_collections::user_id::equals(ctx.user_id.clone()),
+                        and!(prisma::pinned_user_collections::collection_id::equals(id)),
+                    ],
+                    prisma::pinned_user_collections::create(user_id, updated_collection, vec![]),
+                    vec![]
+                ).exec().await?;
+            }
             Ok(updated_collection)
         })
     })
