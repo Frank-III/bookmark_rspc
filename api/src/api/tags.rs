@@ -1,9 +1,9 @@
 use std::{env, sync::Arc};
 
 use axum::{
-    http::{HeaderMap, StatusCode},
-    routing::post,
-    Extension, Router,
+  http::{HeaderMap, StatusCode},
+  routing::post,
+  Extension, Router,
 };
 
 use super::{PrivateCtx, PrivateRouter};
@@ -14,52 +14,53 @@ use svix::webhooks::Webhook;
 use crate::prisma::{self, PrismaClient};
 
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
-    PrivateRouter::new()
-        .query("getByUser", |t| {
-            t(|ctx: PrivateCtx, _: ()| async move {
-                let tags = ctx
-                    .db
-                    .tag()
-                    .find_many(vec![prisma::tag::owner_id::equals(ctx.user_id)])
-                    .exec()
-                    .await?;
-                Ok(tags)
-            })
-        })
-        .mutation("create", |t| {
-            #[derive(Debug, Deserialize, Serialize, Type)]
-            struct CreateTagArgs {
-                tag_name: String,
-            }
+  PrivateRouter::new()
+    .query("getByUser", |t| {
+      t(|ctx: PrivateCtx, _: ()| async move {
+        let tags = ctx
+          .db
+          .tag()
+          .find_many(vec![prisma::tag::owner_id::equals(ctx.user_id)])
+          .exec()
+          .await?;
+        Ok(tags)
+      })
+    })
+    .mutation("create", |t| {
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      struct CreateTagArgs {
+        tag_name: String,
+      }
 
-            t(|ctx: PrivateCtx, CreateTagArgs { tag_name }| async move {
-                let new_tag = ctx
-                    .db
-                    .tag()
-                    .create(tag_name, prisma::user::id::equals(ctx.user_id), vec![])
-                    .exec()
-                    .await?;
-                Ok(new_tag)
-            })
-        
-        })
-        .mutation("edit", |t| {
-            #[derive(Debug, Deserialize, Serialize, Type)]
-            struct UpdateTagArgs {
-                tag_id: i32,
-                tag_name: String,
-            }
-            t(|ctx: PrivateCtx, UpdateTagArgs { tag_id, tag_name }| async move {
-                let new_tag = ctx
-                    .db
-                    .tag()
-                    .update(
-                        prisma::tag::id::equals(tag_id),
-                        vec![prisma::tag::name::set(tag_name)]
-                    )
-                    .exec()
-                    .await?;
-                Ok(new_tag)
-            })
-        })
+      t(|ctx: PrivateCtx, CreateTagArgs { tag_name }| async move {
+        let new_tag = ctx
+          .db
+          .tag()
+          .create(tag_name, prisma::user::id::equals(ctx.user_id), vec![])
+          .exec()
+          .await?;
+        Ok(new_tag)
+      })
+    })
+    .mutation("edit", |t| {
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      struct UpdateTagArgs {
+        tag_id: i32,
+        tag_name: String,
+      }
+      t(
+        |ctx: PrivateCtx, UpdateTagArgs { tag_id, tag_name }| async move {
+          let new_tag = ctx
+            .db
+            .tag()
+            .update(
+              prisma::tag::id::equals(tag_id),
+              vec![prisma::tag::name::set(tag_name)],
+            )
+            .exec()
+            .await?;
+          Ok(new_tag)
+        },
+      )
+    })
 }

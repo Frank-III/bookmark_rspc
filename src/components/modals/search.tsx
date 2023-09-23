@@ -1,101 +1,103 @@
-import React from 'react'
-import { Command } from 'cmdk'
+import React from 'react';
+import { Command } from 'cmdk';
 
 export function VercelCMDK() {
-  const ref = React.useRef<HTMLDivElement | null>(null)
-  const [inputValue, setInputValue] = React.useState('')
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const [inputValue, setInputValue] = React.useState('');
 
-  const [stage, setStage] = React.useState<string[]>(['home'])
-  const activeStage = stage[stage.length - 1]
-  const isHome = activeStage === 'home'
+  const [stage, setStage] = React.useState<string[]>(['home']);
+  const activeStage = stage[stage.length - 1];
+  const isHome = activeStage === 'home';
 
   const popPage = React.useCallback(() => {
     setStage((pages) => {
-      const x = [...pages]
-      x.splice(-1, 1)
-      return x
-    })
-  }, [])
+      const x = [...pages];
+      x.splice(-1, 1);
+      return x;
+    });
+  }, []);
 
   const onKeyDown = React.useCallback(
     (e: KeyboardEvent) => {
       if (isHome || inputValue.length) {
-        return
+        return;
       }
 
       if (e.key === 'Backspace') {
-        e.preventDefault()
-        popPage()
+        e.preventDefault();
+        popPage();
       }
     },
     [inputValue.length, isHome, popPage],
-  )
+  );
 
   function bounce() {
     if (ref.current) {
-      ref.current.style.transform = 'scale(0.96)'
+      ref.current.style.transform = 'scale(0.96)';
       setTimeout(() => {
         if (ref.current) {
-          ref.current.style.transform = ''
+          ref.current.style.transform = '';
         }
-      }, 100)
+      }, 100);
 
-      setInputValue('')
+      setInputValue('');
     }
   }
 
   return (
-    <div className="searchOverlay">
+    <div className='searchOverlay'>
       <Command
         ref={ref}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === 'Enter') {
-            bounce()
+            bounce();
           }
 
           if (isHome || inputValue.length) {
-            return
+            return;
           }
 
           if (e.key === 'Backspace') {
-            e.preventDefault()
-            popPage()
-            bounce()
+            e.preventDefault();
+            popPage();
+            bounce();
           }
         }}
       >
         <div>
           {stage.map((p) => (
-            <div key={p} cmdk-vercel-badge="">
+            <div key={p} cmdk-vercel-badge=''>
               {p}
             </div>
           ))}
         </div>
         <Command.Input
           autoFocus
-          placeholder="What do you need?"
+          placeholder='What do you need?'
           onValueChange={(value) => {
-            setInputValue(value)
+            setInputValue(value);
           }}
         />
         <Command.List>
           <Command.Empty>No results found.</Command.Empty>
-          {activeStage === 'home' && <Home searchProjects={() => setStage([...stage, 'projects'])} />}
+          {activeStage === 'home' && (
+            <Home searchProjects={() => setStage([...stage, 'projects'])} />
+          )}
           {activeStage === 'projects' && <Projects />}
         </Command.List>
       </Command>
     </div>
-  )
+  );
 }
 
 function Home({ searchProjects }: { searchProjects: Function }) {
   return (
     <>
-      <Command.Group heading="Projects">
+      <Command.Group heading='Projects'>
         <Item
-          shortcut="S P"
+          shortcut='S P'
           onSelect={() => {
-            searchProjects()
+            searchProjects();
           }}
         >
           <ProjectsIcon />
@@ -106,8 +108,8 @@ function Home({ searchProjects }: { searchProjects: Function }) {
           Create New Project...
         </Item>
       </Command.Group>
-      <Command.Group heading="Teams">
-        <Item shortcut="⇧ P">
+      <Command.Group heading='Teams'>
+        <Item shortcut='⇧ P'>
           <TeamsIcon />
           Search Teams...
         </Item>
@@ -116,8 +118,8 @@ function Home({ searchProjects }: { searchProjects: Function }) {
           Create New Team...
         </Item>
       </Command.Group>
-      <Command.Group heading="Help">
-        <Item shortcut="⇧ D">
+      <Command.Group heading='Help'>
+        <Item shortcut='⇧ D'>
           <DocsIcon />
           Search Docs...
         </Item>
@@ -131,7 +133,7 @@ function Home({ searchProjects }: { searchProjects: Function }) {
         </Item>
       </Command.Group>
     </>
-  )
+  );
 }
 
 function Projects() {
@@ -144,7 +146,7 @@ function Projects() {
       <Item>Project 5</Item>
       <Item>Project 6</Item>
     </>
-  )
+  );
 }
 
 function Item({
@@ -152,20 +154,20 @@ function Item({
   shortcut,
   onSelect = () => {},
 }: {
-  children: React.ReactNode
-  shortcut?: string
-  onSelect?: (value: string) => void
+  children: React.ReactNode;
+  shortcut?: string;
+  onSelect?: (value: string) => void;
 }) {
   return (
     <Command.Item onSelect={onSelect}>
       {children}
       {shortcut && (
-        <div cmdk-vercel-shortcuts="">
+        <div cmdk-vercel-shortcuts=''>
           {shortcut.split(' ').map((key) => {
-            return <kbd key={key}>{key}</kbd>
+            return <kbd key={key}>{key}</kbd>;
           })}
         </div>
       )}
     </Command.Item>
-  )
+  );
 }

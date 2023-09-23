@@ -1,4 +1,5 @@
 import { NewCollectionForm } from '../forms/new_collection_forms';
+import { EditCllectionForm } from '../forms/edit_collection';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -36,7 +37,7 @@ export function EditCollection({ key, children }: EditCollectionProps) {
   <Dialog>
     <DialogTrigger asChild>{children}</DialogTrigger>
     <DialogContent className='sm:max-w-[425px]'>
-      <EditCollectionForm key={key} />
+      <EditCllectionForm key={key} />
     </DialogContent>
-  </Dialog>
+  </Dialog>;
 }

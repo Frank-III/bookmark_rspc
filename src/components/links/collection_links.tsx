@@ -21,7 +21,7 @@ export function CollectionLink({ id, name, color }: CollectionLinkProps) {
     >
       <div className='flex flex-row items-center justify-start truncate'>
         <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-          <SquareDot color={color} size={30}/>
+          <SquareDot color={color} size={30} />
           {/* <Dot color={color} size={30} /> */}
         </div>
         <p className='truncate text-sm'>{name}</p>

@@ -1,9 +1,8 @@
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { rspc } from '../../utils/rspc';
-import { CreateCollectionArgs } from '../../../bindings';
+import { CreateCollectionArgs, EditCollectionArgs } from '../../../bindings';
 import {
   Form,
   FormControl,
@@ -19,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '../../utils';
 import { CommandList, Command as CommandPrimative } from 'cmdk';
-import { CheckIcon, Command } from 'lucide-react';
+import { CheckIcon, Command, Pin } from 'lucide-react';
 import {
   CommandEmpty,
   CommandGroup,
@@ -32,14 +31,17 @@ interface EditCollectionProps {
   key: number;
 }
 
-export function EditCllectionForm({key}: EditCollectionProps) {
+export function EditCllectionForm({ key }: EditCollectionProps) {
   const queryClient = rspc.useContext().queryClient;
-  const {isLoading: collectionLoading, data: collection_detail} = rspc.useQuery(['collections.getById', key]);
-  const addCollection = rspc.useMutation(['collections.create'], {
-    onSuccess: () => {
+  const { isLoading: collectionLoading, data: collection_detail } =
+    rspc.useQuery(['collections.getById', key]);
+  const addCollection = rspc.useMutation(['collections.editSingle'], {
+    onSuccess: (data) => {
+      queryClient.setQueryData(['collections.getById', key], data);
       queryClient.invalidateQueries(['collections.getByUser']);
     },
   });
+
   const formSchema = z.object({
     name: z
       .string()
@@ -63,8 +65,9 @@ export function EditCllectionForm({key}: EditCollectionProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: collection_detail?.name,
       color: collection_detail?.color,
-      // pinned: collection_detail?,
+      // pinned: collection_detail?.pinned,
       public: true,
     },
   });
@@ -73,7 +76,10 @@ export function EditCllectionForm({key}: EditCollectionProps) {
   function onSubmit(values: FormValues) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    addCollection.mutate(values as CreateCollectionArgs);
+    addCollection.mutate({
+      id: key,
+      ...values,
+    } as EditCollectionArgs);
   }
 
   // 3. Render the form.

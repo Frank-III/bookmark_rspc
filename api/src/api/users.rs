@@ -1,14 +1,18 @@
-use std::{ env, sync::Arc };
+use std::{env, sync::Arc};
 
-use axum::{ body::Bytes, http::{ HeaderMap, StatusCode }, routing::post, Extension, Router };
+use axum::{
+  body::Bytes,
+  http::{HeaderMap, StatusCode},
+  routing::post,
+  Extension, Router,
+};
 
-use rspc::{ Error, ErrorCode, RouterBuilder, Type };
-use super::{ PrivateCtx, PrivateRouter };
-use serde::{ Deserialize, Serialize };
+use super::{PrivateCtx, PrivateRouter};
+use rspc::{Error, ErrorCode, RouterBuilder, Type};
+use serde::{Deserialize, Serialize};
 use svix::webhooks::Webhook;
 
-use crate::prisma::{ self, PrismaClient };
-
+use crate::prisma::{self, PrismaClient};
 
 #[derive(Serialize, Deserialize)]
 struct Payload {
@@ -34,10 +38,10 @@ impl Role {
   }
   pub fn admin_unauthorized(&self) -> Result<(), Error> {
     match self {
-      Role::Admin(_) =>
-        Err(
-          Error::new(ErrorCode::Unauthorized, "Admin tidak bisa mengakses halaman ini".to_string())
-        ),
+      Role::Admin(_) => Err(Error::new(
+        ErrorCode::Unauthorized,
+        "Admin tidak bisa mengakses halaman ini".to_string(),
+      )),
       _ => Ok(()),
     }
   }
@@ -73,11 +77,14 @@ struct EmailAddress {
 async fn users_handler(
   db: Extension<Arc<PrismaClient>>,
   headers: HeaderMap,
-  body: Bytes
+  body: Bytes,
 ) -> Result<StatusCode, StatusCode> {
   let wh = Webhook::new(
-    env::var("WEBHOOK_SECRET").expect("WEBHOOK_SECRET not found").as_str()
-  ).map_err(|_| {
+    env::var("WEBHOOK_SECRET")
+      .expect("WEBHOOK_SECRET not found")
+      .as_str(),
+  )
+  .map_err(|_| {
     println!("Webhook secret not found");
     StatusCode::INTERNAL_SERVER_ERROR
   })?;
@@ -107,18 +114,29 @@ async fn users_handler(
 
         let user = db
           .user()
-          .create(id, username.unwrap(), name, email.to_string(), vec![prisma::user::avatar::set(Some(image_url))])
-          .exec().await;
+          .create(
+            id,
+            username.unwrap(),
+            name,
+            email.to_string(),
+            vec![prisma::user::avatar::set(Some(image_url))],
+          )
+          .exec()
+          .await;
         match user {
           Ok(_) => println!("User created"),
           Err(_) => println!("User not created"),
         }
       } else if payload.r#type == "user.updated" {
-        let user = db.user().delete(prisma::user::id::equals(id.clone())).exec().await;
+        let user = db
+          .user()
+          .delete(prisma::user::id::equals(id.clone()))
+          .exec()
+          .await;
         match user {
           Ok(_) => {
             println!("User deleted");
-          },
+          }
           Err(_) => println!("User not deleted"),
         }
 
@@ -127,9 +145,10 @@ async fn users_handler(
 
         if public_metadata["role"] == "admin" {
           let admin = db
-            .admins()
+            .admin()
             .create(id, username.unwrap(), name, email.to_string(), vec![])
-            .exec().await;
+            .exec()
+            .await;
 
           match admin {
             Ok(_) => println!("User promoted to admin"),
@@ -153,17 +172,21 @@ async fn users_handler(
 }
 
 pub(crate) fn webhooks(client: Arc<PrismaClient>) -> Router {
-  Router::new().route("/webhooks", post(users_handler)).layer(Extension(client))
+  Router::new()
+    .route("/webhooks", post(users_handler))
+    .layer(Extension(client))
 }
 
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
-  PrivateRouter::new()
-    .query("get", |t| {
-      t(|ctx: PrivateCtx, _: ()| async move {
-        let users = ctx.db
-          .user()
-          .find_first(vec![prisma::user::id::equals(ctx.user_id)])
-          .exec().await?;
-        Ok(users)
-      })
-    })}
+  PrivateRouter::new().query("get", |t| {
+    t(|ctx: PrivateCtx, _: ()| async move {
+      let users = ctx
+        .db
+        .user()
+        .find_first(vec![prisma::user::id::equals(ctx.user_id)])
+        .exec()
+        .await?;
+      Ok(users)
+    })
+  })
+}

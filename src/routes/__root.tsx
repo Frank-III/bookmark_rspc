@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { Link, Outlet, RootRoute, RouterContext } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import * as React from 'react';
+import { Link, Outlet, RootRoute, RouterContext } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Layout } from '../components/layout';
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-react';
 import { Toaster } from 'sonner';
@@ -28,4 +28,4 @@ export const route = routerContext.createRootRoute({
       </>
     );
   },
-})
+});

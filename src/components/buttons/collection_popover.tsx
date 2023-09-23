@@ -8,9 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 
-function removePinned() {
-}
-
+function removePinned() {}
 
 export function CollectionPopover() {
   return (
@@ -21,17 +19,18 @@ export function CollectionPopover() {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-[220px]'>
-        <DropdownMenuItem key="edit">
-          Edit Collection
-        </DropdownMenuItem>
-        <DropdownMenuItem key="remove-pin">
-          Remove Pinned
-        </DropdownMenuItem>
-        <DropdownMenuItem className='data-[highlighted]:bg-red-400 data-[highlighted]:opacity-50 data-[highlighted]:text-red-500' key="delete">
+        <DropdownMenuItem key='edit'>Edit Collection</DropdownMenuItem>
+        <DropdownMenuItem key='remove-pin'>Remove Pinned</DropdownMenuItem>
+        <DropdownMenuItem
+          className='data-[highlighted]:bg-red-400 data-[highlighted]:opacity-50 data-[highlighted]:text-red-500'
+          key='delete'
+        >
           Delete Collection
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className='text-xs text-gray-700 font-light'>Deleting a collection does not remove any of its content.</DropdownMenuLabel>
+        <DropdownMenuLabel className='text-xs text-gray-700 font-light'>
+          Deleting a collection does not remove any of its content.
+        </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>
   );
