@@ -33,7 +33,6 @@ export function NewLink({ children }: NewLinkProps) {
   );
 }
 
-
 interface TabLinkCollectionProps {
   children: React.ReactNode;
 }
@@ -52,5 +51,5 @@ export function TabLinkCollection({ children }: TabLinkCollectionProps) {
         <NewLinkForm />
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -42,7 +42,7 @@ export function Layout() {
               <PanelLeft size={20} />
             </button>
           </div>
-          <Link to="/">
+          <Link to='/'>
             <h1 className='whitespace-nowrap text-base font-semibold text-gray-900'>
               Bookmarks
             </h1>

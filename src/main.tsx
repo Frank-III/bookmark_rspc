@@ -3,14 +3,8 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { rspc, client, queryClient } from './utils/rspc';
 import { dark } from '@clerk/themes';
-import {
-  ClerkProvider,
-} from '@clerk/clerk-react';
-import {
-  RouterProvider,
-  Router,
-  RouterContext,
-} from '@tanstack/react-router';
+import { ClerkProvider } from '@clerk/clerk-react';
+import { RouterProvider, Router, RouterContext } from '@tanstack/react-router';
 
 import { routeTree } from './routeTree.gen';
 if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
