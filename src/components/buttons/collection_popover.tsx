@@ -27,7 +27,7 @@ export function CollectionPopover() {
         <DropdownMenuItem key="remove-pin">
           Remove Pinned
         </DropdownMenuItem>
-        <DropdownMenuItem className='data-[highlighted]:bg-red-500' key="delete">
+        <DropdownMenuItem className='data-[highlighted]:bg-red-400 data-[highlighted]:opacity-50 data-[highlighted]:text-red-500' key="delete">
           Delete Collection
         </DropdownMenuItem>
         <DropdownMenuSeparator />

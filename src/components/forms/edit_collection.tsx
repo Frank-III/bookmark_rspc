@@ -34,6 +34,7 @@ interface EditCollectionProps {
 
 export function EditCllectionForm({key}: EditCollectionProps) {
   const queryClient = rspc.useContext().queryClient;
+  const {isLoading: collectionLoading, data: collection_detail} = rspc.useQuery(['collections.getById', key]);
   const addCollection = rspc.useMutation(['collections.create'], {
     onSuccess: () => {
       queryClient.invalidateQueries(['collections.getByUser']);
@@ -51,16 +52,19 @@ export function EditCllectionForm({key}: EditCollectionProps) {
     color: z.string().max(7, {
       message: 'Color must be at most 7 characters.',
     }),
-    pinned: z.boolean().default(false),
-    public: z.boolean().default(true),
+    pinned: z.boolean(),
+    public: z.boolean(),
   });
   type FormValues = z.infer<typeof formSchema>;
+  if (collectionLoading) {
+    return <div>Loading...</div>;
+  }
   // 1. Define your form.
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      color: '#000000',
-      pinned: false,
+      color: collection_detail?.color,
+      // pinned: collection_detail?,
       public: true,
     },
   });
