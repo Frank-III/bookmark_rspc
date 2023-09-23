@@ -11,6 +11,12 @@ use super::{PrivateCtx, PrivateRouter};
 use rspc::{Error, ErrorCode, RouterBuilder, Type};
 use serde::{Deserialize, Serialize};
 use svix::webhooks::Webhook;
+use prisma::{collection, pinned_user_collections};
+collection::include!(collection_with_pinned_status {
+  pinned_by: select {
+    user: select { id }
+  }
+});
 
 use crate::prisma::{
   self, link::collection_id, pinned_user_collections::user_id, user::pinned_collections,
@@ -24,7 +30,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         let tags = ctx
           .db
           .collection()
-          .find_many(vec![prisma::collection::owner_id::equals(ctx.user_id)])
+          .find_many(vec![collection::owner_id::equals(ctx.user_id)])
           .exec()
           .await?;
         Ok(tags)
@@ -32,12 +38,12 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
     })
     .query("getPinned", |t| {
       t(|ctx: PrivateCtx, _: ()| async move {
-        prisma::pinned_user_collections::select!(PinnedCollections { collection });
+        pinned_user_collections::select!(PinnedCollections { collection });
 
         let pinned_collections = ctx
           .db
           .pinned_user_collections()
-          .find_many(vec![prisma::pinned_user_collections::user_id::equals(
+          .find_many(vec![pinned_user_collections::user_id::equals(
             ctx.user_id,
           )])
           .select(PinnedCollections::select())
@@ -52,7 +58,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .db
           .collection()
           .find_first(vec![
-            prisma::collection::id::equals(id),
+            collection::id::equals(id),
             // prisma::collection::owner_id::equals(ctx.user_id)
           ])
           .exec()
@@ -60,13 +66,23 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         Ok(collection)
       })
     })
-    .query("getWithPinned", |t| {
+    .query("getOnePinnedStatus", |t| {
       use prisma::{collection, pinned_user_collections};
-      collection::include!(collection_with_pinned_status {
-        pinned_by: select {
-          user: select { id }
-        }
-      });
+      t(|ctx: PrivateCtx, id:i32| async move {
+        let collection = ctx
+          .db
+          .collection()
+          .find_first(vec![collection::id::equals(id)])
+          .with(collection::pinned_by::fetch(vec![
+            pinned_user_collections::user_id::equals(ctx.user_id),
+          ]))
+          .include(collection_with_pinned_status::include())
+          .exec()
+          .await?;
+        Ok(collection)
+      })
+      }) 
+    .query("getAllWithPinned", |t| {
       t(|ctx: PrivateCtx, _: ()| async move {
         let collections: Vec<_> = ctx
           .db
