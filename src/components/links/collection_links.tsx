@@ -1,17 +1,19 @@
 import { Link } from '@tanstack/react-router';
-import { Collection, PinnedCollections } from '../../../bindings';
+import { Collection, PinnedCollections, CollectionWithPinnedStatus } from '../../../bindings';
 import { CollectionPopover } from '../buttons/collection_popover';
-import { Dot, GalleryVerticalEnd, Loader2, Pin, SquareDot } from 'lucide-react';
+import { Dot, GalleryVerticalEnd, Loader2, MoreVertical, Pin, SquareDot } from 'lucide-react';
 import { rspc } from '../../utils/rspc';
 import { useUser } from '@clerk/clerk-react';
 
+
+export type CollectionPinned = Omit<CollectionWithPinnedStatus, 'pinnedBy'> & {isPinned: boolean}
+
 interface CollectionLinkProps {
-  id: number;
-  name: string;
-  color: string;
+  collection: CollectionPinned;
 }
 
-export function CollectionLink({ id, name, color }: CollectionLinkProps) {
+export function CollectionLink({ collection }: CollectionLinkProps) {
+  const {id, color, name} = collection;
   return (
     <Link
       to={`/collections/${id}`}
@@ -26,7 +28,7 @@ export function CollectionLink({ id, name, color }: CollectionLinkProps) {
         </div>
         <p className='truncate text-sm'>{name}</p>
       </div>
-      <CollectionPopover />
+      <CollectionPopover collection={collection} />
     </Link>
   );
 }
@@ -50,7 +52,7 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
     data: collections,
     isFetching,
   } = rspc.useQuery(
-    pinned ? ['collections.getByUser'] : ['collections.getPinned'],
+    pinned ? ['collections.getPinned'] : ['collections.getAllWithPinned'],
     { enabled: !!user },
   );
 
@@ -73,9 +75,14 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
       case 'success':
         // collections.sort((a, b) => {return a.})
         //TODO: better way?
-        const collects = collections?.map((c) =>
-          'collection' in c ? c.collection : c,
-        );
+        const collects = collections?.map((c) => {
+          if ('collection' in c) {
+            return {...c.collection, isPinned: true} as CollectionPinned;
+          } else {
+            const {pinnedBy, ...collection} = c;
+            return {...collection, isPinned: pinnedBy.length > 0 ? true : false} as CollectionPinned;
+          }
+        });
         return collects.length == 0 ? (
           <div className='relative flex w-full flex-col space-y-2 px-2'>
             <div className=' pointer-events-none opacity-40 blur-sm'>
@@ -112,7 +119,7 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
           </div>
         ) : (
           <div className='flex w-full flex-col space-y-0.5'>
-            {collects?.map((collection) => <CollectionLink {...collection} />)}
+            {collects?.map((collection) => <CollectionLink collection={collection} />)}
           </div>
         );
     }
