@@ -34,7 +34,7 @@ interface EditCollectionProps {
 export function EditCllectionForm({ key }: EditCollectionProps) {
   const queryClient = rspc.useContext().queryClient;
   const { isLoading: collectionLoading, data: collection_detail } =
-    rspc.useQuery(['collections.getById', key]);
+    rspc.useQuery(['collections.getOnePinnedStatus', key]);
   const addCollection = rspc.useMutation(['collections.editSingle'], {
     onSuccess: (data) => {
       queryClient.setQueryData(['collections.getById', key], data);
@@ -67,8 +67,8 @@ export function EditCllectionForm({ key }: EditCollectionProps) {
     defaultValues: {
       name: collection_detail?.name,
       color: collection_detail?.color,
-      // pinned: collection_detail?.pinned,
-      public: true,
+      pinned: collection_detail?.pinnedBy.length ? true : false,
+      public: collection_detail?.isPublic,
     },
   });
 
