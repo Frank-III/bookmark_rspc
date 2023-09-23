@@ -15,29 +15,20 @@ import {
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { CaretSortIcon } from '@radix-ui/react-icons';
-import { cn } from '../../utils';
-import { CommandList, Command as CommandPrimative } from 'cmdk';
-import { CheckIcon, Command, Pin } from 'lucide-react';
-import {
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '../ui/command';
 import { Switch } from '../ui/switch';
+import { HexColorPicker } from 'react-colorful';
+import { CollectionPinned } from '../links/collection_links';
 
 interface EditCollectionProps {
-  key: number;
+  collection: CollectionPinned;
 }
 
-export function EditCllectionForm({ key }: EditCollectionProps) {
+export function EditCllectionForm({ collection }: EditCollectionProps) {
+  const {id, color, name, isPinned, isPublic} = collection;
   const queryClient = rspc.useContext().queryClient;
-  const { isLoading: collectionLoading, data: collection_detail } =
-    rspc.useQuery(['collections.getOnePinnedStatus', key]);
   const addCollection = rspc.useMutation(['collections.editSingle'], {
     onSuccess: (data) => {
-      queryClient.setQueryData(['collections.getById', key], data);
+      queryClient.setQueryData(['collections.getById', id], data);
       queryClient.invalidateQueries(['collections.getByUser']);
     },
   });
@@ -57,18 +48,16 @@ export function EditCllectionForm({ key }: EditCollectionProps) {
     pinned: z.boolean(),
     public: z.boolean(),
   });
+
   type FormValues = z.infer<typeof formSchema>;
-  if (collectionLoading) {
-    return <div>Loading...</div>;
-  }
   // 1. Define your form.
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: collection_detail?.name,
-      color: collection_detail?.color,
-      pinned: collection_detail?.pinnedBy.length ? true : false,
-      public: collection_detail?.isPublic,
+      name: name,
+      color: color,
+      pinned: isPinned, 
+      public: isPublic,
     },
   });
 
@@ -77,7 +66,7 @@ export function EditCllectionForm({ key }: EditCollectionProps) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     addCollection.mutate({
-      id: key,
+      id: id,
       ...values,
     } as EditCollectionArgs);
   }
@@ -87,17 +76,29 @@ export function EditCllectionForm({ key }: EditCollectionProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+      <div className='flex flex-row  w-full items-end justify-start space-x-2'>
         <FormField
           control={form.control}
           name='color'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder='Color' {...field} />
-              </FormControl>
-              <FormDescription>color for you collection</FormDescription>
+              <div>
+              {/* <FormLabel>Pick Color</FormLabel> */}
+              <Popover>
+                  <PopoverTrigger asChild>
+                      <FormControl>
+                    <button className='shrink-0 rounded-lg border px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium'>
+                      <div className='rounded-full h-4 w-4' style={{backgroundColor: field.value}}/>
+                    </button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <HexColorPicker color={field.value} onChange={field.onChange} />
+                  </PopoverContent>
+              </Popover>
+              {/* <FormDescription>color for you collection</FormDescription> */}
               <FormMessage />
+              </div>
             </FormItem>
           )}
         />
@@ -105,15 +106,16 @@ export function EditCllectionForm({ key }: EditCollectionProps) {
           control={form.control}
           name='name'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
+            <FormItem className='flex flex-col w-full'>
+              <FormLabel className='text-sm font-normal text-gray-700'>Name*</FormLabel>
               <FormControl>
-                <Input placeholder='Collection Name' {...field} />
+                <Input placeholder='Collection Name' {...field} className='h-8 w-full'/>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        </div>
         <FormField
           control={form.control}
           name='pinned'

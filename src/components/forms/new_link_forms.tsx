@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { rspc } from '../../utils/rspc';
-import { CreateLinkArgs } from '../../../bindings';
 import {
   Form,
   FormControl,
@@ -19,13 +18,6 @@ import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '../../utils';
 import { Command as CommandPrimative } from 'cmdk';
 import { CheckIcon, Command, Search } from 'lucide-react';
-import {
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '../ui/command';
 
 export function NewLinkForm() {
   const queryClient = rspc.useContext().queryClient;
