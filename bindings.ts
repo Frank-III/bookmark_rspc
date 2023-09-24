@@ -18,6 +18,7 @@ export type Procedures = {
         { key: "collections.create", input: CreateCollectionArgs, result: Collection } | 
         { key: "collections.editSingle", input: EditCollectionArgs, result: Collection } | 
         { key: "links.create", input: CreateLinkArgs, result: Link } | 
+        { key: "links.deleteOne", input: number, result: Link } | 
         { key: "tags.create", input: CreateTagArgs, result: Tag } | 
         { key: "tags.delete", input: number, result: Tag } | 
         { key: "tags.edit", input: UpdateTagArgs, result: Tag },

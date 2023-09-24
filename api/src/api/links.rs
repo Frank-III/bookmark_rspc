@@ -163,4 +163,18 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         },
       )
     })
+    .mutation("deleteOne", |t| {
+      
+      t(|ctx: PrivateCtx, id:i32 | async move {
+        let deleted_link = ctx
+          .db
+          .link()
+          .delete(
+            prisma::link::id::equals(id),
+          )
+          .exec()
+          .await?;
+        Ok(deleted_link)
+      })
+    })
 }
