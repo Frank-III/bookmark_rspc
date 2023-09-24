@@ -14,6 +14,7 @@ import React from 'react';
 import './layout.css';
 import { PanelLeft, Plus } from 'lucide-react';
 import { CalenderView } from './calender_view';
+import { CommandMenu } from './modals/search';
 
 export function Layout() {
   const isLoading = useIsFetching({
@@ -88,6 +89,7 @@ export function Layout() {
         {/* <C/> */}
         <CalenderView />
       </div>
+      <CommandMenu />
     </main>
   );
 }
