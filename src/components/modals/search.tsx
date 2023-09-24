@@ -90,7 +90,7 @@ export function NewTagSelect() {
 }
 
 
-export function SearchCMDK() {
+export function SearchCMDK({children}:{children: React.ReactNode}) {
   const ref = React.useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = React.useState('');
   const [open, setOpen] = React.useState(false);
@@ -214,6 +214,9 @@ export function SearchCMDK() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent className='p-0'>
         <Command
           label='Global Command Menu'

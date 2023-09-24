@@ -21,9 +21,10 @@ import { Badge } from '../ui/badge';
 
 export function NewTagForm() {
   const queryClient = rspc.useContext().queryClient;
-  const addTag = rspc.useMutation(['tags.create'], {
+  const addTag = rspc.useMutation(['tags.edit'], {
     onSuccess: () => {
-      queryClient.invalidateQueries(['collections.getByUser']);
+      // queryClient.setQueriesData(['tags.getB'])
+      queryClient.invalidateQueries(['tags.getByUser']);
     },
   });
   const formSchema = z.object({
@@ -91,7 +92,7 @@ export function NewTagForm() {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <button className='h-4 w-8'>
-                          <Badge style={{ backgroundColor: `${field.value}30`, color: field.value, borderColor: `${field.value}20`}}>
+                          <Badge style={{ backgroundColor: field.value }}>
                             {watchedTagName ? watchedTagName : 'Tag'}
                           </Badge>
                         </button>
