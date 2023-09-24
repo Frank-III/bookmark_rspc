@@ -48,8 +48,6 @@ model Collection {
   members       UsersAndCollections[]
   pinnedBy      PinnedUserCollections[]
   links         Link[]
-  archivedLinks Int                     @default(0)
-  totalLinks    Int                     @default(0)
   createdAt     DateTime                @default(now()) @db.Date
 
   @@unique([name, ownerId])

@@ -82,7 +82,6 @@ export function Layout() {
               <div></div>
             </div>
           </div>
-          <SearchCMDK />
           <Outlet />
         </div>
       </div>
