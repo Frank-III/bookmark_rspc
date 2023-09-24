@@ -1,5 +1,5 @@
 import { Outlet, Route, Link } from '@tanstack/react-router';
-import { useUser, UserButton as ClerkUserButton } from '@clerk/clerk-react';
+import { useUser, UserButton as ClerkUserButton, RedirectToSignIn } from '@clerk/clerk-react';
 import {
   Boxes,
   PanelLeft,
@@ -7,21 +7,9 @@ import {
   Tag,
   User,
   Search,
-  Loader2,
-  Dot,
-  GalleryVerticalEnd,
 } from 'lucide-react';
-import React, {
-  ForwardRefExoticComponent,
-  ReactElement,
-  ReactNode,
-} from 'react';
-import { rspc } from '../utils/rspc';
-import ButtonLoading from './buttons/button_loading';
-import { CollectionPopover } from './buttons/collection_popover';
-import { CollectionLinks } from './links/collection_links';
+import { CollectionLinks } from './links/collection_lists';
 import { NewCollection } from './modals/collection_modals';
-// import { UserButton } from './buttons/user_button';
 
 const privateLinks = [
   { href: '/tags', label: 'Tags', icon: <Tag /> },
@@ -71,11 +59,7 @@ export function Nav() {
                 {user.username}
               </span>
             </>
-          ) : (
-            <Link to='/auth/sign_in' key='sign-in'>
-              Sign In
-            </Link>
-          )}
+          ) : (<RedirectToSignIn />)}
         </div>
       </div>
     );
@@ -123,9 +107,6 @@ export function Nav() {
             </NewCollection>
           </div>
           <CollectionLinks pinned={false} />
-          {/* <div className='flex w-full flex-col space-y-0.5'>
-            <CollectionLinks />
-          </div> */}
         </div>
       </div>
       <div className='flex w-full flex-col'>

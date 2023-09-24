@@ -4,7 +4,7 @@ import { NewCollection } from '../components/modals/collection_modals';
 import { Button } from '../components/ui/button';
 import { CollectionDropdown, DropdownWithDialogItemsSolution2 } from '../components/buttons/collection_popover';
 import { rspc } from '../utils/rspc';
-import { CollectionPinned } from '../components/links/collection_links';
+import { CollectionPinned } from '../components/links/collection_lists';
 
 export const route = new FileRoute('/collections').createRoute({
   component: () => {

@@ -17,7 +17,7 @@ import { Input } from '../ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Switch } from '../ui/switch';
 import { HexColorPicker } from 'react-colorful';
-import { CollectionPinned } from '../links/collection_links';
+import { CollectionPinned } from '../links/collection_lists';
 
 interface EditCollectionProps {
   collection: CollectionPinned;

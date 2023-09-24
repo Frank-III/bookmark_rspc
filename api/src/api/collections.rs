@@ -27,13 +27,14 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
     .query("getByUser", |t| {
       t(|ctx: PrivateCtx, _: ()| async move {
-        let tags = ctx
+        let collections = ctx
           .db
           .collection()
-          .find_many(vec![collection::owner_id::equals(ctx.user_id)])
+          .find_many(vec![collection::owner_id::equals(ctx.user_id.clone())])
           .exec()
           .await?;
-        Ok(tags)
+        tracing::info!("collections of user:{:?} are fetched", ctx.user_id);
+        Ok(collections)
       })
     })
     .query("getPinned", |t| {
@@ -44,11 +45,12 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .db
           .pinned_user_collections()
           .find_many(vec![pinned_user_collections::user_id::equals(
-            ctx.user_id,
+            ctx.user_id.clone(),
           )])
           .select(PinnedCollections::select())
           .exec()
           .await?;
+        tracing::info!("collections of user:{:?} with Pin Status are fetched", ctx.user_id);
         Ok(pinned_collections)
       })
     })
@@ -63,6 +65,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           ])
           .exec()
           .await?;
+        tracing::info!("collections {:?} is fetched", id);
         Ok(collection)
       })
     })
@@ -79,6 +82,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .include(collection_with_pinned_status::include())
           .exec()
           .await?;
+        tracing::info!("collection {:?} with Pin Status is fetched", id);
         Ok(collection)
       })
       }) 
@@ -89,11 +93,12 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .collection()
           .find_many(vec![collection::owner_id::equals(ctx.user_id.clone())])
           .with(collection::pinned_by::fetch(vec![
-            pinned_user_collections::user_id::equals(ctx.user_id),
+            pinned_user_collections::user_id::equals(ctx.user_id.clone()),
           ]))
           .include(collection_with_pinned_status::include())
           .exec()
           .await?;
+        tracing::info!("collections of user: {:?} with Pin Status is fetched", ctx.user_id);
         Ok(collections)
       })
     })
