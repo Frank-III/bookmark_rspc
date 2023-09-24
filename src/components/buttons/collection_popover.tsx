@@ -27,15 +27,16 @@ interface CollectionPopoverProps {
   children: React.ReactNode;
 }
 
-export function CollectionDropdown({ collection, children }: CollectionPopoverProps) {
+export function CollectionDropdown({
+  collection,
+  children,
+}: CollectionPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
   return (
     <Dialog open={showEdit} onOpenChange={setShowEdit}>
       <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild>
-        {children}
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent className='w-[220px]'>
           <DropdownMenuItem>
             <DialogTrigger

@@ -35,7 +35,7 @@ export function NewTagForm() {
       .max(30, {
         message: 'Collection name must be at most 30 characters.',
       }),
-    color: z.string().length(7,{
+    color: z.string().length(7, {
       message: 'Color must be 7 characters.',
     }),
   });
@@ -43,14 +43,14 @@ export function NewTagForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      color: '#327fa8'
+      color: '#327fa8',
     },
   });
 
   function onSubmit(values: FormValues) {
     addTag.mutate(values as CreateTagArgs);
   }
-  const {watch} = form;
+  const { watch } = form;
   const watchedTagName = watch('tag_name');
   const watchedColor = watch('color');
   // 3. Render the form.
@@ -58,28 +58,28 @@ export function NewTagForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name='tag_name'
-            render={({ field }) => (
-              <FormItem className='flex flex-col w-full mb-3'>
-                <FormLabel className='text-sm font-normal text-gray-700'>
-                  Name*
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder='Collection Name'
-                    {...field}
-                    className='h-8 w-full'
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={form.control}
+          name='tag_name'
+          render={({ field }) => (
+            <FormItem className='flex flex-col w-full mb-3'>
+              <FormLabel className='text-sm font-normal text-gray-700'>
+                Name*
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder='Collection Name'
+                  {...field}
+                  className='h-8 w-full'
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormLabel>Preview </FormLabel>
-          <div className='mt-1 flex items-center justify-center h-[100px] border'>
+        <FormLabel>Preview </FormLabel>
+        <div className='mt-1 flex items-center justify-center h-[100px] border'>
           <FormField
             control={form.control}
             name='color'
@@ -91,11 +91,9 @@ export function NewTagForm() {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <button className='h-4 w-8'>
-                          <Badge
-                            style={{ backgroundColor: field.value }}>
-                            {watchedTagName ? watchedTagName: 'Tag'}
+                          <Badge style={{ backgroundColor: field.value }}>
+                            {watchedTagName ? watchedTagName : 'Tag'}
                           </Badge>
-                          
                         </button>
                       </FormControl>
                     </PopoverTrigger>
@@ -113,7 +111,9 @@ export function NewTagForm() {
             )}
           />
         </div>
-        <Button type='submit' className='mt-3'>Submit</Button>
+        <Button type='submit' className='mt-3'>
+          Submit
+        </Button>
       </form>
     </Form>
   );

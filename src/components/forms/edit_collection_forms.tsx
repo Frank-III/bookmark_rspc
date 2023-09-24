@@ -63,7 +63,7 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
   });
 
   function onSubmit(values: FormValues) {
-    console.log("aaaaaa");
+    console.log('aaaaaa');
     editCollection.mutate({
       id: id,
       ...values,
@@ -160,7 +160,7 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type='submit'>Submit</Button>
       </form>
     </Form>
   );
