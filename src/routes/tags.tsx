@@ -7,7 +7,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { NewLink } from '../components/modals/link_modals';
 import { Button } from '../components/ui/button';
-
+import { NewTag } from '../components/modals/tag_modals';
+import { Badge } from '../components/ui/badge';
 export const route = new FileRoute('/tags').createRoute({
   component: () => {
     return (
@@ -15,9 +16,10 @@ export const route = new FileRoute('/tags').createRoute({
         <div className='w-full bg-base-200'>
           <div className='w-full max-w-7xl p-4 mx-auto'>
             <h1> Test Tags</h1>
-            <NewLink>
+            <Badge className='bg-[#327fa8]'>Test</Badge>
+            <NewTag>
               <Button variant='outline'>New Link</Button>
-            </NewLink>
+            </NewTag>
           </div>
         </div>
       </>

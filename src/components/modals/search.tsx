@@ -1,5 +1,68 @@
 import React from 'react';
 import { Command } from 'cmdk';
+import { Tag } from 'lucide-react';
+
+
+const Groups = [
+  {
+    name: 'Tags',
+    items: [
+      {
+        name: 'Search Tags...',
+        shortcut: 'S P',
+        icon: <Tag />,
+        action: 'searchProjects',
+      },
+      {
+        name: 'Create New Project...',
+        shortcut: 'S P',
+        icon: 'plus',
+        action: 'createProject',
+      },
+    ],
+  },
+  {
+    name: 'Collections',
+    items: [
+      {
+        name: 'Search Teams...',
+        shortcut: '⇧ P',
+        icon: 'teams',
+        action: 'searchTeams',
+      },
+      {
+        name: 'Create New Team...',
+        shortcut: '⇧ P',
+        icon: 'plus',
+        action: 'createTeam',
+      },
+    ],
+  },
+  {
+    name: 'Links',
+    items: [
+      {
+        name: 'Search Docs...',
+        shortcut: '⇧ D',
+        icon: 'docs',
+        action: 'searchDocs',
+      },
+      {
+        name: 'Send Feedback...',
+        shortcut: '⇧ D',
+        icon: 'feedback',
+        action: 'sendFeedback',
+      },
+      {
+        name: 'Contact Support',
+        shortcut: '⇧ D',
+        icon: 'contact',
+        action: 'contactSupport',
+      },
+    ],
+  },
+];
+
 
 export function VercelCMDK() {
   const ref = React.useRef<HTMLDivElement | null>(null);

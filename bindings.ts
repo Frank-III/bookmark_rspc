@@ -19,11 +19,10 @@ export type Procedures = {
         { key: "collections.editSingle", input: EditCollectionArgs, result: Collection } | 
         { key: "links.create", input: CreateLinkArgs, result: Link } | 
         { key: "tags.create", input: CreateTagArgs, result: Tag } | 
+        { key: "tags.delete", input: number, result: Tag } | 
         { key: "tags.edit", input: UpdateTagArgs, result: Tag },
     subscriptions: never
 };
-
-export type UpdateTagArgs = { tag_id: number; tag_name: string }
 
 export type CollectionWithPinnedStatus = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; archivedLinks: number; totalLinks: number; createdAt: string; pinnedBy: { user: { id: string } }[] }
 
@@ -41,13 +40,15 @@ export type GetByDateArgs = { date: string; size: number | null }
 
 export type ArchiveStatData = { total: number; archived: number; not_archived: number }
 
-export type CreateTagArgs = { tag_name: string }
+export type CreateTagArgs = { tag_name: string; color: string }
 
 export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; archivedLinks: number; totalLinks: number; createdAt: string }
 
-export type Tag = { id: number; name: string; ownerId: string }
-
 export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
+
+export type UpdateTagArgs = { tag_id: number; tag_name: string; color: string }
+
+export type Tag = { id: number; name: string; color: string; ownerId: string }
 
 export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
 

@@ -15,19 +15,8 @@ import {
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { CaretSortIcon } from '@radix-ui/react-icons';
-import { cn } from '../../utils';
-import { CommandList, Command as CommandPrimative } from 'cmdk';
-import { CheckIcon, Command } from 'lucide-react';
-import {
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '../ui/command';
 import { Switch } from '../ui/switch';
 import { HexColorPicker } from 'react-colorful';
-import { PopoverArrow } from '@radix-ui/react-popover';
 
 export function NewCollectionForm() {
   const queryClient = rspc.useContext().queryClient;
