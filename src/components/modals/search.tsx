@@ -10,8 +10,8 @@ export function VercelCMDK() {
   const isHome = activeStage === 'home';
 
   const popPage = React.useCallback(() => {
-    setStage((pages) => {
-      const x = [...pages];
+    setStage((stage) => {
+      const x = [...stage];
       x.splice(-1, 1);
       return x;
     });
@@ -93,7 +93,7 @@ export function VercelCMDK() {
 function Home({ searchProjects }: { searchProjects: Function }) {
   return (
     <>
-      <Command.Group heading='Projects'>
+      <Command.Group heading='Tags'>
         <Item
           shortcut='S P'
           onSelect={() => {
@@ -108,7 +108,7 @@ function Home({ searchProjects }: { searchProjects: Function }) {
           Create New Project...
         </Item>
       </Command.Group>
-      <Command.Group heading='Teams'>
+      <Command.Group heading='Collections'>
         <Item shortcut='⇧ P'>
           <TeamsIcon />
           Search Teams...
@@ -118,7 +118,7 @@ function Home({ searchProjects }: { searchProjects: Function }) {
           Create New Team...
         </Item>
       </Command.Group>
-      <Command.Group heading='Help'>
+      <Command.Group heading='Links'>
         <Item shortcut='⇧ D'>
           <DocsIcon />
           Search Docs...

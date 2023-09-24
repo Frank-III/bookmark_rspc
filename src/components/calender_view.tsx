@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar } from '../components/ui/calendar';
 import { useAuth } from '@clerk/clerk-react';
 import { rspc } from '../utils/rspc';
@@ -51,10 +51,18 @@ export function CalenderView() {
     error,
     data: dateLinks,
     isFetching,
+    refetch
   } = rspc.useQuery(
     ['links.getByDate', date?.toISOString()?.slice(0, 10)],
-    { enabled: isSignedIn && !!date},
+    { enabled: false},
   );
+
+  useEffect(() => {
+    if (date !== undefined) {
+      refetch();  
+    }
+
+  }, [date])
 
   return (
     <div className='right-sidebar flex h-full w-[280px] flex-col items-center justify-between border-l border-gray-200 bg-white'>
