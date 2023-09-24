@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Collection, PinnedCollections, CollectionWithPinnedStatus } from '../../../bindings';
-import { CollectionPopover } from '../buttons/collection_popover';
+import { CollectionDropdown, CollectionPopover } from '../buttons/collection_popover';
 import { Dot, GalleryVerticalEnd, Loader2, MoreVertical, Pin, SquareDot } from 'lucide-react';
 import { rspc } from '../../utils/rspc';
 import { useUser } from '@clerk/clerk-react';
@@ -28,7 +28,8 @@ export function CollectionLink({ collection }: CollectionLinkProps) {
         </div>
         <p className='truncate text-sm'>{name}</p>
       </div>
-      <CollectionPopover collection={collection} />
+      <CollectionDropdown collection={collection} />
+      {/* <CollectionPopover collection={collection} /> */}
     </Link>
   );
 }
