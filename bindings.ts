@@ -8,7 +8,7 @@ export type Procedures = {
         { key: "collections.getOnePinnedStatus", input: number, result: CollectionWithPinnedStatus | null } | 
         { key: "collections.getPinned", input: never, result: PinnedCollections[] } | 
         { key: "links.archiveStatByDate", input: string | null, result: ArchiveStatData } | 
-        { key: "links.getByDate", input: string, result: Link[] } | 
+        { key: "links.getByDate", input: GetByDateArgs, result: Link[] } | 
         { key: "links.getSummary", input: string | null, result: SummariesData[] } | 
         { key: "tags.getByUser", input: never, result: Tag[] } | 
         { key: "users.get", input: never, result: User | null } | 
@@ -23,21 +23,23 @@ export type Procedures = {
     subscriptions: never
 };
 
-export type ArchiveStatData = { total: number; archived: number; not_archived: number }
-
 export type UpdateTagArgs = { tag_id: number; tag_name: string }
 
 export type CollectionWithPinnedStatus = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; archivedLinks: number; totalLinks: number; createdAt: string; pinnedBy: { user: { id: string } }[] }
+
+export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number }
 
 export type User = { id: string; created_at: string; updated_at: string; username: string; name: string; email: string; avatar: string | null; bio: string | null; connectedTG: boolean }
 
 export type PinnedUserCollections = { userId: string; collectionId: number }
 
-export type SummariesData = { date: string; count: number }
-
 export type PinnedCollections = { collection: Collection }
 
-export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
+export type SummariesData = { date: string; count: number }
+
+export type GetByDateArgs = { date: string; size: number | null }
+
+export type ArchiveStatData = { total: number; archived: number; not_archived: number }
 
 export type CreateTagArgs = { tag_name: string }
 
@@ -47,6 +49,6 @@ export type Tag = { id: number; name: string; ownerId: string }
 
 export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
 
-export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number }
+export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
 
 export type EditCollectionArgs = { id: number; name: string; color: string; pinned: boolean; public: boolean }

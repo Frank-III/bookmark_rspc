@@ -51,18 +51,17 @@ export function CalenderView() {
     error,
     data: dateLinks,
     isFetching,
-    refetch
+    refetch,
   } = rspc.useQuery(
-    ['links.getByDate', date?.toISOString()?.slice(0, 10)],
-    { enabled: false},
+    ['links.getByDate', { date: date?.toISOString()?.slice(0, 10), size: 10 }],
+    { enabled: false },
   );
 
   useEffect(() => {
     if (date !== undefined) {
-      refetch();  
+      refetch();
     }
-
-  }, [date])
+  }, [date]);
 
   return (
     <div className='right-sidebar flex h-full w-[280px] flex-col items-center justify-between border-l border-gray-200 bg-white'>

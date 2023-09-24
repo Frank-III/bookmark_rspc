@@ -18,15 +18,16 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Switch } from '../ui/switch';
 import { HexColorPicker } from 'react-colorful';
 import { CollectionPinned } from '../links/collection_lists';
+import React from 'react';
 
 interface EditCollectionProps {
   collection: CollectionPinned;
 }
 
 export function EditCllectionForm({ collection }: EditCollectionProps) {
-  const {id, color, name, isPinned, isPublic} = collection;
+  const { id, color, name, isPinned, isPublic } = collection;
   const queryClient = rspc.useContext().queryClient;
-  const addCollection = rspc.useMutation(['collections.editSingle'], {
+  const editCollection = rspc.useMutation(['collections.editSingle'], {
     onSuccess: (data) => {
       queryClient.setQueryData(['collections.getById', id], data);
       queryClient.invalidateQueries(['collections.getByUser']);
@@ -50,22 +51,20 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
   });
 
   type FormValues = z.infer<typeof formSchema>;
-  // 1. Define your form.
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: name,
       color: color,
-      pinned: isPinned, 
+      pinned: isPinned,
       public: isPublic,
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: FormValues) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    addCollection.mutate({
+    console.log("aaaaaa");
+    editCollection.mutate({
       id: id,
       ...values,
     } as EditCollectionArgs);
@@ -76,45 +75,56 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-      <div className='flex flex-row  w-full items-end justify-start space-x-2'>
-        <FormField
-          control={form.control}
-          name='color'
-          render={({ field }) => (
-            <FormItem>
-              <div>
-              {/* <FormLabel>Pick Color</FormLabel> */}
-              <Popover>
-                  <PopoverTrigger asChild>
+        <div className='flex flex-row  w-full items-end justify-start space-x-2'>
+          <FormField
+            control={form.control}
+            name='color'
+            render={({ field }) => (
+              <FormItem>
+                <div>
+                  {/* <FormLabel>Pick Color</FormLabel> */}
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <FormControl>
-                    <button className='shrink-0 rounded-lg border px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium'>
-                      <div className='rounded-full h-4 w-4' style={{backgroundColor: field.value}}/>
-                    </button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <HexColorPicker color={field.value} onChange={field.onChange} />
-                  </PopoverContent>
-              </Popover>
-              {/* <FormDescription>color for you collection</FormDescription> */}
-              <FormMessage />
-              </div>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='name'
-          render={({ field }) => (
-            <FormItem className='flex flex-col w-full'>
-              <FormLabel className='text-sm font-normal text-gray-700'>Name*</FormLabel>
-              <FormControl>
-                <Input placeholder='Collection Name' {...field} className='h-8 w-full'/>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                        <button className='shrink-0 rounded-lg border px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium'>
+                          <div
+                            className='rounded-full h-4 w-4'
+                            style={{ backgroundColor: field.value }}
+                          />
+                        </button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <HexColorPicker
+                        color={field.value}
+                        onChange={field.onChange}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='name'
+            render={({ field }) => (
+              <FormItem className='flex flex-col w-full'>
+                <FormLabel className='text-sm font-normal text-gray-700'>
+                  Name*
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Collection Name'
+                    {...field}
+                    className='h-8 w-full'
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <FormField
           control={form.control}
@@ -129,7 +139,6 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
                   aria-readonly
                 />
               </FormControl>
-              {/* <FormDescription></FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -144,17 +153,14 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  // aria-readonly
+                  aria-readonly
                 />
               </FormControl>
-              {/* <FormDescription>
-                The collection you want to add the link to
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type='submit'>Add Link</Button>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );

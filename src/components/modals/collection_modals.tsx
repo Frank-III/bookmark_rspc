@@ -24,7 +24,9 @@ export function NewCollection({ children }: NewCollectionProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='sm:max-w-[350px] '>
         <DialogHeader>
-          <DialogTitle className='text-gray-800 font-md'>New Collection</DialogTitle>
+          <DialogTitle className='text-gray-800 font-md'>
+            New Collection
+          </DialogTitle>
         </DialogHeader>
         <div className='h-[0.8px] w-full rounded-full bg-gray-200' />
         <NewCollectionForm />
@@ -39,16 +41,18 @@ interface EditCollectionProps {
 }
 
 export function EditCollection({ collection, children }: EditCollectionProps) {
-  return(
+  return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='sm:max-w-[350px]'>
         <DialogHeader>
-          <DialogTitle className='text-gray-800 font-md'>Edit Collection</DialogTitle>
+          <DialogTitle className='text-gray-800 font-md'>
+            Edit Collection
+          </DialogTitle>
         </DialogHeader>
         <div className='h-[0.8px] w-full rounded-full bg-gray-200' />
         <EditCllectionForm collection={collection} />
       </DialogContent>
     </Dialog>
-    );
+  );
 }

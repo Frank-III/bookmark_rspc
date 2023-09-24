@@ -26,7 +26,7 @@ import {
   CommandItem,
 } from '../ui/command';
 import { Switch } from '../ui/switch';
-import { HexColorPicker} from 'react-colorful';
+import { HexColorPicker } from 'react-colorful';
 import { PopoverArrow } from '@radix-ui/react-popover';
 
 export function NewCollectionForm() {
@@ -52,7 +52,6 @@ export function NewCollectionForm() {
     public: z.boolean().default(true),
   });
   type FormValues = z.infer<typeof formSchema>;
-  // 1. Define your form.
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,10 +61,7 @@ export function NewCollectionForm() {
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: FormValues) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     addCollection.mutate(values as CreateCollectionArgs);
   }
 
@@ -74,45 +70,57 @@ export function NewCollectionForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-      <div className='flex flex-row  w-full items-end justify-start space-x-2'>
-        <FormField
-          control={form.control}
-          name='color'
-          render={({ field }) => (
-            <FormItem>
-              <div>
-              {/* <FormLabel>Pick Color</FormLabel> */}
-              <Popover>
-                  <PopoverTrigger asChild>
+        <div className='flex flex-row  w-full items-end justify-start space-x-2'>
+          <FormField
+            control={form.control}
+            name='color'
+            render={({ field }) => (
+              <FormItem>
+                <div>
+                  {/* <FormLabel>Pick Color</FormLabel> */}
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <FormControl>
-                    <button className='shrink-0 rounded-lg border px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium'>
-                      <div className='rounded-full h-4 w-4' style={{backgroundColor: field.value}}/>
-                    </button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <HexColorPicker color={field.value} onChange={field.onChange} />
-                  </PopoverContent>
-              </Popover>
-              {/* <FormDescription>color for you collection</FormDescription> */}
-              <FormMessage />
-              </div>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='name'
-          render={({ field }) => (
-            <FormItem className='flex flex-col w-full'>
-              <FormLabel className='text-sm font-normal text-gray-700'>Name*</FormLabel>
-              <FormControl>
-                <Input placeholder='Collection Name' {...field} className='h-8 w-full'/>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                        <button className='shrink-0 rounded-lg border px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium'>
+                          <div
+                            className='rounded-full h-4 w-4'
+                            style={{ backgroundColor: field.value }}
+                          />
+                        </button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <HexColorPicker
+                        color={field.value}
+                        onChange={field.onChange}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {/* <FormDescription>color for you collection</FormDescription> */}
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='name'
+            render={({ field }) => (
+              <FormItem className='flex flex-col w-full'>
+                <FormLabel className='text-sm font-normal text-gray-700'>
+                  Name*
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Collection Name'
+                    {...field}
+                    className='h-8 w-full'
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <FormField
           control={form.control}
@@ -152,7 +160,7 @@ export function NewCollectionForm() {
             </FormItem>
           )}
         />
-        <Button type='submit'>Add Link</Button>
+        <Button type='submit'>Submit</Button>
       </form>
     </Form>
   );

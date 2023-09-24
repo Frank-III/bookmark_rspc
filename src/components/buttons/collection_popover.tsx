@@ -11,7 +11,13 @@ import {
 
 import { EditCollection } from '../modals/collection_modals';
 import { CollectionPinned } from '../links/collection_lists';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogDescription } from '../ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from '../ui/dialog';
 import { DialogHeader } from '../ui/dialog';
 import { EditCllectionForm } from '../forms/edit_collection_forms';
 import React from 'react';
@@ -20,53 +26,64 @@ interface CollectionPopoverProps {
   collection: CollectionPinned;
 }
 
-export function CollectionDropdown({collection}: CollectionPopoverProps) {
-  const [open, setOpen] = React.useState(false)
-  const [showEdit, setShowEdit] = React.useState(false)
-  return(
+export function CollectionDropdown({ collection }: CollectionPopoverProps) {
+  const [open, setOpen] = React.useState(false);
+  const [showEdit, setShowEdit] = React.useState(false);
+  return (
     <Dialog open={showEdit} onOpenChange={setShowEdit} modal={true}>
       <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <button className='flex -translate-x-1 items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700 group-hover:opacity-100 sm:opacity-0' aria-expanded={open}>
-          <MoreVertical size={15} />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-[220px]'>
-        <DropdownMenuItem >
-          <DialogTrigger asChild onSelect={(e) => {e.preventDefault()}}>
-            <button onClick={(e)=> {
-              setOpen(false)
-              setShowEdit(true)
-              e.preventDefault()
-            }}>
-              Edit Collection
-            </button>
-          </DialogTrigger>
-        </DropdownMenuItem>
-        <DropdownMenuItem>Remove Pinned</DropdownMenuItem>
-        <DropdownMenuItem
-          className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
-          key='delete'
-        >
-          Delete Collection
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel className='text-xs text-gray-700 font-light'>
-          Deleting a collection does not remove any of its content.
-        </DropdownMenuLabel>
-      </DropdownMenuContent>
+        <DropdownMenuTrigger asChild>
+          <button
+            className='flex -translate-x-1 items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700 group-hover:opacity-100 sm:opacity-0'
+            aria-expanded={open}
+          >
+            <MoreVertical size={15} />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className='w-[220px]'>
+          <DropdownMenuItem>
+            <DialogTrigger
+              asChild
+              onSelect={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <button
+                onClick={(e) => {
+                  setOpen(false);
+                  setShowEdit(true);
+                  e.preventDefault();
+                }}
+              >
+                Edit Collection
+              </button>
+            </DialogTrigger>
+          </DropdownMenuItem>
+          <DropdownMenuItem>Remove Pinned</DropdownMenuItem>
+          <DropdownMenuItem
+            className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
+            key='delete'
+          >
+            Delete Collection
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel className='text-xs text-gray-700 font-light'>
+            Deleting a collection does not remove any of its content.
+          </DropdownMenuLabel>
+        </DropdownMenuContent>
       </DropdownMenu>
       <DialogContent className='sm:max-w-[350px]'>
         <DialogHeader>
-          <DialogTitle className='text-gray-800 font-md'>Edit Collection</DialogTitle>
+          <DialogTitle className='text-gray-800 font-md'>
+            Edit Collection
+          </DialogTitle>
         </DialogHeader>
         <div className='h-[0.8px] w-full rounded-full bg-gray-200' />
         <EditCllectionForm collection={collection} />
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-
 
 // export const DialogItem = React.forwardRef((props, forwardedRef) => {
 //   const { triggerChildren, children, onSelect, onOpenChange, ...itemProps } = props;
