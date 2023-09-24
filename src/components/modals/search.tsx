@@ -1,6 +1,13 @@
 import React from 'react';
 import { Command } from 'cmdk';
 import { ArrowLeft, ArrowLeftToLine, BadgePlus, BookMarked, BookPlus, Boxes, ChevronDown, ChevronUp, Highlighter, Link, MoveRight, Search, Tag } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from '../ui/dialog';
 import { rspc } from '../../utils/rspc';
 
 
@@ -117,7 +124,9 @@ export function SearchCMDK() {
   ]
 
   return (
-    <Command.Dialog open={open} onOpenChange={setOpen} label="Global Command Menu"
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className='p-0'>
+    <Command label="Global Command Menu"
       loop
       ref={ref}
       onKeyDown={(e: React.KeyboardEvent) => {
@@ -134,7 +143,6 @@ export function SearchCMDK() {
         }
       }}
       className='origin-top overflow-hidden bg-white/90 backdrop-blur-xl transition-transform duration-100 rounded-lg shadow-large ring-1 ring-black/5'
-      modal={true}
       >
           <div className='flex space-x-1 px-2 pt-2'>
             {pages.map((p) => (
@@ -218,7 +226,9 @@ export function SearchCMDK() {
             </div>
         </div>
         </div>
-      </Command.Dialog>
+      </Command>
+      </DialogContent>
+      </Dialog>
     )
 }
 
