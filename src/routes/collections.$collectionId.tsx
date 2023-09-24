@@ -9,6 +9,7 @@ import { parse } from 'path';
 import { EditCllectionForm } from '../components/forms/edit_collection_forms';
 import { CollectionWithPinnedStatus } from '../../bindings'
 import { MakeCollectionWithPinnedStatus } from '../utils';
+import { Button } from '../components/ui/button';
 
 async function loadCollectionById(collectionId: number): Promise<CollectionWithPinnedStatus> {
   return await client.query(["collections.getOnePinnedStatus", collectionId]).then((rsp) => rsp as CollectionWithPinnedStatus);
@@ -36,15 +37,17 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
     if (status !=='success') {
       return <div>Error</div>;
     }
-    const  collection = MakeCollectionWithPinnedStatus(thisCollection);
 
+    const  collection = MakeCollectionWithPinnedStatus(thisCollection as CollectionWithPinnedStatus);
 
     return (
       <>
         <div className='w-full bg-base-200'>
           <div className='w-full max-w-7xl p-4 mx-auto'>
             <h1>Collections</h1>
-            <EditCllectionForm collection={collection} />
+            <CollectionDropdown collection={collection} >
+              <Button>Edit Collection</Button>
+            </CollectionDropdown>
           </div>
         </div>
       </>

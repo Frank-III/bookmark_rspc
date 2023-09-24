@@ -24,21 +24,17 @@ import React from 'react';
 
 interface CollectionPopoverProps {
   collection: CollectionPinned;
+  children: React.ReactNode;
 }
 
-export function CollectionDropdown({ collection }: CollectionPopoverProps) {
+export function CollectionDropdown({ collection, children }: CollectionPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
   return (
-    <Dialog open={showEdit} onOpenChange={setShowEdit} modal={true}>
+    <Dialog open={showEdit} onOpenChange={setShowEdit}>
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
-          <button
-            className='flex -translate-x-1 items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700 group-hover:opacity-100 sm:opacity-0'
-            aria-expanded={open}
-          >
-            <MoreVertical size={15} />
-          </button>
+        {children}
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-[220px]'>
           <DropdownMenuItem>
