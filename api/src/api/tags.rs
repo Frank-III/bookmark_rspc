@@ -30,13 +30,14 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
       #[derive(Debug, Deserialize, Serialize, Type)]
       struct CreateTagArgs {
         tag_name: String,
+        color: String
       }
 
-      t(|ctx: PrivateCtx, CreateTagArgs { tag_name }| async move {
+      t(|ctx: PrivateCtx, CreateTagArgs { tag_name, color}| async move {
         let new_tag = ctx
           .db
           .tag()
-          .create(tag_name, prisma::user::id::equals(ctx.user_id), vec![])
+          .create(tag_name, color, prisma::user::id::equals(ctx.user_id), vec![])
           .exec()
           .await?;
         Ok(new_tag)
@@ -47,15 +48,31 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
       struct UpdateTagArgs {
         tag_id: i32,
         tag_name: String,
+        color: String
       }
       t(
-        |ctx: PrivateCtx, UpdateTagArgs { tag_id, tag_name }| async move {
+        |ctx: PrivateCtx, UpdateTagArgs { tag_id, tag_name, color}| async move {
           let new_tag = ctx
             .db
             .tag()
             .update(
               prisma::tag::id::equals(tag_id),
-              vec![prisma::tag::name::set(tag_name)],
+              vec![prisma::tag::name::set(tag_name), prisma::tag::color::set(color)],
+            )
+            .exec()
+            .await?;
+          Ok(new_tag)
+        },
+      )
+    })
+    .mutation("delete", |t| {
+      t(
+        |ctx: PrivateCtx, id: i32| async move {
+          let new_tag = ctx
+            .db
+            .tag()
+            .delete(
+              prisma::tag::id::equals(id),
             )
             .exec()
             .await?;
