@@ -46,6 +46,18 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         }
       })
     })
+    .query("getByUser", |t| {
+      t(|ctx: PrivateCtx, _: ()| async move {
+        let links = ctx
+          .db
+          .link()
+          .find_many(vec![prisma::link::owner_id::equals(ctx.user_id.clone())])
+          .exec()
+          .await?;
+        tracing::info!("links of user:{:?} are fetched", ctx.user_id);
+        Ok(links)
+      })
+    })
     .query("getSummary", |t| {
       t(|ctx: PrivateCtx, time_span: Option<String>| async move {
         #[derive(Debug, Serialize, Deserialize, Type)]
