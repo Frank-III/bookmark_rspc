@@ -24,6 +24,7 @@ const client = createClient<Procedures>({
   // Refer to the integration your using for the correct transport.
   transport: new FetchTransport('http://localhost:9000/rspc', fetch),
 });
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
