@@ -1,13 +1,10 @@
 import { Outlet, Route, Link } from '@tanstack/react-router';
-import { useUser, UserButton as ClerkUserButton, RedirectToSignIn } from '@clerk/clerk-react';
 import {
-  Boxes,
-  PanelLeft,
-  Plus,
-  Tag,
-  User,
-  Search,
-} from 'lucide-react';
+  useUser,
+  UserButton as ClerkUserButton,
+  RedirectToSignIn,
+} from '@clerk/clerk-react';
+import { Boxes, PanelLeft, Plus, Tag, User, Search } from 'lucide-react';
 import { CollectionLinks } from './links/collection_lists';
 import { NewCollection } from './modals/collection_modals';
 
@@ -59,7 +56,9 @@ export function Nav() {
                 {user.username}
               </span>
             </>
-          ) : (<RedirectToSignIn />)}
+          ) : (
+            <RedirectToSignIn />
+          )}
         </div>
       </div>
     );

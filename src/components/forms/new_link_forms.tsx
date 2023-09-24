@@ -31,7 +31,7 @@ export function NewLinkForm() {
     onSuccess: () => {
       queryClient.invalidateQueries([
         'links.getByDate',
-        new Date().toISOString().slice(0, 10),
+        { date: new Date().toISOString().slice(0, 10) },
       ]);
     },
   });

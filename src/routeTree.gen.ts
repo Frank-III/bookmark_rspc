@@ -3,6 +3,8 @@ import { route as TagsRoute } from "./routes/tags"
 import { route as MeRoute } from "./routes/me"
 import { route as CollectionsRoute } from "./routes/collections"
 import { route as IndexRoute } from "./routes/index"
+import { route as CollectionsCollectionIdRoute } from "./routes/collections.$collectionId"
+import { route as CollectionsIndexRoute } from "./routes/collections.index"
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
@@ -17,6 +19,12 @@ declare module "@tanstack/react-router" {
     }
     "/tags": {
       parentRoute: typeof rootRoute
+    }
+    "/collections/": {
+      parentRoute: typeof CollectionsRoute
+    }
+    "/collections/$collectionId": {
+      parentRoute: typeof CollectionsRoute
     }
   }
 }
@@ -41,9 +49,22 @@ Object.assign(TagsRoute.options, {
   getParentRoute: () => rootRoute,
 })
 
+Object.assign(CollectionsIndexRoute.options, {
+  path: "/",
+  getParentRoute: () => CollectionsRoute,
+})
+
+Object.assign(CollectionsCollectionIdRoute.options, {
+  path: "/$collectionId",
+  getParentRoute: () => CollectionsRoute,
+})
+
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  CollectionsRoute,
+  CollectionsRoute.addChildren([
+    CollectionsIndexRoute,
+    CollectionsCollectionIdRoute,
+  ]),
   MeRoute,
   TagsRoute,
 ])

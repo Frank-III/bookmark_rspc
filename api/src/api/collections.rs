@@ -8,10 +8,10 @@ use axum::{
 
 // use prisma_client_rust::{and};
 use super::{PrivateCtx, PrivateRouter};
+use prisma::{collection, pinned_user_collections};
 use rspc::{Error, ErrorCode, RouterBuilder, Type};
 use serde::{Deserialize, Serialize};
 use svix::webhooks::Webhook;
-use prisma::{collection, pinned_user_collections};
 collection::include!(collection_with_pinned_status {
   pinned_by: select {
     user: select { id }
@@ -50,7 +50,10 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .select(PinnedCollections::select())
           .exec()
           .await?;
-        tracing::info!("collections of user:{:?} with Pin Status are fetched", ctx.user_id);
+        tracing::info!(
+          "collections of user:{:?} with Pin Status are fetched",
+          ctx.user_id
+        );
         Ok(pinned_collections)
       })
     })
@@ -71,7 +74,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
     })
     .query("getOnePinnedStatus", |t| {
       use prisma::{collection, pinned_user_collections};
-      t(|ctx: PrivateCtx, id:i32| async move {
+      t(|ctx: PrivateCtx, id: i32| async move {
         let collection = ctx
           .db
           .collection()
@@ -85,7 +88,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         tracing::info!("collection {:?} with Pin Status is fetched", id);
         Ok(collection)
       })
-      }) 
+    })
     .query("getAllWithPinned", |t| {
       t(|ctx: PrivateCtx, _: ()| async move {
         let collections: Vec<_> = ctx
@@ -98,7 +101,10 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .include(collection_with_pinned_status::include())
           .exec()
           .await?;
-        tracing::info!("collections of user: {:?} with Pin Status is fetched", ctx.user_id);
+        tracing::info!(
+          "collections of user: {:?} with Pin Status is fetched",
+          ctx.user_id
+        );
         Ok(collections)
       })
     })
@@ -176,13 +182,14 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
       use prisma::{collection, pinned_user_collections};
       t(
         |ctx: PrivateCtx,
-         EditCollectionArgs {
-           id,
-           name,
-           color,
-           pinned,
-           public,
-         }| async move {
+          EditCollectionArgs {
+            id,
+            name,
+            color,
+            pinned,
+            public,
+          }| async move {
+          println!("update collection!");
           //TODO: create a macro to generate the set value vector
           let updated_collection = ctx
             .db
@@ -211,7 +218,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
                   id,
                 ),
                 pinned_user_collections::create(
-                  prisma::user::id::equals(ctx.user_id),
+                  prisma::user::id::equals(ctx.user_id.clone()),
                   prisma::collection::id::equals(id),
                   vec![],
                 ),
@@ -219,7 +226,19 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
               )
               .exec()
               .await?;
+          } else {
+            ctx
+              .db
+              .pinned_user_collections()
+              .delete(
+                pinned_user_collections::UniqueWhereParam::UserIdCollectionIdEquals(
+                  ctx.user_id.clone(),
+                  id,
+                ))
+              .exec()
+              .await?;
           }
+          tracing::info!("user: {:?} updated collection: {:?} success", ctx.user_id, id);
           Ok(updated_collection)
         },
       )

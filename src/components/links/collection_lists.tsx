@@ -1,22 +1,35 @@
 import { Link } from '@tanstack/react-router';
-import { Collection, PinnedCollections, CollectionWithPinnedStatus } from '../../../bindings';
-import { CollectionDropdown, CollectionPopover } from '../buttons/collection_popover';
-import { Dot, GalleryVerticalEnd, Loader2, MoreVertical, Pin, SquareDot } from 'lucide-react';
+import {
+  Collection,
+  PinnedCollections,
+  CollectionWithPinnedStatus,
+} from '../../../bindings';
+import { CollectionDropdown } from '../buttons/collection_popover';
+import {
+  Dot,
+  GalleryVerticalEnd,
+  Loader2,
+  MoreVertical,
+  Pin,
+  SquareDot,
+} from 'lucide-react';
 import { rspc } from '../../utils/rspc';
 import { useUser } from '@clerk/clerk-react';
 
-
-export type CollectionPinned = Omit<CollectionWithPinnedStatus, 'pinnedBy'> & {isPinned: boolean}
+export type CollectionPinned = Omit<CollectionWithPinnedStatus, 'pinnedBy'> & {
+  isPinned: boolean;
+};
 
 interface CollectionLinkProps {
   collection: CollectionPinned;
 }
 
 export function CollectionLink({ collection }: CollectionLinkProps) {
-  const {id, color, name} = collection;
+  const { id, color, name } = collection;
   return (
     <Link
-      to={`/collections/${id}`}
+      to={`/collections/$collectionId`}
+      params={{ collectionId: id.toString() }}
       key={`to-collection${id}`}
       className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition  font-semibold text-gray-700 hover:bg-gray-100 hover:text-gray-900'
       activeProps={{ style: { backgroundColor: 'rgb(243 244 246)' } }}
@@ -78,10 +91,13 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
         //TODO: better way?
         const collects = collections?.map((c) => {
           if ('collection' in c) {
-            return {...c.collection, isPinned: true} as CollectionPinned;
+            return { ...c.collection, isPinned: true } as CollectionPinned;
           } else {
-            const {pinnedBy, ...collection} = c;
-            return {...collection, isPinned: pinnedBy.length > 0 ? true : false} as CollectionPinned;
+            const { pinnedBy, ...collection } = c;
+            return {
+              ...collection,
+              isPinned: pinnedBy.length > 0 ? true : false,
+            } as CollectionPinned;
           }
         });
         return collects.length == 0 ? (
@@ -120,7 +136,9 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
           </div>
         ) : (
           <div className='flex w-full flex-col space-y-0.5'>
-            {collects?.map((collection) => <CollectionLink collection={collection} />)}
+            {collects?.map((collection) => (
+              <CollectionLink collection={collection} />
+            ))}
           </div>
         );
     }

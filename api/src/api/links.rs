@@ -18,7 +18,12 @@ use serde::{Deserialize, Serialize};
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
     .query("getByDate", |t| {
-      t(|ctx: PrivateCtx, date: String| async move {
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      struct GetByDateArgs {
+        date: String,
+        size: Option<i32>,
+      }
+      t(|ctx: PrivateCtx, GetByDateArgs {date, size}| async move {
         println!("date: {}", date);
         let links = ctx
           .db
@@ -34,11 +39,11 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
               DateTime::<FixedOffset>::parse_from_rfc3339(&format!("{}T23:59:59+00:00", date))
                 .unwrap()
             )),
-          ])
-          .exec()
-          .await?;
-        tracing::info!("{links:?}");
-        Ok(links)
+          ]).order_by(prisma::link::created_at::order(prisma_client_rust::Direction::Desc));
+        match size {
+          None => Ok(links.exec().await?),
+          Some(sz) => Ok(links.take(sz as i64).exec().await?),
+        }
       })
     })
     .query("getSummary", |t| {
