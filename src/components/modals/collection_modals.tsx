@@ -12,7 +12,7 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { CollectionPinned } from '../links/collection_links';
+import { CollectionPinned } from '../links/collection_lists';
 
 interface NewCollectionProps {
   children: React.ReactNode;

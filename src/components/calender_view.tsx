@@ -3,7 +3,7 @@ import { Calendar } from '../components/ui/calendar';
 import { useAuth } from '@clerk/clerk-react';
 import { rspc } from '../utils/rspc';
 
-function DailySummary({ date, total }: { date: Date; total: number }) {
+function DailySummary({ date, total }: { date?: Date; total: number }) {
   return (
     <div className='container m-auto mt-3 flex  items-center justify-center rounded-md m-w-full text-[#111827]'>
       <div className='w-10 h-10 p-1 rounded-lg border border-gray-200 justify-center items-center inline-flex'>
@@ -45,7 +45,6 @@ function DailyLink() {
 
 export function CalenderView() {
   const { getToken, isSignedIn, userId } = useAuth();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [date, setDate] = React.useState<Date | undefined>();
   const {
     status: dateLinkStatus,
@@ -53,8 +52,8 @@ export function CalenderView() {
     data: dateLinks,
     isFetching,
   } = rspc.useQuery(
-    ['links.getByDate', selectedDate?.toISOString()?.slice(0, 10)],
-    { enabled: isSignedIn && !!selectedDate },
+    ['links.getByDate', date?.toISOString()?.slice(0, 10)],
+    { enabled: isSignedIn && !!date},
   );
 
   return (
@@ -70,7 +69,8 @@ export function CalenderView() {
           <div className='relative flex w-full items-center justify-center mt-4 px-2'>
             <div className='h-[1px] w-full rounded-full bg-gray-100' />
           </div>
-          <DailySummary date={new Date()} total={0} />
+          <DailySummary date={date} total={0} />
+          {/* <LinkLists dateLinks={dateLinks} /> */}
         </div>
       </div>
     </div>
