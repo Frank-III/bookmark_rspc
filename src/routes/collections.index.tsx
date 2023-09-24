@@ -2,9 +2,7 @@ import * as React from 'react';
 import { FileRoute } from '@tanstack/react-router';
 import { NewCollection } from '../components/modals/collection_modals';
 import { Button } from '../components/ui/button';
-import {
-  CollectionDropdown,
-} from '../components/buttons/collection_popover';
+import { CollectionDropdown } from '../components/buttons/collection_popover';
 import { rspc } from '../utils/rspc';
 import { CollectionPinned } from '../components/links/collection_lists';
 import { EditCllectionForm } from '../components/forms/edit_collection_forms';

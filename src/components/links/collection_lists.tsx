@@ -32,32 +32,37 @@ export function CollectionLink({ collection }: CollectionLinkProps) {
   const [active, setActive] = React.useState(false);
   const { id, color, name } = collection;
   return (
-    <div className={cn('group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition  font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900', active && 'bg-gray-100 text-gray-900')}>
-    <Link
-      to={`/collections/$collectionId`}
-      params={{ collectionId: id.toString() }}
-      key={`to-collection${id}`}
-      // activeProps={{ style: { backgroundColor: 'rgb(243 244 246)' } }}
+    <div
+      className={cn(
+        'group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition  font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+        active && 'bg-gray-100 text-gray-900',
+      )}
     >
-      {({isActive}) => {
-      setActive(isActive);
-      return(<div className='flex flex-row items-center justify-start truncate'>
-        <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-          <SquareDot color="white" size={30} fill={color}/>
-          {/* <Dot color={color} size={30} /> */}
-        </div>
-        <p className='truncate text-sm'>{name}</p>
-      </div>)}
-      }
-      {/* <CollectionPopover collection={collection} /> */}
-    </Link>
-    <CollectionDropdown collection={collection} >
-      <button
-        className='flex -translate-x-1 items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700'
+      <Link
+        to={`/collections/$collectionId`}
+        params={{ collectionId: id.toString() }}
+        key={`to-collection${id}`}
+        // activeProps={{ style: { backgroundColor: 'rgb(243 244 246)' } }}
       >
-        <MoreVertical size={15} />
-      </button>
-    </CollectionDropdown>
+        {({ isActive }) => {
+          setActive(isActive);
+          return (
+            <div className='flex flex-row items-center justify-start truncate'>
+              <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
+                <SquareDot color='white' size={30} fill={color} />
+                {/* <Dot color={color} size={30} /> */}
+              </div>
+              <p className='truncate text-sm'>{name}</p>
+            </div>
+          );
+        }}
+        {/* <CollectionPopover collection={collection} /> */}
+      </Link>
+      <CollectionDropdown collection={collection}>
+        <button className='flex -translate-x-1 items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700'>
+          <MoreVertical size={15} />
+        </button>
+      </CollectionDropdown>
     </div>
   );
 }
