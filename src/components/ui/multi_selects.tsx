@@ -16,6 +16,8 @@ import {
     PopoverTrigger,
 } from "./popover"
 import { Badge } from "./badge";
+import { rspc } from '../../utils/rspc'
+import { Procedures } from '../../../bindings'
 
 
 export type OptionType = {
@@ -23,18 +25,19 @@ export type OptionType = {
     value: string;
 }
 
-interface MultiSelectProps {
-    options: OptionType[];
-    selected: string[];
-    onChange: React.Dispatch<React.SetStateAction<string[]>>;
-    className?: string;
+interface MultiSelectProps<Key extends Procedures['queries']['key'], V = Procedures['queries']> {
+
+  selected: V[];
+  onChange: React.Dispatch<React.SetStateAction<V[]>>;
+  className?: string;
 }
 
-function MultiSelect({ options, selected, onChange, className, ...props }: MultiSelectProps) {
+function MultiSelect<T extends { id: V; name: K }, K = T['name'], V = T['id']>({ selected, onChange, className, ...props }: MultiSelectProps<T>) {
 
+    const {isLoading, data: tags} = rspc.useQuery(['tags.getByUser'])
     const [open, setOpen] = React.useState(false)
 
-    const handleUnselect = (item: string) => {
+    const handleUnselect = (item: V) => {
         onChange(selected.filter((i) => i !== item))
     }
 
@@ -79,18 +82,19 @@ function MultiSelect({ options, selected, onChange, className, ...props }: Multi
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-full p-0">
-                <Command className={className}>
-                    <CommandInput placeholder="Search ..." />
-                    <CommandEmpty>No item found.</CommandEmpty>
-                    <CommandGroup className='max-h-64 overflow-auto'>
-                        {options.map((option) => (
-                            <CommandItem
-                                key={option.value}
+              <CommandPrimative className='flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground'>
+                    <CommandPrimative.Input placeholder="Search ..." />
+                    {isLoading && <CommandPrimative.Loading>Loading...</CommandPrimative.Loading>}
+                    <CommandPrimative.Empty>No item found.</CommandPrimative.Empty>
+                    <CommandPrimative.Group className='max-h-64 overflow-auto'>
+                        {tags?.map((tag) => (
+                            <CommandPrimative.Item
+                                key={tag.name}
                                 onSelect={() => {
                                     onChange(
-                                        selected.includes(option.value)
-                                            ? selected.filter((item) => item !== option.value)
-                                            : [...selected, option.value]
+                                        selected.includes(tag.id)
+                                            ? selected.filter((item) => item !== tag.id)
+                                            : [...selected, tag.id]
                                     )
                                     setOpen(true)
                                 }}
@@ -98,18 +102,16 @@ function MultiSelect({ options, selected, onChange, className, ...props }: Multi
                                 <Check
                                     className={cn(
                                         "mr-2 h-4 w-4",
-                                        selected.includes(option.value) ?
+                                        selected.includes(tag.id as V) ?
                                             "opacity-100" : "opacity-0"
                                     )}
                                 />
-                                {option.label}
-                            </CommandItem>
+                                {tag.name}
+                            </CommandPrimative.Item>
                         ))}
-                    </CommandGroup>
-                </Command>
+                    </CommandPrimative.Group>
+                </CommandPrimative>
             </PopoverContent>
         </Popover>
     )
 }
-
-export { MultiSelect }

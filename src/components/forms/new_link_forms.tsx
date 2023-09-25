@@ -17,7 +17,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '../../utils';
 import { Command as CommandPrimative } from 'cmdk';
-import { CheckIcon, Command, Search } from 'lucide-react';
+import { Check, CheckIcon, ChevronsUpDown, Command, Search, X } from 'lucide-react';
+import React from 'react';
+import { Badge } from '../ui/badge';
+import { Tag } from '../../../bindings';
 
 export function NewLinkForm() {
   const queryClient = rspc.useContext().queryClient;
