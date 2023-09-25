@@ -22,12 +22,11 @@ import { CheckIcon, Command, Search } from 'lucide-react';
 export function NewLinkForm() {
   const queryClient = rspc.useContext().queryClient;
   const { data: potentialCollections, isLoading: collectionLoading } =
-    rspc.useQuery(['collections.getByUser'], {
-      onSuccess: () => {
-        console.log(potentialCollections);
-      },
-    });
+    rspc.useQuery(['collections.getByUser']);
   const addLink = rspc.useMutation(['links.create'], {
+    meta: {
+      message: "Link created!"
+    },
     onSuccess: () => {
       queryClient.invalidateQueries([
         'links.getByDate',

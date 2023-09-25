@@ -22,6 +22,9 @@ import { Badge } from '../ui/badge';
 export function NewTagForm() {
   const queryClient = rspc.useContext().queryClient;
   const addTag = rspc.useMutation(['tags.create'], {
+    meta: {
+      message: 'Tag created!',
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['collections.getByUser']);
     },
