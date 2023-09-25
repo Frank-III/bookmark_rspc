@@ -3,13 +3,7 @@ import { cn } from "../../utils"
 
 import { Check, X, ChevronsUpDown } from "lucide-react"
 import { Button } from "./button"
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-} from "./command"
+import { Command as CommandPrimative } from 'cmdk';
 import {
     Popover,
     PopoverContent,
@@ -19,22 +13,18 @@ import { Badge } from "./badge";
 import { rspc } from '../../utils/rspc'
 import { Procedures } from '../../../bindings'
 
+type ExtractQuery<Key extends Procedures['queries']['key']> = Extract<Procedures['queries'], { key: Key }>['result'];
+type ExtractIdType<Key extends Procedures['queries']['key']>=  ExtractQuery<Key> extends {id: infer V} ? V : never;
 
-export type OptionType = {
-    label: string;
-    value: string;
-}
-
-interface MultiSelectProps<Key extends Procedures['queries']['key'], V = Procedures['queries']> {
-
+interface MultiSelectProps<Key extends Procedures['queries']['key'], V=ExtractIdType<Key>> {
   selected: V[];
   onChange: React.Dispatch<React.SetStateAction<V[]>>;
   className?: string;
 }
 
-function MultiSelect<T extends { id: V; name: K }, K = T['name'], V = T['id']>({ selected, onChange, className, ...props }: MultiSelectProps<T>) {
+function MultiSelect<Key extends Procedures['queries']['key'], Output = ExtractQuery<Key>, V = Output extends {id: infer V} ? V: never>({ selected, onChange, className, ...props }: MultiSelectProps<Key>) {
 
-    const {isLoading, data: tags} = rspc.useQuery(['tags.getByUser'])
+    const {isLoading, data: tags} = rspc.useQuery(Key)
     const [open, setOpen] = React.useState(false)
 
     const handleUnselect = (item: V) => {
@@ -55,7 +45,7 @@ function MultiSelect<T extends { id: V; name: K }, K = T['name'], V = T['id']>({
                         {selected.map((item) => (
                             <Badge
                                 variant="secondary"
-                                key={item}
+                                key={item.toString()}
                                 className="mr-1 mb-1"
                                 onClick={() => handleUnselect(item)}
                             >
