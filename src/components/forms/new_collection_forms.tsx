@@ -21,6 +21,9 @@ import { HexColorPicker } from 'react-colorful';
 export function NewCollectionForm() {
   const queryClient = rspc.useContext().queryClient;
   const addCollection = rspc.useMutation(['collections.create'], {
+    meta: {
+      message: 'Collection created!',
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['collections.getByUser']);
     },

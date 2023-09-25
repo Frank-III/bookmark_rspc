@@ -28,6 +28,9 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
   const { id, color, name, isPinned, isPublic } = collection;
   const queryClient = rspc.useContext().queryClient;
   const editCollection = rspc.useMutation(['collections.editSingle'], {
+    meta: {
+      message: `Collection ${id} edited!`,
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['collections.getById', id], data);
       queryClient.invalidateQueries(['collections.getByUser']);
