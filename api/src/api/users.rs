@@ -128,17 +128,17 @@ async fn users_handler(
           Err(_) => println!("User not created"),
         }
       } else if payload.r#type == "user.updated" {
-        let user = db
-          .user()
-          .delete(prisma::user::id::equals(id.clone()))
-          .exec()
-          .await;
-        match user {
-          Ok(_) => {
-            println!("User deleted");
-          }
-          Err(_) => println!("User not deleted"),
-        }
+        // let user = db
+        //   .user()
+        //   .delete(prisma::user::id::equals(id.clone()))
+        //   .exec()
+        //   .await;
+        // match user {
+        //   Ok(_) => {
+        //     println!("User deleted");
+        //   }
+        //   Err(_) => println!("User not deleted"),
+        // }
 
         let name = format!("{} {}", first_name, last_name);
         let email = &email_addresses[0].email_address;

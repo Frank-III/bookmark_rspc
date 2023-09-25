@@ -62,15 +62,17 @@ function Item({
 
 
 export function NewTagSelect() {
-  const [open, setOpen] = React.useState(false);
+  const [newTag, setNewTag] = React.useState(false);
   return(
-  <Command.Item onSelect={(open) => setOpen(true)} 
+  <Command.Item onSelect={() => setNewTag(true)} 
     className={cn(
       'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       'flex h-11 rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
-    )}>
-  <Dialog open={open} onOpenChange={setOpen}>
-    <DialogTrigger asChild >
+    )}
+    key="newTag"
+    >
+  <Dialog open={newTag}  onOpenChange={() => setNewTag(false)}>
+    <DialogTrigger asChild>
     <button className='flex flex-row items-center justify-start truncate'>
       <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
         <BadgePlus />
@@ -78,7 +80,7 @@ export function NewTagSelect() {
       <p className='truncate text-sm'>Create Tag2...</p>
     </button>
     </DialogTrigger>
-    <DialogContent className='sm:max-w-[350px] '>
+    <DialogContent className='sm:max-w-[350px]' >
       <DialogHeader>
         <DialogTitle className='text-gray-800 font-md'>New Tag</DialogTitle>
       </DialogHeader>
@@ -97,6 +99,8 @@ export function SearchCMDK({children}:{children: React.ReactNode}) {
   const [pages, setPages] = React.useState<string[]>(['home']);
   const activePage = pages[pages.length - 1];
   const isHome = activePage === 'home';
+
+  const [newTag, setNewTag] = React.useState(false);
 
   React.useEffect(() => {
     const down = (e) => {
@@ -284,10 +288,9 @@ export function SearchCMDK({children}:{children: React.ReactNode}) {
             {activePage === 'tags' && <SearchTags />}
             {activePage === 'collections' && <SearchCollection />}
             {activePage === 'links' && <SearchLinks />}
-
+            <NewTagSelect/>
           </Command.List>
           <Command.Separator />
-          <NewTagSelect />
           <div className='flex items-center justify-between border-t p-2'>
             <div />
             <div className='flex space-x-2'>
