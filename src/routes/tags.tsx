@@ -15,11 +15,12 @@ export const route = new FileRoute('/tags').createRoute({
       <>
         <div className='w-full bg-base-200'>
           <div className='w-full max-w-7xl p-4 mx-auto'>
-            <h1> Test Tags</h1>
-            <Badge className='bg-[#327fa8]'>Test</Badge>
+            <h1>Tags</h1>
+
+            {/* <Badge className='bg-[#327fa8]'>Test</Badge>
             <NewTag>
               <Button variant='outline'>New Link</Button>
-            </NewTag>
+            </NewTag> */}
           </div>
         </div>
       </>

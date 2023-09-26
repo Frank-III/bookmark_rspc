@@ -29,13 +29,11 @@ export type Procedures = {
     subscriptions: never
 };
 
-export type GetByDateArgs = { date: string; size: number | null }
-
-export type SummariesData = { date: string; count: number }
-
-export type LinkWithTags = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string; tags: { id: number; name: string }[] }
+export type LinkWithTags = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string; tags: { id: number; name: string; color: string }[] }
 
 export type CollectionWithPinnedStatus = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string; pinnedBy: { user: { id: string } }[] }
+
+export type ArchiveStatData = { total: number; archived: number; not_archived: number }
 
 export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number; tags: number[] }
 
@@ -43,22 +41,24 @@ export type User = { id: string; created_at: string; updated_at: string; usernam
 
 export type Tag = { id: number; name: string; color: string; ownerId: string }
 
-export type ArchiveStatData = { total: number; archived: number; not_archived: number }
-
 export type PinnedUserCollections = { userId: string; collectionId: number }
 
 export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string }
 
 export type PinnedCollections = { collection: Collection }
 
-export type EditLinkArgs = { id: number; link_name: string; url: string; description: string | null; collection_id: number; new_tags: number[]; deleted_tags: number[] }
-
 export type CreateTagArgs = { tag_name: string; color: string }
 
 export type UpdateTagArgs = { tag_id: number; tag_name: string; color: string }
 
+export type EditLinkArgs = { id: number; link_name: string; url: string; description: string | null; collection_id: number; new_tags: number[]; deleted_tags: number[] }
+
 export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
 
+export type SummariesData = { date: string; count: number }
+
 export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
+
+export type GetByDateArgs = { date: string; size: number | null }
 
 export type EditCollectionArgs = { id: number; name: string; color: string; pinned: boolean; public: boolean }

@@ -19,6 +19,7 @@ prisma::link::include!( link_with_tags {
   tags: select {
     id
     name
+    color
   }
 });
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {

@@ -17,8 +17,10 @@ import { Input } from '../ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Switch } from '../ui/switch';
 import { HexColorPicker } from 'react-colorful';
+import { useRouter } from '@tanstack/react-router';
 
 export function NewCollectionForm() {
+  const router = useRouter();
   const queryClient = rspc.useContext().queryClient;
   const addCollection = rspc.useMutation(['collections.create'], {
     meta: {

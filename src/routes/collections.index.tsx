@@ -32,7 +32,6 @@ export const route = new FileRoute('/collections/').createRoute({
             <NewCollection>
               <Button variant='outline'>New Collection</Button>
             </NewCollection>
-            <EditCllectionForm collection={collects![0]} />
             {/* <DropdownWithDialogItemsSolution2 collection={collects[0]}/> */}
           </div>
         </div>
