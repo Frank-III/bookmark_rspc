@@ -77,12 +77,12 @@ export function Nav() {
         </div>
         <div className='mt-4 flex w-full flex-row space-x-2 px-2'>
           <SearchCMDK>
-          <button className='bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  w-full h-8 rounded-lg px-2 text-sm min-w-[60px] relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
-            <div className='relative flex items-center justify-center'>
-              <Search />
-              <span className='relative whitespace-nowrap'>Search</span>
-            </div>
-          </button>
+            <button className='bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  w-full h-8 rounded-lg px-2 text-sm min-w-[60px] relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
+              <div className='relative flex items-center justify-center'>
+                <Search />
+                <span className='relative whitespace-nowrap'>Search</span>
+              </div>
+            </button>
           </SearchCMDK>
           <button className='rounded-lg bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  auto shrink-0 ounded-lg px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
             <div className='relative flex items-center justify-center'>

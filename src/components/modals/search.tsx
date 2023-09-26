@@ -60,39 +60,39 @@ function Item({
   );
 }
 
-
 export function NewTagSelect() {
   const [newTag, setNewTag] = React.useState(false);
-  return(
-  <Command.Item onSelect={() => setNewTag(true)} 
-    className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      'flex h-11 rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
-    )}
-    key="newTag"
+  return (
+    <Command.Item
+      onSelect={() => setNewTag(true)}
+      className={cn(
+        'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'flex h-11 rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+      )}
+      key='newTag'
     >
-  <Dialog open={newTag}  onOpenChange={() => setNewTag(false)}>
-    <DialogTrigger asChild>
-    <button className='flex flex-row items-center justify-start truncate'>
-      <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-        <BadgePlus />
-      </div>
-      <p className='truncate text-sm'>Create Tag2...</p>
-    </button>
-    </DialogTrigger>
-    <DialogContent className='sm:max-w-[350px]' >
-      <DialogHeader>
-        <DialogTitle className='text-gray-800 font-md'>New Tag</DialogTitle>
-      </DialogHeader>
-      <div className='h-[0.8px] w-full rounded-full bg-gray-200' />
-      <NewTagForm />
-    </DialogContent>
-  </Dialog>
-  </Command.Item>)
+      <Dialog open={newTag} onOpenChange={() => setNewTag(false)}>
+        <DialogTrigger asChild>
+          <button className='flex flex-row items-center justify-start truncate'>
+            <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
+              <BadgePlus />
+            </div>
+            <p className='truncate text-sm'>Create Tag2...</p>
+          </button>
+        </DialogTrigger>
+        <DialogContent className='sm:max-w-[350px]'>
+          <DialogHeader>
+            <DialogTitle className='text-gray-800 font-md'>New Tag</DialogTitle>
+          </DialogHeader>
+          <div className='h-[0.8px] w-full rounded-full bg-gray-200' />
+          <NewTagForm />
+        </DialogContent>
+      </Dialog>
+    </Command.Item>
+  );
 }
 
-
-export function SearchCMDK({children}:{children: React.ReactNode}) {
+export function SearchCMDK({ children }: { children: React.ReactNode }) {
   const ref = React.useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = React.useState('');
   const [open, setOpen] = React.useState(false);
@@ -218,9 +218,7 @@ export function SearchCMDK({children}:{children: React.ReactNode}) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='p-0'>
         <Command
           label='Global Command Menu'
@@ -288,7 +286,7 @@ export function SearchCMDK({children}:{children: React.ReactNode}) {
             {activePage === 'tags' && <SearchTags />}
             {activePage === 'collections' && <SearchCollection />}
             {activePage === 'links' && <SearchLinks />}
-            <NewTagSelect/>
+            <NewTagSelect />
           </Command.List>
           <Command.Separator />
           <div className='flex items-center justify-between border-t p-2'>

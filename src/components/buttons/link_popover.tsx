@@ -1,4 +1,3 @@
-
 import { MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
@@ -27,10 +26,7 @@ interface CollectionPopoverProps {
   children: React.ReactNode;
 }
 
-export function CollectionDropdown({
-  link,
-  children,
-}: CollectionPopoverProps) {
+export function CollectionDropdown({ link, children }: CollectionPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
   return (

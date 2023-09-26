@@ -17,16 +17,17 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '../../utils';
 import { Command as CommandPrimative } from 'cmdk';
-import { CheckIcon, Search} from 'lucide-react';
-import { CreateLinkArgs} from '../../../bindings';
+import { CheckIcon, Search } from 'lucide-react';
+import { CreateLinkArgs } from '../../../bindings';
 import { MultiSelectTags } from '../buttons/multi_select_tags';
 
 export function NewLinkForm() {
   const queryClient = rspc.useContext().queryClient;
-  const { data: potentialCollections, isLoading: collectionLoading } = rspc.useQuery(['collections.getByUser']);
+  const { data: potentialCollections, isLoading: collectionLoading } =
+    rspc.useQuery(['collections.getByUser']);
   const addLink = rspc.useMutation(['links.create'], {
     meta: {
-      message: "Link created!"
+      message: 'Link created!',
     },
     onSuccess: () => {
       queryClient.invalidateQueries([
@@ -57,7 +58,7 @@ export function NewLinkForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       link_name: 'unnamed-' + new Date().toISOString(),
-      tags: []
+      tags: [],
     },
   });
 
@@ -65,10 +66,10 @@ export function NewLinkForm() {
   function onSubmit(values: FormValues) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values)
+    console.log(values);
     addLink.mutate({
       description: values.description || null,
-      ...values
+      ...values,
     } as CreateLinkArgs);
   }
 
@@ -199,10 +200,7 @@ export function NewLinkForm() {
           render={({ field }) => (
             <FormItem className='py-3 flex flex-col'>
               <FormLabel>Tags</FormLabel>
-              <MultiSelectTags
-                selected={field.value}
-                {...field}
-              />
+              <MultiSelectTags selected={field.value} {...field} />
               <FormMessage />
             </FormItem>
           )}
@@ -214,4 +212,3 @@ export function NewLinkForm() {
     </Form>
   );
 }
-
