@@ -15,6 +15,12 @@ use prisma_client_rust::{
 use rspc::{Error, ErrorCode, RouterBuilder, Type};
 use serde::{Deserialize, Serialize};
 
+prisma::link::include!( link_with_tags {
+  tags: select {
+    id
+    name
+  }
+});
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
     .query("getByDate", |t| {
@@ -52,6 +58,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .db
           .link()
           .find_many(vec![prisma::link::owner_id::equals(ctx.user_id.clone())])
+          .include(link_with_tags::include())
           .exec()
           .await?;
         tracing::info!("links of user:{:?} are fetched", ctx.user_id);
@@ -66,7 +73,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .find_many(vec![
             prisma::link::owner_id::equals(ctx.user_id.clone()),
             prisma::link::collection_id::equals(id),
-          ])
+          ]).include(link_with_tags::include())
           .exec()
           .await?;
         tracing::info!("links of collection: {:?} is fetched", id);
@@ -74,12 +81,6 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
       })
     })
     .query("getById", |t| {
-      prisma::link::include!( link_with_tags {
-        tags: select {
-          id
-          name
-        }
-      });
 
       t(|ctx: PrivateCtx, id: i32| async move {
         let link = ctx
