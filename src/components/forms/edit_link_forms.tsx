@@ -18,26 +18,31 @@ import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '../../utils';
 import { Command as CommandPrimative } from 'cmdk';
 import { CheckIcon, Command, Search } from 'lucide-react';
-import { Link } from '../../../bindings';
+import { LinkWithTags, EditLinkArgs } from '../../../bindings';
+import { MultiSelectTags } from '../buttons/multi_select_tags';
 interface EditLinkProps {
-  link: Link;
+  link: LinkWithTags;
 }
 
 export function EditLinkForm({link}: EditLinkProps ) {
-  const {id, name, url, collectionId, archived, description} = link
+  const {id, name, url, collectionId, archived, description, tags} = link
   const queryClient = rspc.useContext().queryClient;
-  const { data: potentialCollections, isLoading: collectionLoading } =
-    rspc.useQuery(['collections.getByUser'], {
-      onSuccess: () => {
-        console.log(potentialCollections);
-      },
-    });
-  const editLink = rspc.useMutation(['links.create'], {
+
+  const { data: potentialCollections, isLoading: collectionLoading } = rspc.useQuery(['collections.getByUser']);
+  const addLink = rspc.useMutation(['links.create'], {
+    meta: {
+      message: "Link created!"
+    },
     onSuccess: () => {
       queryClient.invalidateQueries([
         'links.getByDate',
         { date: new Date().toISOString().slice(0, 10) },
       ]);
+    },
+  });
+  const editLink = rspc.useMutation(['links.editOne'], {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['links.getByUser']);
     },
   });
   const formSchema = z.object({
@@ -54,7 +59,10 @@ export function EditLinkForm({link}: EditLinkProps ) {
     }),
     description: z.string().optional(),
     collection_id: z.number(),
+    tags: z.array(z.number())
   });
+
+  const tags_id = tags.map(tag => tag.id)
   type FormValues = z.infer<typeof formSchema>;
   // 1. Define your form.
   const form = useForm<FormValues>({
@@ -64,6 +72,7 @@ export function EditLinkForm({link}: EditLinkProps ) {
       description: description,
       url: url,
       collection_id: collectionId,
+      tags: tags_id
     },
   });
 
@@ -71,15 +80,19 @@ export function EditLinkForm({link}: EditLinkProps ) {
   function onSubmit(values: FormValues) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    const new_tags = values.tags.filter(tag => !tags_id.includes(tag))
+    const deleted_tags = tags_id.filter(tag => !values.tags.includes(tag))
     editLink.mutate({
+      id: id,
       link_name: values.link_name,
       url: values.url,
       description: values.description || null,
       collection_id: values.collection_id,
-    });
+      new_tags: new_tags,
+      deleted_tags: deleted_tags,
+    } as EditLinkArgs);
   }
 
-  // 3. Render the form.
   // TODO: a select for collections then get id from that
   return (
     <Form {...form}>
@@ -196,6 +209,20 @@ export function EditLinkForm({link}: EditLinkProps ) {
                   </CommandPrimative>
                 </PopoverContent>
               </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='tags'
+          render={({ field }) => (
+            <FormItem className='py-3 flex flex-col'>
+              <FormLabel>Tags</FormLabel>
+              <MultiSelectTags
+                selected={field.value}
+                {...field}
+              />
               <FormMessage />
             </FormItem>
           )}
