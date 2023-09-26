@@ -92,7 +92,13 @@ export function NewTagForm() {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <button className='h-4 w-[80px] flex items-center justify-center'>
-                          <Badge style={{ backgroundColor: `${field.value}30`, color: field.value, borderColor: `${field.value}20`}}>
+                          <Badge
+                            style={{
+                              backgroundColor: `${field.value}30`,
+                              color: field.value,
+                              borderColor: `${field.value}20`,
+                            }}
+                          >
                             {watchedTagName ? watchedTagName : 'Tag'}
                           </Badge>
                         </button>

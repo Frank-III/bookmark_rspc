@@ -24,14 +24,15 @@ interface EditLinkProps {
   link: LinkWithTags;
 }
 
-export function EditLinkForm({link}: EditLinkProps ) {
-  const {id, name, url, collectionId, archived, description, tags} = link
+export function EditLinkForm({ link }: EditLinkProps) {
+  const { id, name, url, collectionId, archived, description, tags } = link;
   const queryClient = rspc.useContext().queryClient;
 
-  const { data: potentialCollections, isLoading: collectionLoading } = rspc.useQuery(['collections.getByUser']);
+  const { data: potentialCollections, isLoading: collectionLoading } =
+    rspc.useQuery(['collections.getByUser']);
   const addLink = rspc.useMutation(['links.create'], {
     meta: {
-      message: "Link created!"
+      message: 'Link created!',
     },
     onSuccess: () => {
       queryClient.invalidateQueries([
@@ -59,10 +60,10 @@ export function EditLinkForm({link}: EditLinkProps ) {
     }),
     description: z.string().optional(),
     collection_id: z.number(),
-    tags: z.array(z.number())
+    tags: z.array(z.number()),
   });
 
-  const tags_id = tags.map(tag => tag.id)
+  const tags_id = tags.map((tag) => tag.id);
   type FormValues = z.infer<typeof formSchema>;
   // 1. Define your form.
   const form = useForm<FormValues>({
@@ -72,7 +73,7 @@ export function EditLinkForm({link}: EditLinkProps ) {
       description: description,
       url: url,
       collection_id: collectionId,
-      tags: tags_id
+      tags: tags_id,
     },
   });
 
@@ -80,8 +81,8 @@ export function EditLinkForm({link}: EditLinkProps ) {
   function onSubmit(values: FormValues) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const new_tags = values.tags.filter(tag => !tags_id.includes(tag))
-    const deleted_tags = tags_id.filter(tag => !values.tags.includes(tag))
+    const new_tags = values.tags.filter((tag) => !tags_id.includes(tag));
+    const deleted_tags = tags_id.filter((tag) => !values.tags.includes(tag));
     editLink.mutate({
       id: id,
       link_name: values.link_name,
@@ -219,10 +220,7 @@ export function EditLinkForm({link}: EditLinkProps ) {
           render={({ field }) => (
             <FormItem className='py-3 flex flex-col'>
               <FormLabel>Tags</FormLabel>
-              <MultiSelectTags
-                selected={field.value}
-                {...field}
-              />
+              <MultiSelectTags selected={field.value} {...field} />
               <FormMessage />
             </FormItem>
           )}
