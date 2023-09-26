@@ -17,12 +17,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '../../utils';
 import { Command as CommandPrimative } from 'cmdk';
-import { CheckIcon, Command, Search } from 'lucide-react';
+import { CheckIcon, Search} from 'lucide-react';
+import { CreateLinkArgs} from '../../../bindings';
+import { MultiSelectTags } from '../buttons/multi_select_tags';
 
 export function NewLinkForm() {
   const queryClient = rspc.useContext().queryClient;
-  const { data: potentialCollections, isLoading: collectionLoading } =
-    rspc.useQuery(['collections.getByUser']);
+  const { data: potentialCollections, isLoading: collectionLoading } = rspc.useQuery(['collections.getByUser']);
   const addLink = rspc.useMutation(['links.create'], {
     meta: {
       message: "Link created!"
@@ -48,6 +49,7 @@ export function NewLinkForm() {
     }),
     description: z.string().optional(),
     collection_id: z.number(),
+    tags: z.array(z.number()),
   });
   type FormValues = z.infer<typeof formSchema>;
   // 1. Define your form.
@@ -55,6 +57,7 @@ export function NewLinkForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       link_name: 'unnamed-' + new Date().toISOString(),
+      tags: []
     },
   });
 
@@ -62,12 +65,11 @@ export function NewLinkForm() {
   function onSubmit(values: FormValues) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    console.log(values)
     addLink.mutate({
-      link_name: values.link_name,
-      url: values.url,
       description: values.description || null,
-      collection_id: values.collection_id,
-    });
+      ...values
+    } as CreateLinkArgs);
   }
 
   // 3. Render the form.
@@ -191,6 +193,20 @@ export function NewLinkForm() {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name='tags'
+          render={({ field }) => (
+            <FormItem className='py-3 flex flex-col'>
+              <FormLabel>Tags</FormLabel>
+              <MultiSelectTags
+                selected={field.value}
+                {...field}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type='submit' className='mt-3'>
           Add Link
         </Button>
@@ -198,3 +214,4 @@ export function NewLinkForm() {
     </Form>
   );
 }
+
