@@ -21,12 +21,12 @@ import React from 'react';
 import { LinkWithTags } from '../../../bindings';
 import { EditLinkForm } from '../forms/edit_link_forms';
 
-interface CollectionPopoverProps {
+interface LinkPopoverProps {
   link: LinkWithTags;
   children: React.ReactNode;
 }
 
-export function CollectionDropdown({ link, children }: CollectionPopoverProps) {
+export function LinkDropdown({ link, children }: LinkPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
   return (
@@ -52,12 +52,12 @@ export function CollectionDropdown({ link, children }: CollectionPopoverProps) {
               </button>
             </DialogTrigger>
           </DropdownMenuItem>
-          <DropdownMenuItem>Remove Pinned</DropdownMenuItem>
+          <DropdownMenuItem>Archive Link</DropdownMenuItem>
           <DropdownMenuItem
             className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
             key='delete'
           >
-            Delete Collection
+            Delete Link
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuLabel className='text-xs text-gray-700 font-light'>

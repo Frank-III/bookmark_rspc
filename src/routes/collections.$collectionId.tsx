@@ -56,7 +56,7 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
             <CollectionDropdown collection={collection}>
               <Button>Edit Collection</Button>
             </CollectionDropdown>
-            <div className='grid grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 '>
+            <div className='mt-5 grid grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {links && links.map((link) => <LinkCard link={link}/>)}
             </div>
           </div>

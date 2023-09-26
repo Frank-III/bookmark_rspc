@@ -10,38 +10,58 @@ import {
 
 import { LinkWithTags } from "../../../bindings"
 import { Badge } from "../ui/badge"
+import { ArrowRight, Menu } from "lucide-react"
+import { LinkDropdown } from "./link_popover"
 
 
-export function LinkCard({ link }: {link: LinkWithTags}) {
+export function LinkCard({ link }: { link: LinkWithTags }) {
+  const { id, name, url, description, archived, collectionId, tags } = link;
 
-  const {id, name, url, description, archived, collectionId, tags} = link
   return (
-    <Card className="w-full" key={id}>
-      <CardHeader>
+    <Card className="w-full rounded-lg h-[175px] pb-0" key={id}>
+      <CardHeader className="p-3 text-gray-700 font-medium">
         <CardTitle>{name}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <a href={url} target="_blank" rel="noreferrer">
-          <Button>Visit</Button>
-        </a>
+      <CardContent className="p-2">
+        <div className="h-[1px] w-full rounded-full bg-gray-100" />
       </CardContent>
-      <CardFooter className="flex flex-wrap ">
+      <div
+        className="flex flex-row overflow-x-auto px-1" // Add 'overflow-x-auto' class for horizontal scroll
+        style={{ paddingBottom: '10px' }} // Add some padding for the button
+      >
         {link.tags.map((tag) => (
-          <Badge 
-            key={tag.id} 
+          <Badge
+            key={tag.id}
             style={{
               backgroundColor: `${tag.color}30`,
               color: tag.color,
               borderColor: `${tag.color}20`,
+              marginRight: '8px', // Add some space between badges
             }}
           >
             {tag.name}
           </Badge>
         ))}
-      </CardFooter>
+      </div>
+      <div className="h-[1px] w-full rounded-full bg-gray-100" />
+      <div className="mt-2 flex w-full items-center justify-end space-x-1">
+        <LinkDropdown link={link}>
+        <button className="border rounded-full h-6 w-6 align-middle ">
+          <Menu size={20}/>
+        </button>
+        </LinkDropdown>
+        <a href={url} target="_blank" rel="noreferrer">
+          <button
+            className="border rounded-full h-6 w-6" // Position the button at the bottom-right
+          >
+            <ArrowRight color={"black"} size={20}/>
+          </button>
+        </a>
+        </div>
     </Card>
-  )
-
+  );
 }
 
+
+//wrap
