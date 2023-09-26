@@ -38,6 +38,7 @@ export function CollectionLink({ collection }: CollectionLinkProps) {
         'group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition  font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900',
         active && 'bg-gray-100 text-gray-900',
       )}
+      key={`collection${id}`}
     >
       <Link
         to={`/collections/$collectionId`}

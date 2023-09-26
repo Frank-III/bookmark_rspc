@@ -16,7 +16,7 @@ export function LinkCard({ link }: {link: LinkWithTags}) {
 
   const {id, name, url, description, archived, collectionId, tags} = link
   return (
-    <Card className="w-full">
+    <Card className="w-full" key={id}>
       <CardHeader>
         <CardTitle>{name}</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -28,7 +28,8 @@ export function LinkCard({ link }: {link: LinkWithTags}) {
       </CardContent>
       <CardFooter className="flex flex-wrap ">
         {link.tags.map((tag) => (
-          <Badge key={tag.id} 
+          <Badge 
+            key={tag.id} 
             style={{
               backgroundColor: `${tag.color}30`,
               color: tag.color,
