@@ -73,6 +73,27 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         Ok(links)
       })
     })
+    .query("getById", |t| {
+      prisma::link::include!( link_with_tags {
+        tags: select {
+          id
+          name
+        }
+      });
+
+      t(|ctx: PrivateCtx, id: i32| async move {
+        let link = ctx
+          .db
+          .link()
+          .find_first(vec![
+            prisma::link::id::equals(id),
+          ]).include(link_with_tags::include())
+          .exec()
+          .await?;
+        tracing::info!("link: {:?} is fetched", id);
+        Ok(link)
+      })
+    })
     .query("getSummary", |t| {
       t(|ctx: PrivateCtx, time_span: Option<String>| async move {
         #[derive(Debug, Serialize, Deserialize, Type)]
@@ -163,6 +184,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         url: String,
         description: Option<String>,
         collection_id: i32,
+        tags: Vec<i32>
       }
       t(
         |ctx: PrivateCtx,
@@ -171,7 +193,11 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
            url,
            description,
            collection_id,
+           tags
          }| async move {
+
+          let tag_unique_where = tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>();
+
           let new_link = ctx
             .db
             .link()
@@ -181,14 +207,42 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
               prisma::user::id::equals(ctx.user_id),
               prisma::collection::id::equals(collection_id),
               vec![prisma::link::description::set(
-                description.unwrap_or("".into()),
-              )],
+                description.unwrap_or("".into()),),
+                prisma::link::tags::connect(tag_unique_where)
+                ],
             )
             .exec()
             .await?;
           Ok(new_link)
         },
       )
+    })
+    .mutation("editOne", |t| {
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      struct EditLinkArgs {
+        id: i32,
+        link_name: String,
+        url: String,
+        description: Option<String>,
+        collection_id: i32,
+        new_tags: Vec<i32>,
+        deleted_tags: Vec<i32>,
+      }
+
+      t(|ctx: PrivateCtx, EditLinkArgs {id, link_name, url, description, collection_id, new_tags, deleted_tags}| async move{
+
+        let edited_link = ctx.db.link().update(
+          prisma::link::id::equals(id),
+          vec![
+            prisma::link::name::set(link_name),
+            prisma::link::url::set(url),
+            prisma::link::description::set(description.unwrap_or("".into())),
+            prisma::link::collection_id::set(collection_id),
+            prisma::link::tags::connect(new_tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>()),
+            prisma::link::tags::disconnect(deleted_tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>())
+          ]).exec().await?;
+        Ok(edited_link)
+      })
     })
     .mutation("deleteOne", |t| {
       
