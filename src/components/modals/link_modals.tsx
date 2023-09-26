@@ -1,3 +1,4 @@
+import { TabNewForm } from '../forms/new_combined_forms';
 import { NewLinkForm } from '../forms/new_link_forms';
 import { Button } from '../ui/button';
 import {
@@ -42,13 +43,7 @@ export function TabLinkCollection({ children }: TabLinkCollectionProps) {
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='sm:max-w-[450px]'>
-        <DialogHeader>
-          <DialogTitle>New Link</DialogTitle>
-          <DialogDescription>
-            Add a new link to your collection
-          </DialogDescription>
-        </DialogHeader>
-        <NewLinkForm />
+        <TabNewForm />
       </DialogContent>
     </Dialog>
   );

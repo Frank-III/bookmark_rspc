@@ -37,14 +37,21 @@ export function MultiSelectTags({
           onClick={() => setOpen(!open)}
         >
           <div className='flex gap-1 flex-wrap'>
-            {selected.map((item) => (
+            {selected.map((item) => {
+              const this_tag = tags?.find((tag) => tag.id === item)
+              return (
               <Badge
                 variant='secondary'
                 key={item.toString()}
                 className='mr-1 mb-1'
                 onClick={() => handleUnselect(item)}
+                style={{
+                  backgroundColor: `${this_tag?.color}30`,
+                  color: this_tag?.color,
+                  borderColor: `${this_tag?.color}20`,
+                }}
               >
-                {tags?.find((tag) => tag.id === item)?.name}
+                {this_tag?.name}
                 <button
                   className='ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
                   onKeyDown={(e) => {
@@ -61,7 +68,7 @@ export function MultiSelectTags({
                   <X className='h-3 w-3 text-muted-foreground hover:text-foreground' />
                 </button>
               </Badge>
-            ))}
+            )})}
           </div>
           <ChevronsUpDown className='h-4 w-4 shrink-0 opacity-50' />
         </Button>

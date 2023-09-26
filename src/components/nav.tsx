@@ -8,6 +8,7 @@ import { Boxes, PanelLeft, Plus, Tag, User, Search } from 'lucide-react';
 import { CollectionLinks } from './links/collection_lists';
 import { NewCollection } from './modals/collection_modals';
 import { SearchCMDK } from './modals/search';
+import { TabLinkCollection } from './modals/link_modals';
 
 const privateLinks = [
   { href: '/tags', label: 'Tags', icon: <Tag /> },
@@ -84,11 +85,13 @@ export function Nav() {
               </div>
             </button>
           </SearchCMDK>
-          <button className='rounded-lg bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  auto shrink-0 ounded-lg px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
-            <div className='relative flex items-center justify-center'>
-              <Plus />
-            </div>
-          </button>
+          <TabLinkCollection>
+            <button className='rounded-lg bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  auto shrink-0 ounded-lg px-2 text-sm h-8 w-8  relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
+              <div className='relative flex items-center justify-center'>
+                <Plus />
+              </div>
+            </button>
+          </TabLinkCollection>
         </div>
         <div className='mt-4 flex w-full flex-col space-y-0.5 px-2'>
           <Links links={privateLinks} />

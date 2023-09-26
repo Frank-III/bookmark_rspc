@@ -50,7 +50,12 @@ export function CollectionLink({ collection }: CollectionLinkProps) {
           return (
             <div className='flex flex-row items-center justify-start truncate'>
               <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
-                <Pin color='white' size={30} fill={`${color}20`} stroke={color}/>
+                <Pin
+                  color='white'
+                  size={30}
+                  fill={`${color}20`}
+                  stroke={color}
+                />
                 {/* <Dot color={color} size={30} /> */}
               </div>
               <p className='truncate text-sm'>{name}</p>
