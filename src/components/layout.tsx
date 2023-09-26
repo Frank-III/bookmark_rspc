@@ -21,18 +21,6 @@ export function Layout() {
     predicate: (query) => query.state.status === 'loading',
   });
 
-  const { getToken, isSignedIn } = useAuth();
-
-  const setToken = useJwtStore((s) => s.setJwt);
-  const isExpired = useJwtStore((s) => s.expired);
-
-  React.useEffect(() => {
-    if (isSignedIn && !isExpired) return;
-    const token = async () => {
-      return await getToken({ template: 'with_role' });
-    };
-    token().then((res) => setToken(res));
-  }, [isSignedIn, isExpired]);
 
   const Header = () => {
     return (
