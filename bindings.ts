@@ -9,7 +9,7 @@ export type Procedures = {
         { key: "collections.getPinned", input: never, result: PinnedCollections[] } | 
         { key: "links.archiveStatByDate", input: string | null, result: ArchiveStatData } | 
         { key: "links.getByCollection", input: number, result: LinkWithTags[] } | 
-        { key: "links.getByDate", input: GetByDateArgs, result: Link[] } | 
+        { key: "links.getByDate", input: GetByDateArgs, result: LinkWithTags[] } | 
         { key: "links.getById", input: number, result: LinkWithTags | null } | 
         { key: "links.getByUser", input: never, result: LinkWithTags[] } | 
         { key: "links.getSummary", input: string | null, result: SummariesData[] } | 

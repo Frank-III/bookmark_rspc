@@ -48,8 +48,8 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
             )),
           ]).order_by(prisma::link::created_at::order(prisma_client_rust::Direction::Desc));
         match size {
-          None => Ok(links.exec().await?),
-          Some(sz) => Ok(links.take(sz as i64).exec().await?),
+          None => Ok(links.include(link_with_tags::include()).exec().await?),
+          Some(sz) => Ok(links.take(sz as i64).include(link_with_tags::include()).exec().await?),
         }
       })
     })
