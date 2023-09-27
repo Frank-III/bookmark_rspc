@@ -109,6 +109,7 @@ export function MultiSelectTags({
           <CommandPrimative.Empty>
             {/* No Tags Found */}
             <button
+              key='no-tags-found'
               onClick={() => {
                 addNewTag.mutate({
                   tag_name: value,
@@ -116,8 +117,22 @@ export function MultiSelectTags({
                 } as CreateTagArgs);
                 setValue('');
               }}
+              className='inline-flex'
+              // className='relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground'
             >
-              No Tag Found
+              Add 
+              <Badge
+                variant='secondary'
+                className='ml-1'
+                style={{
+                  backgroundColor: '#327fa830',
+                  color: '#327fa8',
+                  borderColor: '#327fa820',
+                }}>
+                {value}
+                </Badge>
+                to tags
+              {/* {`add "${value}" to tags`} */}
             </button>
           </CommandPrimative.Empty>
           <CommandPrimative.Group className='overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground'>
