@@ -3,9 +3,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Command as CommandPrimative } from 'cmdk';
 import React from 'react';
 import { Badge } from '../ui/badge';
-import { rspc } from '../../utils/rspc';
+import { queryClient, rspc } from '../../utils/rspc';
 import { cn } from '../../utils';
 import { Check, ChevronsUpDown, Search, X } from 'lucide-react';
+import { on } from 'events';
+import { CreateTagArgs } from '../../../bindings';
 
 interface MultiSelectProps {
   selected: number[];
@@ -23,6 +25,19 @@ export function MultiSelectTags({
     onChange(selected.filter((i) => i !== item));
   };
   const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState<string>();
+
+  const addNewTag = rspc.useMutation(['tags.create'], {
+    meta: {
+      message: 'Tag created!',
+    },
+    onSuccess: (data) => {
+      onChange([...selected, data.id]);
+      queryClient.setQueryData(['tags.getByUser'], (oldData: any) => {
+        return [...oldData, data];
+      });
+    },
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen} {...props}>
@@ -84,16 +99,26 @@ export function MultiSelectTags({
             <CommandPrimative.Input
               placeholder='Search Tags...'
               className='flex h-11 rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
+              value={value}
+              onValueChange={setValue}
             />
           </div>
           {isLoading && (
             <CommandPrimative.Loading>Loading...</CommandPrimative.Loading>
           )}
           <CommandPrimative.Empty>
-            No Tags Found
-            {/* <button onClick={}>
-
-            </button> */}
+            {/* No Tags Found */}
+            <button
+              onClick={() => {
+                addNewTag.mutate({
+                  tag_name: value,
+                  color: '#327fa8',
+                } as CreateTagArgs);
+                setValue('');
+              }}
+            >
+              No Tag Found
+            </button>
           </CommandPrimative.Empty>
           <CommandPrimative.Group className='overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground'>
             {tags?.map((tag) => (
