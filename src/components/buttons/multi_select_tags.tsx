@@ -38,37 +38,38 @@ export function MultiSelectTags({
         >
           <div className='flex gap-1 flex-wrap'>
             {selected.map((item) => {
-              const this_tag = tags?.find((tag) => tag.id === item)
+              const this_tag = tags?.find((tag) => tag.id === item);
               return (
-              <Badge
-                variant='secondary'
-                key={item.toString()}
-                className='mr-1 mb-1'
-                onClick={() => handleUnselect(item)}
-                style={{
-                  backgroundColor: `${this_tag?.color}30`,
-                  color: this_tag?.color,
-                  borderColor: `${this_tag?.color}20`,
-                }}
-              >
-                {this_tag?.name}
-                <button
-                  className='ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleUnselect(item);
-                    }
-                  }}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
+                <Badge
+                  variant='secondary'
+                  key={item.toString()}
+                  className='mr-1 mb-1'
                   onClick={() => handleUnselect(item)}
+                  style={{
+                    backgroundColor: `${this_tag?.color}30`,
+                    color: this_tag?.color,
+                    borderColor: `${this_tag?.color}20`,
+                  }}
                 >
-                  <X className='h-3 w-3 text-muted-foreground hover:text-foreground' />
-                </button>
-              </Badge>
-            )})}
+                  {this_tag?.name}
+                  <button
+                    className='ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleUnselect(item);
+                      }
+                    }}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onClick={() => handleUnselect(item)}
+                  >
+                    <X className='h-3 w-3 text-muted-foreground hover:text-foreground' />
+                  </button>
+                </Badge>
+              );
+            })}
           </div>
           <ChevronsUpDown className='h-4 w-4 shrink-0 opacity-50' />
         </Button>
@@ -88,7 +89,12 @@ export function MultiSelectTags({
           {isLoading && (
             <CommandPrimative.Loading>Loading...</CommandPrimative.Loading>
           )}
-          <CommandPrimative.Empty>No item found.</CommandPrimative.Empty>
+          <CommandPrimative.Empty>
+            No Tags Found
+            {/* <button onClick={}>
+
+            </button> */}
+          </CommandPrimative.Empty>
           <CommandPrimative.Group className='overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground'>
             {tags?.map((tag) => (
               <CommandPrimative.Item

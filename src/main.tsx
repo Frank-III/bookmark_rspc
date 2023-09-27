@@ -29,7 +29,6 @@ declare module '@tanstack/react-router' {
 }
 
 function App() {
-
   const { getToken, isSignedIn } = useAuth();
 
   const setToken = useJwtStore((s) => s.setJwt);
@@ -42,9 +41,8 @@ function App() {
     };
     token().then((res) => setToken(res));
   }, [isSignedIn, isExpired]);
-  return (
-    <RouterProvider router={router} />
-  );
+
+  return <RouterProvider router={router} />;
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

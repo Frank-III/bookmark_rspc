@@ -21,7 +21,6 @@ export function Layout() {
     predicate: (query) => query.state.status === 'loading',
   });
 
-
   const Header = () => {
     return (
       <div className='flex h-[50px] max-h-[50px] flex-row items-center justify-between space-x-4 border-b border-gray-200/50 bg-gray-50 px-4 py-2.5'>
