@@ -1,4 +1,4 @@
-import { Button } from "../ui/button"
+import { Button } from '../ui/button';
 import {
   Card,
   CardContent,
@@ -6,28 +6,27 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card"
+} from '../ui/card';
 
-import { LinkWithTags } from "../../../bindings"
-import { Badge } from "../ui/badge"
-import { ArrowRight, Menu } from "lucide-react"
-import { LinkDropdown } from "./link_popover"
-
+import { LinkWithTags } from '../../../bindings';
+import { Badge } from '../ui/badge';
+import { ArrowRight, Menu } from 'lucide-react';
+import { LinkDropdown } from './link_popover';
 
 export function LinkCard({ link }: { link: LinkWithTags }) {
   const { id, name, url, description, archived, collectionId, tags } = link;
 
   return (
-    <Card className="w-full rounded-lg h-[175px] pb-0" key={id}>
-      <CardHeader className="p-3 text-gray-700 font-medium">
+    <Card className='w-full rounded-lg h-[175px] pb-0' key={id}>
+      <CardHeader className='p-3 text-gray-700 font-medium'>
         <CardTitle>{name}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className="p-2">
-        <div className="h-[1px] w-full rounded-full bg-gray-100" />
+      <CardContent className='p-2'>
+        <div className='h-[1px] w-full rounded-full bg-gray-100' />
       </CardContent>
       <div
-        className="flex flex-row overflow-x-auto px-1" // Add 'overflow-x-auto' class for horizontal scroll
+        className='flex flex-row overflow-x-auto px-1' // Add 'overflow-x-auto' class for horizontal scroll
         style={{ paddingBottom: '10px' }} // Add some padding for the button
       >
         {link.tags.map((tag) => (
@@ -44,24 +43,23 @@ export function LinkCard({ link }: { link: LinkWithTags }) {
           </Badge>
         ))}
       </div>
-      <div className="h-[1px] w-full rounded-full bg-gray-100" />
-      <div className="mt-2 flex w-full items-center justify-end space-x-1">
+      <div className='h-[1px] w-full rounded-full bg-gray-100' />
+      <div className='mt-2 flex w-full items-center justify-end space-x-1'>
         <LinkDropdown link={link}>
-        <button className="border rounded-full h-6 w-6 align-middle ">
-          <Menu size={20}/>
-        </button>
+          <button className='border rounded-full h-6 w-6 align-middle '>
+            <Menu size={20} />
+          </button>
         </LinkDropdown>
-        <a href={url} target="_blank" rel="noreferrer">
+        <a href={url} target='_blank' rel='noreferrer'>
           <button
-            className="border rounded-full h-6 w-6" // Position the button at the bottom-right
+            className='border rounded-full h-6 w-6' // Position the button at the bottom-right
           >
-            <ArrowRight color={"black"} size={20}/>
+            <ArrowRight color={'black'} size={20} />
           </button>
         </a>
-        </div>
+      </div>
     </Card>
   );
 }
-
 
 //wrap

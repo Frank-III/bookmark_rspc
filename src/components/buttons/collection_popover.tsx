@@ -38,7 +38,7 @@ export function CollectionDropdown({
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent className='w-[220px]'>
-          <DropdownMenuItem key="edit">
+          <DropdownMenuItem key='edit'>
             <DialogTrigger
               asChild
               onSelect={(e) => {
@@ -55,8 +55,8 @@ export function CollectionDropdown({
                 Edit Collection
               </button>
             </DialogTrigger>
-          </DropdownMenuItem >
-          <DropdownMenuItem key="remove">Remove Pinned</DropdownMenuItem>
+          </DropdownMenuItem>
+          <DropdownMenuItem key='remove'>Remove Pinned</DropdownMenuItem>
           <DropdownMenuItem
             className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
             key='delete'

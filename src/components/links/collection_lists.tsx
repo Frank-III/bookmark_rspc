@@ -19,6 +19,7 @@ import { useUser } from '@clerk/clerk-react';
 import React from 'react';
 import { set } from 'date-fns';
 import { cn } from '../../utils';
+import ContentLoader from 'react-content-loader';
 
 export type CollectionPinned = Omit<CollectionWithPinnedStatus, 'pinnedBy'> & {
   isPinned: boolean;
@@ -102,17 +103,32 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
     switch (status) {
       case 'loading':
         return isFetching ? (
-          <div className='flex w-full flex-col space-y-0.5'>
-            <div className='flex w-full flex-row items-center mt-4 justify-center'>
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-            </div>
-          </div>
-        ) : (
-          <div>Error</div>
-        );
+          <ContentLoader
+            speed={2}
+            width={400}
+            height={150}
+            viewBox='0 0 400 150'
+            backgroundColor='#f3f3f3'
+            foregroundColor='#ecebeb'
+            // {...props}
+          >
+            <circle cx='10' cy='20' r='8' />
+            <rect x='25' y='15' rx='5' ry='5' width='220' height='10' />
+            <circle cx='10' cy='50' r='8' />
+            <rect x='25' y='45' rx='5' ry='5' width='220' height='10' />
+            <circle cx='10' cy='80' r='8' />
+            <rect x='25' y='75' rx='5' ry='5' width='220' height='10' />
+            <circle cx='10' cy='110' r='8' />
+            <rect x='25' y='105' rx='5' ry='5' width='220' height='10' />
+          </ContentLoader>
+        ): (<></>)
+        // : (
+        //   <div>Error</div>
+        // );
       case 'error':
         //TODO: better Errors
-        return <div>Error</div>;
+        // return <div>Error</div>;
+        return
       case 'success':
         // collections.sort((a, b) => {return a.})
         //TODO: better way?

@@ -9,6 +9,7 @@ import { CollectionWithPinnedStatus } from '../../bindings';
 import { MakeCollectionWithPinnedStatus } from '../utils';
 import { Button } from '../components/ui/button';
 import { LinkCard } from '../components/buttons/link_card';
+import { CardsSkeleton } from '../components/links/card_loader';
 
 async function loadCollectionById(
   collectionId: number,
@@ -41,12 +42,13 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
       return <div>Error</div>;
     }
 
-
-
     const collection = MakeCollectionWithPinnedStatus(
       thisCollection as CollectionWithPinnedStatus,
     );
-    const {data: links} = rspc.useQuery(['links.getByCollection', thisCollection?.id]);
+    const { status: link_status, data: links } = rspc.useQuery([
+      'links.getByCollection',
+      thisCollection?.id,
+    ]);
 
     return (
       <>
@@ -57,7 +59,10 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
               <Button>Edit Collection</Button>
             </CollectionDropdown>
             <div className='mt-5 grid grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {links && links.map((link) => <LinkCard link={link}/>)}
+              {link_status !== 'success' && <CardsSkeleton />}
+              {links &&
+                links?.length > 0 &&
+                links.map((link) => <LinkCard link={link} />)}
             </div>
           </div>
         </div>

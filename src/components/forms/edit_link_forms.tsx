@@ -30,22 +30,16 @@ export function EditLinkForm({ link }: EditLinkProps) {
 
   const { data: potentialCollections, isLoading: collectionLoading } =
     rspc.useQuery(['collections.getByUser']);
-  const addLink = rspc.useMutation(['links.create'], {
-    meta: {
-      message: 'Link created!',
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries([
-        'links.getByDate',
-        { date: new Date().toISOString().slice(0, 10) },
-      ]);
-    },
-  });
+
   const editLink = rspc.useMutation(['links.editOne'], {
+    meta: {
+      message: 'Link edited!',
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['links.getByUser']);
     },
   });
+
   const formSchema = z.object({
     link_name: z
       .string()

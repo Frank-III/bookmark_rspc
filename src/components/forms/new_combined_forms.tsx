@@ -3,7 +3,6 @@ import { NewTagForm } from './create_tag_forms';
 import { NewCollectionForm } from './new_collection_forms';
 import { NewLinkForm } from './new_link_forms';
 
-
 export function TabNewForm() {
   return (
     <Tabs defaultValue='link' className='w-[400px] flex flex-col'>
