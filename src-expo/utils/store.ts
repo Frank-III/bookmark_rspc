@@ -23,11 +23,11 @@ export const useJwtStore = create<JwtStore>()(
  
 const createTokenCache = (): TokenCache => {
     return {
-        getToken: (key) => {
-            return SecureStore.getItemAsync(key);
+        getToken: async (key) => {
+            return await SecureStore.getItemAsync(key);
         },
-        saveToken: (key, token) => {
-            return SecureStore.setItemAsync(key, token);
+        saveToken: async (key, token) => {
+            return await SecureStore.setItemAsync(key, token);
         },
     };
 };

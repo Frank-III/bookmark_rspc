@@ -66,7 +66,6 @@ function RootLayoutNav() {
 
   React.useEffect(() => {
     if (isSignedIn && !isExpired) return;
-    console.log("userID:",userId)
     const token = async () => {
       return await getToken({ template: 'with_role' });
     };
@@ -75,28 +74,17 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <SafeAreaView style={styles.container}>
-        <SignedIn>
+      <SignedIn>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           </Stack>
-        </SignedIn>
+      </SignedIn>
         <SignedOut>
           <SignInScreen/>
         </SignedOut>
-      </SafeAreaView>
     </ThemeProvider>
   );
 }
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingTop: 20,
-  },
-})
