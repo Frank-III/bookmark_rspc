@@ -6,6 +6,7 @@ import { CollectionDropdown } from '../components/buttons/collection_popover';
 import { rspc } from '../utils/rspc';
 import { CollectionPinned } from '../components/links/collection_lists';
 import { EditCllectionForm } from '../components/forms/edit_collection_forms';
+import { CardsSkeleton } from '../components/links/card_loader';
 
 export const route = new FileRoute('/collections/').createRoute({
   component: () => {
@@ -13,7 +14,7 @@ export const route = new FileRoute('/collections/').createRoute({
       'collections.getAllWithPinned',
     ]);
     if (isLoading) {
-      return <div>Error</div>;
+      return <CardsSkeleton />
     }
 
     const collects = collections?.map((c) => {

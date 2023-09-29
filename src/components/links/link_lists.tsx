@@ -23,11 +23,13 @@ export function LinkLink({ link }: { link: LinkWithTags }) {
   const { id, name, url, collectionId, tags } = link;
   return (
     <div
-      className= 'group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition  font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900' 
+      className= 'group flex w-full flex-row items-center justify-between rounded-lg border-2 border-gray-500 px-2 py-1 transition font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900' 
       key={`collection${id}`}
     >
       <div className='flex flex-row items-center justify-start truncate'>
         <div className='mr-1.5 flex h-5 w-5 items-center justify-center'>
+          <div className='flex h-full w-1 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500' />
+          {/* <Dot color={color} size={30} /> */}
           {/* <Dot color={color} size={30} /> */}
         </div>
         <p className='truncate text-sm'>{name}</p>
@@ -45,9 +47,11 @@ export function LinkLink({ link }: { link: LinkWithTags }) {
 
 export function LinkLinks({ links }: { links: LinkWithTags[] }) {
       return links.length == 0 ? (
+        <div className='h-full flex pt-3 justify-center text-gray-500 font-semibold'>
         <h1>No link created this day</h1>
+        </div>
       ) : (
-        <div className='flex w-full flex-col space-y-0.5 mt-4'>
+        <div className='flex w-full flex-col space-y-2 pt-5'>
           {links?.map((link) => (
             <LinkLink link={link} />
           ))}

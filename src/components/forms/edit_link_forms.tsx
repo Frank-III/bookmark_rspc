@@ -220,7 +220,7 @@ export function EditLinkForm({ link }: EditLinkProps) {
           )}
         />
         <Button type='submit' className='mt-3'>
-          Add Link
+          Edit Link
         </Button>
       </form>
     </Form>

@@ -61,6 +61,7 @@ export function CalenderView() {
               <div className='h-[1px] w-full rounded-full bg-gray-100' />
             </div>
             { dateLinkStatus !== 'success' && (
+              isFetching ? 
             <ContentLoader
               speed={2}
               width={400}
@@ -78,7 +79,10 @@ export function CalenderView() {
               <rect x='25' y='75' rx='5' ry='5' width='220' height='10' />
               <circle cx='10' cy='110' r='8' />
               <rect x='25' y='105' rx='5' ry='5' width='220' height='10' />
-            </ContentLoader>
+            </ContentLoader> :
+            <div className='h-full flex pt-3 justify-center text-gray-400 font-semibold'>
+            <h1>Please Pick a Day</h1>
+            </div>
             )}
             { dateLinkStatus === 'success' && 
               (<>
