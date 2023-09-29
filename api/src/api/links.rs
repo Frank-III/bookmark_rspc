@@ -22,6 +22,7 @@ prisma::link::include!( link_with_tags {
     color
   }
 });
+
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
     .query("getByDate", |t| {
@@ -94,6 +95,21 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .await?;
         tracing::info!("link: {:?} is fetched", id);
         Ok(link)
+      })
+    })
+    .query("filterByTags", |t| {
+      t(|ctx: PrivateCtx, tags: Vec<i32>| async move {
+        let links = ctx
+          .db
+          .link()
+          .find_many(vec![
+            prisma::link::owner_id::equals(ctx.user_id.clone()),
+            prisma::link::tags::some(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>()),
+          ]).include(link_with_tags::include())
+          .exec()
+          .await?;
+        tracing::info!("links of tags: {:?} is fetched", tags);
+        Ok(links)
       })
     })
     .query("getSummary", |t| {
