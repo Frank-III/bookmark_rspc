@@ -9,11 +9,12 @@ import { CollectionLinks } from './links/collection_lists';
 import { NewCollection } from './modals/collection_modals';
 import { SearchCMDK } from './modals/search';
 import { TabLinkCollection } from './modals/link_modals';
+import { cn } from '../utils';
 
 const privateLinks = [
   { href: '/tags', label: 'Tags', icon: <Tag /> },
   { href: '/collections', label: 'Collections', icon: <Boxes /> },
-  { href: '/me', label: 'Me', icon: <User /> },
+  { href: '/me', label: 'Me', icon: <User />, disabled: true },
 ] as const;
 
 interface LinksProps {
@@ -23,12 +24,13 @@ interface LinksProps {
 export function Links({ links }: LinksProps) {
   return (
     <div className='flex w-full flex-col space-y-0.5'>
-      {links.map(({ href, label, icon }) => (
+      {links.map(({ href, label, icon, disabled}) => (
         <Link
           to={href}
           activeProps={{ style: { backgroundColor: 'rgb(243 244 246)' } }}
           key={`link${href}`}
-          className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-normal'
+          className={cn('group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-normal', disabled && 'opacity-50')}
+          disabled={disabled ? true: false}
         >
           <button>
             <div className='flex flex-row items-center justify-start truncate'>
