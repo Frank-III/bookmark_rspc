@@ -7,10 +7,12 @@ import ContentLoader from 'react-content-loader';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Search } from 'lucide-react';
+import { set } from 'date-fns';
 
 export const route = new FileRoute('/tags/').createRoute({
   component: () => {
     const { status, data: allTags } = rspc.useQuery(['tags.getByUser']);
+    // const [selectedTags, setSelectedTags] = React.useState<number[]>([]);
 
     if (status !== 'success') {
       return (
