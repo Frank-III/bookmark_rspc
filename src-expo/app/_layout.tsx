@@ -9,6 +9,15 @@ import { rspc, queryClient, client} from '../utils/rspc'
 import { ClerkProvider, SignedIn, SignedOut, useAuth } from '@clerk/clerk-expo';
 import React from 'react';
 import SignInScreen from '../components/SignInScreen';
+import { AppState, Platform } from 'react-native'
+import type { AppStateStatus } from "react-native"
+import { focusManager } from '@tanstack/react-query'
+
+function onAppStateChange(status: AppStateStatus) {
+  if (Platform.OS !== 'web') {
+    focusManager.setFocused(status === 'active')
+  }
+}
 
 
 export {
@@ -65,12 +74,19 @@ function RootLayoutNav() {
   const isExpired = useJwtStore((s) => s.expired);
 
   React.useEffect(() => {
+    console.log("userId", isSignedIn, userId, useJwtStore.getState().jwt)
     if (isSignedIn && !isExpired) return;
     const token = async () => {
       return await getToken({ template: 'with_role' });
     };
     token().then((res) => setToken(res));
   }, [isSignedIn, isExpired]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', onAppStateChange)
+
+    return () => subscription.remove()
+  }, [])
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
