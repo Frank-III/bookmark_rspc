@@ -9,12 +9,13 @@ use axum::{
 };
 use rspc::integrations::httpz::Request;
 use std::{env, net::SocketAddr, sync::Arc};
-use tower_http::cors::CorsLayer;
+use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod api;
 mod prisma;
 mod utils;
+mod trace_layer;
 
 fn router(client: Arc<prisma::PrismaClient>) -> axum::Router {
   let router = api::new().arced();
@@ -60,18 +61,20 @@ async fn main() {
     .with(tracing_subscriber::fmt::layer())
     .init();
 
+  let trace_layer = TraceLayer::new_for_http()
+            .make_span_with(trace_layer::trace_layer_make_span_with)
+            .on_request(trace_layer::trace_layer_on_request)
+            .on_response(trace_layer::trace_layer_on_response);
+
   dotenv::dotenv().ok();
 
   let port = env::var("PORT").unwrap_or("9000".to_string());
-  tracing::debug!("zero");
   let client = Arc::new(prisma::new_client().await.unwrap());
 
-  tracing::debug!("first");
   let addr = format!("[::]:{}", port).parse::<SocketAddr>().unwrap(); // This listens on IPv6 and IPv4
-  tracing::debug!("sec");
   tracing::info!("{} listening on http://{}", env!("CARGO_CRATE_NAME"), addr);
   axum::Server::bind(&addr)
-    .serve(router(client).into_make_service())
+    .serve(router(client).layer(trace_layer).into_make_service_with_connect_info::<SocketAddr>())
     .with_graceful_shutdown(utils::axum_shutdown_signal())
     .await
     .expect("Error with HTTP server!");
