@@ -98,13 +98,27 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
       })
     })
     .query("filterByTags", |t| {
-      t(|ctx: PrivateCtx, tags: Vec<i32>| async move {
+
+      enum Mode {
+        And,
+        Or
+      }
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      struct FilterByTagsArgs {
+        mode: Mode,
+        tags: Vec<i32>,
+      }
+      t(|ctx: PrivateCtx, FilterByTagsArgs{ mode,  tags}| async move {
+        let filter_cond = match mode {
+          Mode::And => prisma::link::tags::every(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>()),
+          Mode::Or => prisma::link::tags::some(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>())
+        };
         let links = ctx
           .db
           .link()
           .find_many(vec![
             prisma::link::owner_id::equals(ctx.user_id.clone()),
-            prisma::link::tags::every(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>()),
+            filter_cond
           ]).include(link_with_tags::include())
           .exec()
           .await?;
