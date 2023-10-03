@@ -110,17 +110,16 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         tags: Vec<i32>,
       }
       t(|ctx: PrivateCtx, FilterByTagsArgs{ mode,  tags}| async move {
-        let filter_cond = match mode {
-          Mode::And => prisma::link::tags::every(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>()),
-          Mode::Or => prisma::link::tags::some(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>())
+        let filter_cond = match (mode, &*tags) {
+          (_, []) => vec![prisma::link::owner_id::equals(ctx.user_id.clone())],
+          (Mode::And, tgs) => vec![prisma::link::owner_id::equals(ctx.user_id.clone()), prisma::link::tags::every(tgs.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>())],
+          (Mode::Or, tgs) => vec![prisma::link::owner_id::equals(ctx.user_id.clone()),prisma::link::tags::some(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>())]
         };
+
         let links = ctx
           .db
           .link()
-          .find_many(vec![
-            prisma::link::owner_id::equals(ctx.user_id.clone()),
-            filter_cond
-          ]).include(link_with_tags::include())
+          .find_many(filter_cond).include(link_with_tags::include())
           .exec()
           .await?;
         tracing::info!("links of tags: {:?} is fetched", tags);
