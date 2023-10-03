@@ -104,7 +104,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .link()
           .find_many(vec![
             prisma::link::owner_id::equals(ctx.user_id.clone()),
-            prisma::link::tags::some(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>()),
+            prisma::link::tags::every(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>()),
           ]).include(link_with_tags::include())
           .exec()
           .await?;

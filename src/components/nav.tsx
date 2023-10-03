@@ -24,13 +24,16 @@ interface LinksProps {
 export function Links({ links }: LinksProps) {
   return (
     <div className='flex w-full flex-col space-y-0.5'>
-      {links.map(({ href, label, icon, disabled}) => (
+      {links.map(({ href, label, icon, disabled }) => (
         <Link
           to={href}
           activeProps={{ style: { backgroundColor: 'rgb(243 244 246)' } }}
           key={`link${href}`}
-          className={cn('group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-normal', disabled && 'opacity-50')}
-          disabled={disabled ? true: false}
+          className={cn(
+            'group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-normal',
+            disabled && 'opacity-50',
+          )}
+          disabled={disabled ? true : false}
         >
           <button>
             <div className='flex flex-row items-center justify-start truncate'>

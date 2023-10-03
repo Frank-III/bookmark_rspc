@@ -50,11 +50,13 @@ export function LinkCard({ link }: { link: LinkWithTags }) {
             <Menu size={20} />
           </button>
         </LinkDropdown>
-        <a href={url} target='_blank' rel='noreferrer'
+        <a
+          href={url}
+          target='_blank'
+          rel='noreferrer'
           className='border rounded-full h-6 w-6 ' // Position the button at the bottom-right
         >
-          <button
-          >
+          <button>
             <ArrowRight color={'black'} size={20} />
           </button>
         </a>
