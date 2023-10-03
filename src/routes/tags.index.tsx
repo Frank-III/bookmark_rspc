@@ -12,9 +12,18 @@ import { create } from 'zustand';
 import { cn } from '../utils';
 import { CardsSkeleton } from '../components/links/card_loader';
 import { LinkCard } from '../components/buttons/link_card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select"
 
 type selectedTags = {
   tags: Array<Exclude<Tag, 'ownerId'>>;
+  mode: 'and' | 'or';
+  setmode: (mode: 'and' | 'or') => void;
   setselect: (tags: Array<Exclude<Tag, 'ownerId'>>) => void;
   addSelect: (tag: Exclude<Tag, 'ownerId'>) => void;
   removeSelect: (tag: Exclude<Tag, 'ownerId'>) => void;
@@ -22,6 +31,8 @@ type selectedTags = {
 
 const useSelectedTagsStore = create<selectedTags>((set) => ({
   tags: [],
+  mode: 'and',
+  setmode: (mode) => set(() => ({ mode })),
   setselect: (tags) => set(() => ({ tags })),
   addSelect: (tag) => set((state) => ({ tags: [...state.tags, tag] })),
   removeSelect: (tag) =>
@@ -53,6 +64,20 @@ export function TagBadge({
     </Badge>
   );
 }
+
+function TagMode() {
+  return (
+  <Select onValueChange={(v: 'and' | 'or') => {useSelectedTagsStore.getState().setmode(v)}} defaultValue='and'>
+    <SelectTrigger className="w-[85px]">
+      <SelectValue placeholder="Select Mode" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="and">Every</SelectItem>
+      <SelectItem value="or">Some</SelectItem>
+    </SelectContent>
+  </Select>)
+}
+
 
 export const route = new FileRoute('/tags/').createRoute({
   component: () => {
@@ -89,6 +114,7 @@ export const route = new FileRoute('/tags/').createRoute({
       <div className='flex flex-col mx-auto justify-center'>
         <h1 className='text-3xl font-semibold mb-3'>Tags</h1>
         <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 items-center'>
+          <TagMode />
           <div
             className={cn(
               'flex min-h-[2.5rem] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
