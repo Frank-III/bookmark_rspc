@@ -30,8 +30,7 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
     return { queryOptions };
   },
   loader: async ({
-    context: { queryClient },
-    routeContext: { queryOptions },
+    context: { queryClient, queryOptions },
   }) => {
     await queryClient.ensureQueryData(queryOptions);
   },
