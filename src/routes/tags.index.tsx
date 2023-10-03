@@ -2,9 +2,7 @@ import * as React from 'react';
 import { FileRoute } from '@tanstack/react-router';
 import { Badge } from '../components/ui/badge';
 import { rspc } from '../utils/rspc';
-import { is } from 'date-fns/locale';
 import ContentLoader from 'react-content-loader';
-import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Search } from 'lucide-react';
 import { Tag } from '../../bindings';
@@ -19,11 +17,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select"
+import {Mode, FilterByTagsArgs} from '../../bindings'
 
 type selectedTags = {
   tags: Array<Exclude<Tag, 'ownerId'>>;
-  mode: 'and' | 'or';
-  setmode: (mode: 'and' | 'or') => void;
+  mode: Mode;
+  setmode: (mode: Mode) => void;
   setselect: (tags: Array<Exclude<Tag, 'ownerId'>>) => void;
   addSelect: (tag: Exclude<Tag, 'ownerId'>) => void;
   removeSelect: (tag: Exclude<Tag, 'ownerId'>) => void;
@@ -31,7 +30,7 @@ type selectedTags = {
 
 const useSelectedTagsStore = create<selectedTags>((set) => ({
   tags: [],
-  mode: 'and',
+  mode: "And",
   setmode: (mode) => set(() => ({ mode })),
   setselect: (tags) => set(() => ({ tags })),
   addSelect: (tag) => set((state) => ({ tags: [...state.tags, tag] })),
@@ -67,7 +66,7 @@ export function TagBadge({
 
 function TagMode() {
   return (
-  <Select onValueChange={(v: 'and' | 'or') => {useSelectedTagsStore.getState().setmode(v)}} defaultValue='and'>
+  <Select onValueChange={(v: Mode) => {useSelectedTagsStore.getState().setmode(v)}} defaultValue='and'>
     <SelectTrigger className="w-[85px]">
       <SelectValue placeholder="Select Mode" />
     </SelectTrigger>
@@ -87,7 +86,14 @@ export const route = new FileRoute('/tags/').createRoute({
       state.tags.map((t) => t.id),
     );
 
-    const {status: link_status, data: filteredLinks} = rspc.useQuery(['links.filterByTags', useSelectedTagsId]);
+    const FilterTagProps: FilterByTagsArgs = {
+      mode: useSelectedTagsStore((state) => state.mode),
+      tags: useSelectedTagsId
+    }
+
+    const {status: link_status, data: filteredLinks, refetch} = rspc.useQuery(['links.filterByTags', FilterTagProps], {
+      enabled: false
+    });
 
     if (status !== 'success') {
       return (
@@ -141,7 +147,7 @@ export const route = new FileRoute('/tags/').createRoute({
           >
             clear
           </button>
-          <Button className='border-2 bg-gray-900 w-full md:w-auto'>
+          <Button className='border-2 bg-gray-900 w-full md:w-auto' onClick={() => {refetch()}}>
             <Search />
           </Button>
         </div>
