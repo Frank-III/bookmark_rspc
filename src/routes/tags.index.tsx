@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "../components/ui/select"
 import {Mode, FilterByTagsArgs} from '../../bindings'
+import { is } from 'date-fns/locale';
 
 type selectedTags = {
   tags: Array<Exclude<Tag, 'ownerId'>>;
@@ -66,13 +67,13 @@ export function TagBadge({
 
 function TagMode() {
   return (
-  <Select onValueChange={(v: Mode) => {useSelectedTagsStore.getState().setmode(v)}} defaultValue='and'>
+  <Select onValueChange={(v: Mode) => {useSelectedTagsStore.getState().setmode(v)}} defaultValue='And'>
     <SelectTrigger className="w-[85px]">
       <SelectValue placeholder="Select Mode" />
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="and">Every</SelectItem>
-      <SelectItem value="or">Some</SelectItem>
+      <SelectItem value="And">Every</SelectItem>
+      <SelectItem value="Or">Some</SelectItem>
     </SelectContent>
   </Select>)
 }
@@ -91,8 +92,9 @@ export const route = new FileRoute('/tags/').createRoute({
       tags: useSelectedTagsId
     }
 
-    const {status: link_status, data: filteredLinks, refetch} = rspc.useQuery(['links.filterByTags', FilterTagProps], {
-      enabled: false
+    const {isPreviousData, status: link_status, data: filteredLinks, isFetching: linkFetching, refetch} = rspc.useQuery(['links.filterByTags', FilterTagProps], {
+      enabled: false,
+      keepPreviousData: true,
     });
 
     if (status !== 'success') {
@@ -166,12 +168,21 @@ export const route = new FileRoute('/tags/').createRoute({
             />
           ))}
         </div>
-        <div className='mt-5 grid grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-          {link_status !== 'success' && <CardsSkeleton />}
-          {filteredLinks &&
-            filteredLinks?.length > 0 &&
-            filteredLinks.map((link) => <LinkCard link={link} />)}
+
+      {link_status !== 'success' && linkFetching && <CardsSkeleton /> }
+      <div className={cn('mt-5')}>
+        <div className={cn('grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4', isPreviousData ? 'opacity-40 blur-sm pointer-events-none ' : '')}>
+          {filteredLinks && filteredLinks?.length > 0 && filteredLinks.map((link) => <LinkCard link={link} />)}
         </div>
+        {isPreviousData  && <div className='absolute left-1/2 top-1/2'>Please Click Search</div>}
+      </div>
+        {/* <div className='mt-5 grid grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          {!linkFetching &&  link_status !== 'success' ? <div>Please Click Search</div> :
+            link_status !== 'success' ? <CardsSkeleton /> :
+            filteredLinks && filteredLinks?.length > 0 ? filteredLinks.map((link) => <LinkCard link={link} />) :
+            <div>No Links Found</div>
+          }
+        </div> */}
       </div>
     );
   },
