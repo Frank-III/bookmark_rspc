@@ -16,7 +16,7 @@ module.exports = {
       center: true,
       padding: '2rem',
       screens: {
-        'md': '768px', // Adjust as needed
+        md: '768px', // Adjust as needed
         '2xl': '1400px',
       },
     },
@@ -83,5 +83,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography'), require('tailwind-scrollbar')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography'),
+    require('tailwind-scrollbar'),
+  ],
 };
