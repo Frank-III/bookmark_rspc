@@ -1,72 +1,72 @@
-import { route as rootRoute } from "./routes/__root"
-import { route as TagsRoute } from "./routes/tags"
-import { route as MeRoute } from "./routes/me"
-import { route as CollectionsRoute } from "./routes/collections"
-import { route as IndexRoute } from "./routes/index"
-import { route as CollectionsCollectionIdRoute } from "./routes/collections.$collectionId"
-import { route as TagsIndexRoute } from "./routes/tags.index"
-import { route as CollectionsIndexRoute } from "./routes/collections.index"
+import { route as rootRoute } from './routes/__root';
+import { route as TagsRoute } from './routes/tags';
+import { route as MeRoute } from './routes/me';
+import { route as CollectionsRoute } from './routes/collections';
+import { route as IndexRoute } from './routes/index';
+import { route as CollectionsCollectionIdRoute } from './routes/collections.$collectionId';
+import { route as TagsIndexRoute } from './routes/tags.index';
+import { route as CollectionsIndexRoute } from './routes/collections.index';
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      parentRoute: typeof rootRoute
-    }
-    "/collections": {
-      parentRoute: typeof rootRoute
-    }
-    "/me": {
-      parentRoute: typeof rootRoute
-    }
-    "/tags": {
-      parentRoute: typeof rootRoute
-    }
-    "/collections/": {
-      parentRoute: typeof CollectionsRoute
-    }
-    "/tags/": {
-      parentRoute: typeof TagsRoute
-    }
-    "/collections/$collectionId": {
-      parentRoute: typeof CollectionsRoute
-    }
+    '/': {
+      parentRoute: typeof rootRoute;
+    };
+    '/collections': {
+      parentRoute: typeof rootRoute;
+    };
+    '/me': {
+      parentRoute: typeof rootRoute;
+    };
+    '/tags': {
+      parentRoute: typeof rootRoute;
+    };
+    '/collections/': {
+      parentRoute: typeof CollectionsRoute;
+    };
+    '/tags/': {
+      parentRoute: typeof TagsRoute;
+    };
+    '/collections/$collectionId': {
+      parentRoute: typeof CollectionsRoute;
+    };
   }
 }
 
 Object.assign(IndexRoute.options, {
-  path: "/",
+  path: '/',
   getParentRoute: () => rootRoute,
-})
+});
 
 Object.assign(CollectionsRoute.options, {
-  path: "/collections",
+  path: '/collections',
   getParentRoute: () => rootRoute,
-})
+});
 
 Object.assign(MeRoute.options, {
-  path: "/me",
+  path: '/me',
   getParentRoute: () => rootRoute,
-})
+});
 
 Object.assign(TagsRoute.options, {
-  path: "/tags",
+  path: '/tags',
   getParentRoute: () => rootRoute,
-})
+});
 
 Object.assign(CollectionsIndexRoute.options, {
-  path: "/",
+  path: '/',
   getParentRoute: () => CollectionsRoute,
-})
+});
 
 Object.assign(TagsIndexRoute.options, {
-  path: "/",
+  path: '/',
   getParentRoute: () => TagsRoute,
-})
+});
 
 Object.assign(CollectionsCollectionIdRoute.options, {
-  path: "/$collectionId",
+  path: '/$collectionId',
   getParentRoute: () => CollectionsRoute,
-})
+});
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
@@ -76,4 +76,4 @@ export const routeTree = rootRoute.addChildren([
   ]),
   MeRoute,
   TagsRoute.addChildren([TagsIndexRoute]),
-])
+]);

@@ -120,7 +120,7 @@ export function MultiSelectTags({
               className='inline-flex'
               // className='relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground'
             >
-              Add 
+              Add
               <Badge
                 variant='secondary'
                 className='ml-1'
@@ -128,10 +128,11 @@ export function MultiSelectTags({
                   backgroundColor: '#327fa830',
                   color: '#327fa8',
                   borderColor: '#327fa820',
-                }}>
+                }}
+              >
                 {value}
-                </Badge>
-                to tags
+              </Badge>
+              to tags
               {/* {`add "${value}" to tags`} */}
             </button>
           </CommandPrimative.Empty>

@@ -14,7 +14,7 @@ export const route = new FileRoute('/collections/').createRoute({
       'collections.getAllWithPinned',
     ]);
     if (isLoading) {
-      return <CardsSkeleton />
+      return <CardsSkeleton />;
     }
 
     const collects = collections?.map((c) => {
