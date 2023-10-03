@@ -99,6 +99,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
     })
     .query("filterByTags", |t| {
 
+      #[derive(Debug, Deserialize, Serialize, Type)]
       enum Mode {
         And,
         Or

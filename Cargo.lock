@@ -3296,6 +3296,7 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "dotenv",
+ "hyper",
  "jsonwebtoken",
  "prisma-client-rust",
  "rspc",
@@ -3500,6 +3501,7 @@ dependencies = [
  "pin-project-lite",
  "tower-layer",
  "tower-service",
+ "tracing",
 ]
 
 [[package]]
