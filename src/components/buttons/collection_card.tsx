@@ -30,7 +30,7 @@ export function CollectionCard({
     >
       <CardHeader className='p-3 text-gray-700 font-medium'>
         <CardTitle>{name}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription>{description || "None"}</CardDescription>
       </CardHeader>
       <CardContent className='p-2'>
         {/* <div className='h-[1px] w-full rounded-full bg-gray-100' /> */}
