@@ -111,7 +111,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         mode: Mode,
         tags: Vec<i32>,
         take: i32,
-        skip: Option<i32>
+        skip: i32
       }
       
       #[derive(Debug, Deserialize, Serialize, Type)]
@@ -128,15 +128,15 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         };
 
         let total_links = match skip {
-          None => Some(ctx.db.link().count(filter_cond.clone()).exec().await? as i32),
-          Some(_) => None
+          0 => Some(ctx.db.link().count(filter_cond.clone()).exec().await? as i32),
+          _ => None
         };
 
         let links = ctx
           .db
           .link()
           .find_many(filter_cond)
-          .skip((skip.unwrap_or(0) * take) as i64)
+          .skip(skip as i64)
           .take(take as i64)
           .include(link_with_tags::include())
           .exec()
