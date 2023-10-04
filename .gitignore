@@ -25,3 +25,5 @@ target/*
 bun.lockb
 api/src/prisma.rs
 ./bindings.ts
+
+/src-expo/**
