@@ -26,11 +26,16 @@ use crate::prisma::{
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
     .query("getByUser", |t| {
+      // struct CollectionIsPinned {
+      //   ...prisma::
+
+      // }
       t(|ctx: PrivateCtx, _: ()| async move {
         let collections = ctx
           .db
           .collection()
           .find_many(vec![collection::owner_id::equals(ctx.user_id.clone())])
+          .include(collection_with_pinned_status::include())
           .exec()
           .await?;
         tracing::info!("collections of user:{:?} are fetched", ctx.user_id);

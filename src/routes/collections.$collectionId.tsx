@@ -29,9 +29,7 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
     } as const;
     return { queryOptions };
   },
-  loader: async ({
-    context: { queryClient, queryOptions },
-  }) => {
+  loader: async ({ context: { queryClient, queryOptions } }) => {
     await queryClient.ensureQueryData(queryOptions);
   },
   component: ({ useRouteContext }) => {

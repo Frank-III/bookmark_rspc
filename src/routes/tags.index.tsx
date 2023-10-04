@@ -11,13 +11,19 @@ import { cn } from '../utils';
 import { CardsSkeleton } from '../components/links/card_loader';
 import { LinkCard } from '../components/buttons/link_card';
 import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from '@radix-ui/react-icons';
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../components/ui/select"
-import {Mode, FilterByTagsArgs} from '../../bindings'
+} from '../components/ui/select';
+import { Mode, FilterByTagsArgs } from '../../bindings';
 import { is } from 'date-fns/locale';
 
 type selectedTags = {
@@ -33,7 +39,7 @@ type selectedTags = {
 
 const useSelectedTagsStore = create<selectedTags>((set) => ({
   tags: [],
-  mode: "And",
+  mode: 'And',
   page: 1,
   setpage: (page) => set(() => ({ page })),
   setmode: (mode) => set(() => ({ mode })),
@@ -71,17 +77,46 @@ export function TagBadge({
 
 function TagMode() {
   return (
-  <Select onValueChange={(v: Mode) => {useSelectedTagsStore.getState().setmode(v)}} defaultValue='And'>
-    <SelectTrigger className="w-[85px]">
-      <SelectValue placeholder="Select Mode" />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectItem value="And">Every</SelectItem>
-      <SelectItem value="Or">Some</SelectItem>
-    </SelectContent>
-  </Select>)
+    <Select
+      onValueChange={(v: Mode) => {
+        useSelectedTagsStore.getState().setmode(v);
+      }}
+      defaultValue='And'
+    >
+      <SelectTrigger className='w-[85px]'>
+        <SelectValue placeholder='Select Mode' />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value='And'>Every</SelectItem>
+        <SelectItem value='Or'>Some</SelectItem>
+      </SelectContent>
+    </Select>
+  );
 }
 
+function PageButton({
+  onClick,
+  disabled,
+  children,
+}: {
+  page: number;
+  onClick: () => void;
+  disabled: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Button
+      variant='outline'
+      onClick={() => {
+        useSelectedTagsStore.setState({ page: 1 });
+        refetch();
+      }}
+      disabled={useSelectedTagsStore.getState().page == 1}
+    >
+      1
+    </Button>
+  );
+}
 
 export const route = new FileRoute('/tags/').createRoute({
   component: () => {
@@ -91,23 +126,32 @@ export const route = new FileRoute('/tags/').createRoute({
       state.tags.map((t) => t.id),
     );
 
-    const [totalPage, setTotalPage] = React.useState<undefined | number>(undefined);
+    const [totalPage, setTotalPage] = React.useState<undefined | number>(
+      undefined,
+    );
 
     const FilterTagProps: FilterByTagsArgs = {
       mode: useSelectedTagsStore((state) => state.mode),
       tags: useSelectedTagsId,
       skip: (useSelectedTagsStore.getState().page - 1) * 20,
       take: 20,
-    }
+    };
 
-    const {isLoading:linkLoading ,isPreviousData, status: link_status, data: filteredLinks, isFetching: linkFetching, refetch } = rspc.useQuery(['links.filterByTags', FilterTagProps], {
-      enabled: false,
+    const {
+      isLoading: linkLoading,
+      isPreviousData,
+      status: link_status,
+      data: filteredLinks,
+      isFetching: linkFetching,
+      refetch,
+    } = rspc.useQuery(['links.filterByTags', FilterTagProps], {
+      // enabled: false,
       keepPreviousData: true,
       onSuccess: (data) => {
         if (data?.total_links !== undefined && data?.total_links !== null) {
           setTotalPage(Math.ceil(data?.total_links / 20));
         }
-      }
+      },
     });
 
     // if (filteredLinks?.total_links !== undefined && filteredLinks?.total_links !== null) {
@@ -166,7 +210,12 @@ export const route = new FileRoute('/tags/').createRoute({
           >
             clear
           </button>
-          <Button className='border-2 bg-gray-900 w-full md:w-auto' onClick={() => {refetch()}}>
+          <Button
+            className='border-2 bg-gray-900 w-full md:w-auto'
+            onClick={() => {
+              refetch();
+            }}
+          >
             <Search />
           </Button>
         </div>
@@ -186,26 +235,80 @@ export const route = new FileRoute('/tags/').createRoute({
           ))}
         </div>
 
-      {link_status !== 'success' && linkFetching && <CardsSkeleton /> }
-      <div className={cn('mt-5')}>
-        <div className={cn('grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4', isPreviousData && !linkLoading? 'opacity-40 blur-sm pointer-events-none ' : '')}>
-          {filteredLinks && filteredLinks?.links.length > 0 && filteredLinks.links.map((link) => <LinkCard link={link} />)}
-        </div>
-        {/* {isPreviousData  && <div className='absolute left-1/2 top-1/2'>Please Click Search</div>} */}
-      </div>
-      <div className='flex items-center justify-between px-2'>
-        <div className='flex items-center space-x-6 lg:space-x-8'>
-          <div className='flex w-[100px] items-center justify-center text-sm font-medium'>
-            { totalPage && `Page ${useSelectedTagsStore.getState().page} of ${totalPage}`}
+        {link_status !== 'success' && linkFetching && <CardsSkeleton />}
+        <div className={cn('mt-5')}>
+          <div
+            className={cn(
+              'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+              isPreviousData && !linkLoading
+                ? 'opacity-40 blur-sm pointer-events-none '
+                : '',
+            )}
+          >
+            {filteredLinks &&
+              filteredLinks?.links.length > 0 &&
+              filteredLinks.links.map((link) => <LinkCard link={link} />)}
           </div>
-          <div className='flex items-center space-x-2'>
-            <Button onClick={() => {useSelectedTagsStore.setState({page: 1}); refetch()}} disabled={useSelectedTagsStore.getState().page == 1}>1</Button>
-            <Button onClick={() => {useSelectedTagsStore.setState({page: useSelectedTagsStore.getState().page - 1}); refetch()}} disabled={useSelectedTagsStore.getState().page == 1}>2</Button>
-            <Button onClick={() => {useSelectedTagsStore.setState({page: useSelectedTagsStore.getState().page + 1}); refetch()}} disabled={useSelectedTagsStore.getState().page == totalPage}>3</Button>
-            <Button onClick={() => {useSelectedTagsStore.setState({page: totalPage}); refetch()}} disabled={useSelectedTagsStore.getState().page == totalPage}>4</Button>
+          {/* {isPreviousData  && <div className='absolute left-1/2 top-1/2'>Please Click Search</div>} */}
+        </div>
+        <div className='flex items-center justify-end px-2 mt-3'>
+          <div className='flex items-center space-x-6 lg:space-x-8'>
+            <div className=' flex w-[100px] items-center justify-center text-sm font-medium'>
+              {totalPage &&
+                `Page ${useSelectedTagsStore.getState().page} of ${totalPage}`}
+            </div>
+            <div className='flex items-center space-x-2 '>
+              <Button
+                variant='outline'
+                className='h-8 w-8 p-0'
+                onClick={() => {
+                  useSelectedTagsStore.setState({ page: 1 });
+                  refetch();
+                }}
+                disabled={useSelectedTagsStore.getState().page == 1}
+              >
+                <DoubleArrowLeftIcon className='h-4 w-4' />
+              </Button>
+              <Button
+                variant='outline'
+                className='h-8 w-8 p-0'
+                onClick={() => {
+                  useSelectedTagsStore.setState({
+                    page: useSelectedTagsStore.getState().page - 1,
+                  });
+                  refetch();
+                }}
+                disabled={useSelectedTagsStore.getState().page == 1}
+              >
+                <ChevronLeftIcon className='h-4 w-4' />
+              </Button>
+              <Button
+                variant='outline'
+                className='h-8 w-8 p-0'
+                onClick={() => {
+                  useSelectedTagsStore.setState({
+                    page: useSelectedTagsStore.getState().page + 1,
+                  });
+                  refetch();
+                }}
+                disabled={useSelectedTagsStore.getState().page == totalPage}
+              >
+                <ChevronRightIcon className='h-4 w-4' />
+              </Button>
+              <Button
+                variant='outline'
+                className='h-8 w-8 p-0'
+                onClick={() => {
+                  useSelectedTagsStore.setState({ page: totalPage });
+                  refetch();
+                }}
+                disabled={useSelectedTagsStore.getState().page == totalPage}
+              >
+                <DoubleArrowRightIcon className='h-4 w-4' />
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
         {/* <div className='mt-5 grid grid-cols-1 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {!linkFetching &&  link_status !== 'success' ? <div>Please Click Search</div> :
             link_status !== 'success' ? <CardsSkeleton /> :
