@@ -46,7 +46,7 @@ export type Tag = { id: number; name: string; color: string; ownerId: string }
 
 export type FilterByTagsResult = { total_links: number | null; links: LinkWithTags[] }
 
-export type FilterByTagsArgs = { mode: Mode; tags: number[]; take: number; skip: number | null }
+export type FilterByTagsArgs = { mode: Mode; tags: number[]; take: number; skip: number }
 
 export type PinnedUserCollections = { userId: string; collectionId: number }
 
