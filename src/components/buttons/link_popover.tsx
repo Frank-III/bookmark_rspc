@@ -20,6 +20,7 @@ import { DialogHeader } from '../ui/dialog';
 import React from 'react';
 import { LinkWithTags } from '../../../bindings';
 import { EditLinkForm } from '../forms/edit_link_forms';
+import { rspc } from '../../utils/rspc';
 
 interface LinkPopoverProps {
   link: LinkWithTags;
@@ -29,6 +30,23 @@ interface LinkPopoverProps {
 export function LinkDropdown({ link, children }: LinkPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
+  const {mutate: delLink} = rspc.useMutation(['links.deleteOne'], {
+    meta: {
+      message: 'Link deleted!'
+    }, 
+    onSuccess: () => {
+
+    }
+  })
+  const {mutate: archiveLink} = rspc.useMutation(['links.editOne'], {
+    meta: {
+      message: 'Link archived!'
+    }, 
+    onSuccess: () => {
+
+    }
+  })
+
   return (
     <Dialog open={showEdit} onOpenChange={setShowEdit}>
       <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -52,12 +70,18 @@ export function LinkDropdown({ link, children }: LinkPopoverProps) {
               </button>
             </DialogTrigger>
           </DropdownMenuItem>
-          <DropdownMenuItem>Archive Link</DropdownMenuItem>
+          <DropdownMenuItem>
+            <button onClick={()=> {}} >
+            Archive Link
+            </button>
+          </DropdownMenuItem>
           <DropdownMenuItem
             className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
             key='delete'
           >
+            <button onClick={()=> {delLink(link.id)}}>
             Delete Link
+            </button>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuLabel className='text-xs text-gray-700 font-light'>

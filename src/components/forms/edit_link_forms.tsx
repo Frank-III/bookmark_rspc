@@ -16,6 +16,7 @@ import { Input } from '../ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '../../utils';
+import { Switch } from '../ui/switch';
 import { Command as CommandPrimative } from 'cmdk';
 import { CheckIcon, Command, Search } from 'lucide-react';
 import { LinkWithTags, EditLinkArgs } from '../../../bindings';
@@ -53,6 +54,7 @@ export function EditLinkForm({ link }: EditLinkProps) {
       message: 'Please enter a valid URL.',
     }),
     description: z.string().optional(),
+    archived: z.boolean(),
     collection_id: z.number(),
     tags: z.array(z.number()),
   });
@@ -65,6 +67,7 @@ export function EditLinkForm({ link }: EditLinkProps) {
     defaultValues: {
       link_name: name,
       description: description,
+      archived: archived,
       url: url,
       collection_id: collectionId,
       tags: tags_id,
@@ -85,6 +88,7 @@ export function EditLinkForm({ link }: EditLinkProps) {
       collection_id: values.collection_id,
       new_tags: new_tags,
       deleted_tags: deleted_tags,
+      archived: values.archived,
     } as EditLinkArgs);
   }
 
@@ -182,7 +186,7 @@ export function EditLinkForm({ link }: EditLinkProps) {
                     <CommandPrimative.Group className='overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground'>
                       {potentialCollections?.map((collection) => (
                         <CommandPrimative.Item
-                          value={collection.id.toString()}
+                          value={`${collection.name}`}
                           key={`collections+${collection.name}`}
                           className='relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
                           onSelect={() => {
@@ -215,6 +219,23 @@ export function EditLinkForm({ link }: EditLinkProps) {
             <FormItem className='py-3 flex flex-col'>
               <FormLabel>Tags</FormLabel>
               <MultiSelectTags selected={field.value} {...field} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='archived'
+          render={({ field }) => (
+            <FormItem className='flex flex-row items-center pt-1 space-x-2'>
+              <FormLabel>Pin Collection</FormLabel>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  aria-readonly
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
