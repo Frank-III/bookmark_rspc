@@ -12,8 +12,13 @@ import { TabLinkCollection } from './modals/link_modals';
 import { cn } from '../utils';
 
 const privateLinks = [
-  { href: '/tags', label: 'Tags', icon: <Tag /> },
-  { href: '/collections', label: 'Collections', icon: <Boxes /> },
+  { href: '/tags', label: 'Tags', icon: <Tag />, disabled: false },
+  {
+    href: '/collections',
+    label: 'Collections',
+    icon: <Boxes />,
+    disabled: false,
+  },
   { href: '/me', label: 'Me', icon: <User />, disabled: true },
 ] as const;
 
@@ -33,7 +38,7 @@ export function Links({ links }: LinksProps) {
             'group flex w-full flex-row items-center justify-between rounded-lg border-2 border-transparent px-2 py-1 transition text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-normal',
             disabled && 'opacity-50',
           )}
-          disabled={disabled ? true : false}
+          disabled={disabled}
         >
           <button>
             <div className='flex flex-row items-center justify-start truncate'>

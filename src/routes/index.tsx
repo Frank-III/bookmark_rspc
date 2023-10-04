@@ -8,10 +8,6 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
 export const route = new FileRoute('/').createRoute({
   component: () => {
-    return (
-    <div className='p-2'> 
-    Hello 
-    </div>
-    )
+    return <div className='p-2'>Hello</div>;
   },
 });
