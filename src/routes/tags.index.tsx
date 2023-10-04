@@ -107,10 +107,7 @@ function PageButton({
   return (
     <Button
       variant='outline'
-      onClick={() => {
-        useSelectedTagsStore.setState({ page: 1 });
-        refetch();
-      }}
+      onClick={onClick}
       disabled={useSelectedTagsStore.getState().page == 1}
     >
       1
@@ -153,6 +150,7 @@ export const route = new FileRoute('/tags/').createRoute({
         }
       },
     });
+
 
     // if (filteredLinks?.total_links !== undefined && filteredLinks?.total_links !== null) {
     //   setTotalPage(Math.ceil(filteredLinks?.total_links / 20));
@@ -206,6 +204,7 @@ export const route = new FileRoute('/tags/').createRoute({
             className='rounded-full border-1 bg-gray-100 w-full md:w-auto text-gray-400 text-sm font-light'
             onClick={() => {
               useSelectedTagsStore.getState().setselect([]);
+              useSelectedTagsStore.setState({ page: 1 })
             }}
           >
             clear
@@ -213,6 +212,7 @@ export const route = new FileRoute('/tags/').createRoute({
           <Button
             className='border-2 bg-gray-900 w-full md:w-auto'
             onClick={() => {
+              useSelectedTagsStore.setState({ page: 1 })
               refetch();
             }}
           >
@@ -227,6 +227,7 @@ export const route = new FileRoute('/tags/').createRoute({
                 useSelectedTagsId.includes(tag.id)
                   ? useSelectedTagsStore.getState().removeSelect(tag)
                   : useSelectedTagsStore.getState().addSelect(tag);
+                useSelectedTagsStore.setState({ page: 1 })
               }}
               styles={
                 useSelectedTagsId.includes(tag.id) ? { opacity: 0.5 } : {}
