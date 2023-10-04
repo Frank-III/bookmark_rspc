@@ -8,7 +8,7 @@ export type Procedures = {
         { key: "collections.getOnePinnedStatus", input: number, result: CollectionWithPinnedStatus | null } | 
         { key: "collections.getPinned", input: never, result: PinnedCollections[] } | 
         { key: "links.archiveStatByDate", input: string | null, result: ArchiveStatData } | 
-        { key: "links.filterByTags", input: FilterByTagsArgs, result: LinkWithTags[] } | 
+        { key: "links.filterByTags", input: FilterByTagsArgs, result: FilterByTagsResult } | 
         { key: "links.getByCollection", input: number, result: LinkWithTags[] } | 
         { key: "links.getByDate", input: GetByDateArgs, result: LinkWithTags[] } | 
         { key: "links.getById", input: number, result: LinkWithTags | null } | 
@@ -30,39 +30,41 @@ export type Procedures = {
     subscriptions: never
 };
 
+export type EditLinkArgs = { id: number; link_name: string; url: string; description: string | null; collection_id: number; new_tags: number[]; deleted_tags: number[] }
+
+export type SummariesData = { date: string; count: number }
+
 export type LinkWithTags = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string; tags: { id: number; name: string; color: string }[] }
 
 export type CollectionWithPinnedStatus = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string; pinnedBy: { user: { id: string } }[] }
 
-export type FilterByTagsArgs = { mode: Mode; tags: number[] }
+export type GetByDateArgs = { date: string; size: number | null }
 
 export type User = { id: string; created_at: string; updated_at: string; username: string; name: string; email: string; avatar: string | null; bio: string | null; connectedTG: boolean }
 
 export type Tag = { id: number; name: string; color: string; ownerId: string }
 
-export type SummariesData = { date: string; count: number }
+export type FilterByTagsResult = { total_links: number | null; links: LinkWithTags[] }
 
-export type EditLinkArgs = { id: number; link_name: string; url: string; description: string | null; collection_id: number; new_tags: number[]; deleted_tags: number[] }
+export type FilterByTagsArgs = { mode: Mode; tags: number[]; take: number; skip: number | null }
 
 export type PinnedUserCollections = { userId: string; collectionId: number }
-
-export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number; tags: number[] }
-
-export type ArchiveStatData = { total: number; archived: number; not_archived: number }
 
 export type Collection = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string }
 
 export type PinnedCollections = { collection: Collection }
 
-export type GetByDateArgs = { date: string; size: number | null }
+export type Mode = "And" | "Or"
 
 export type CreateTagArgs = { tag_name: string; color: string }
 
 export type UpdateTagArgs = { tag_id: number; tag_name: string; color: string }
 
-export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
+export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number; tags: number[] }
 
-export type Mode = "And" | "Or"
+export type ArchiveStatData = { total: number; archived: number; not_archived: number }
+
+export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
 
 export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
 
