@@ -23,6 +23,8 @@ prisma::link::include!( link_with_tags {
   }
 });
 
+
+
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
     .query("getByDate", |t| {
@@ -108,22 +110,42 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
       struct FilterByTagsArgs {
         mode: Mode,
         tags: Vec<i32>,
+        take: i32,
+        skip: Option<i32>
       }
-      t(|ctx: PrivateCtx, FilterByTagsArgs{ mode,  tags}| async move {
+      
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      pub struct FilterByTagsResult {
+        total_links: Option<i32>,
+        links: Vec<link_with_tags::Data>
+      }
+
+      t(|ctx: PrivateCtx, FilterByTagsArgs{ mode,  tags, skip, take}| async move {
         let filter_cond = match (mode, &*tags) {
           (_, []) => vec![prisma::link::owner_id::equals(ctx.user_id.clone())],
           (Mode::And, tgs) => vec![prisma::link::owner_id::equals(ctx.user_id.clone()), prisma::link::tags::every(tgs.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>())],
           (Mode::Or, tgs) => vec![prisma::link::owner_id::equals(ctx.user_id.clone()),prisma::link::tags::some(tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>())]
         };
 
+        let total_links = match skip {
+          None => Some(ctx.db.link().count(filter_cond.clone()).exec().await? as i32),
+          Some(_) => None
+        };
+
         let links = ctx
           .db
           .link()
-          .find_many(filter_cond).include(link_with_tags::include())
+          .find_many(filter_cond)
+          .skip((skip.unwrap_or(0) * take) as i64)
+          .take(take as i64)
+          .include(link_with_tags::include())
           .exec()
           .await?;
         tracing::info!("links of tags: {:?} is fetched", tags);
-        Ok(links)
+        Ok(FilterByTagsResult {
+          total_links,
+          links
+        })
       })
     })
     .query("getSummary", |t| {
