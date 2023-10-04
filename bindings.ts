@@ -30,7 +30,7 @@ export type Procedures = {
     subscriptions: never
 };
 
-export type EditLinkArgs = { id: number; link_name: string; url: string; description: string | null; collection_id: number; new_tags: number[]; deleted_tags: number[] }
+export type EditLinkArgs = { id: number; link_name: string; url: string; description: string | null; collection_id: number; new_tags: number[]; deleted_tags: number[]; archived: boolean }
 
 export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
 

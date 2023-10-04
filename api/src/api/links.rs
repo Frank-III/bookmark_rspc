@@ -281,9 +281,10 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         collection_id: i32,
         new_tags: Vec<i32>,
         deleted_tags: Vec<i32>,
+        archived: bool
       }
 
-      t(|ctx: PrivateCtx, EditLinkArgs {id, link_name, url, description, collection_id, new_tags, deleted_tags}| async move{
+      t(|ctx: PrivateCtx, EditLinkArgs {id, link_name, url, description, collection_id, new_tags, deleted_tags, archived}| async move{
 
         let edited_link = ctx.db.link().update(
           prisma::link::id::equals(id),
@@ -292,6 +293,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
             prisma::link::url::set(url),
             prisma::link::description::set(description.unwrap_or("".into())),
             prisma::link::collection_id::set(collection_id),
+            prisma::link::archived::set(archived),
             prisma::link::tags::connect(new_tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>()),
             prisma::link::tags::disconnect(deleted_tags.iter().map(|tag_id| prisma::tag::id::equals(*tag_id)).collect::<Vec<_>>())
           ]).exec().await?;

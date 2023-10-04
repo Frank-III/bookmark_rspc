@@ -72,7 +72,7 @@ export function Layout() {
           <Outlet />
         </div>
       </div>
-      <div className='overflow-hidden w-[280px] min-w-[280px]'>
+      <div className='hidden lg:block overflow-hidden w-[280px] min-w-[280px]'>
         {/* <C/> */}
         <CalenderView />
       </div>

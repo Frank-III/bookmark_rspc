@@ -219,7 +219,7 @@ export function SearchCMDK({ children }: { children: React.ReactNode }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='p-0'>
+      <DialogContent className='p-0 max-h-[500px]'>
         <Command
           label='Global Command Menu'
           loop
@@ -239,7 +239,7 @@ export function SearchCMDK({ children }: { children: React.ReactNode }) {
           }}
           className={cn(
             '[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5',
-            'origin-top overflow-hidden bg-white/90 backdrop-blur-xl transition-transform duration-100 rounded-lg shadow-large ring-1 ring-black/5',
+            'origin-top overflow-y-hidden bg-white/90 backdrop-blur-xl transition-transform duration-100 rounded-lg shadow-large ring-1 ring-black/5',
           )}
         >
           <div className='flex space-x-1 px-2 pt-2'>
@@ -270,8 +270,8 @@ export function SearchCMDK({ children }: { children: React.ReactNode }) {
               className='flex h-11 rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
             />
           </div>
-          <Command.List>
-            <Command.Empty>No results found.</Command.Empty>
+          <Command.List className='max-h-[500px] overflow-x-hidden overflow-y-auto'>
+            <Command.Empty><div className='p-3 items-center justify-center'>Something went wrong</div></Command.Empty>
             {activePage === 'home' &&
               commands.map((commandgroup) => (
                 <Command.Group
@@ -384,12 +384,14 @@ export function SearchLinks() {
   const { status, data: links } = rspc.useQuery(['links.getByUser']);
   return (
     <>
-      {status === 'loading' && <Command.Loading>Loading...</Command.Loading>}
+      {status === 'loading' && <Command.Loading><div className='p-3 items-center justify-center'>Loading...</div></Command.Loading>}
       {status === 'error' && (
-        <Command.Empty>Something went wrong</Command.Empty>
+        <Command.Empty><div className='p-3 items-center justify-center'>Something went wrong</div></Command.Empty>
       )}
       {links?.map((link) => (
         <Command.Item
+          key={link.id}
+          value={`${link.name} ${link.collectionId} ${link.url}`}
           onSelect={() => {}}
           className={cn(
             'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',

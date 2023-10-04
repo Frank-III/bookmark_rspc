@@ -89,7 +89,7 @@ export function MultiSelectTags({
           <ChevronsUpDown className='h-4 w-4 shrink-0 opacity-50' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-[400px] p-0'>
+      <PopoverContent className='w-[400px] p-0 max-h-[400px]'>
         <CommandPrimative className='flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground'>
           <div
             className='flex items-center border-b px-3'
@@ -106,7 +106,7 @@ export function MultiSelectTags({
           {isLoading && (
             <CommandPrimative.Loading>Loading...</CommandPrimative.Loading>
           )}
-          <CommandPrimative.Empty>
+          <CommandPrimative.Empty className='items-center justify-center p-3'>
             {/* No Tags Found */}
             <button
               key='no-tags-found'
@@ -136,7 +136,7 @@ export function MultiSelectTags({
               {/* {`add "${value}" to tags`} */}
             </button>
           </CommandPrimative.Empty>
-          <CommandPrimative.Group className='overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground'>
+          <CommandPrimative.Group className='max-h-[300px] overflow-x-hidden overflow-y-auto p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground'>
             {tags?.map((tag) => (
               <CommandPrimative.Item
                 key={tag.name}
