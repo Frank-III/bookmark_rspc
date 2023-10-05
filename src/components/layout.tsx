@@ -76,6 +76,7 @@ export function Layout() {
         {/* <C/> */}
         <CalenderView />
       </div>
+      <div className='position: fixed; z-index: 9999; inset: 16px; pointer-events: none;' />
     </main>
   );
 }
