@@ -31,25 +31,26 @@ export function CollectionDropdown({
 }: CollectionPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
-  const {mutate: delCollection} = rspc.useMutation(['collections.deleteOne'], {
-    meta: {
-      message: 'Collection deleted!'
-    }, 
-    onSuccess: (data) => {
-      queryClient.setQueryData(['collections.getbyUser'], (oldData: any) => {
-        return oldData.filter((collection: any) => collection.id !== data.id)
-      })
-    }
-  })
+  const { mutate: delCollection } = rspc.useMutation(
+    ['collections.deleteOne'],
+    {
+      meta: {
+        message: 'Collection deleted!',
+      },
+      onSuccess: (data) => {
+        queryClient.setQueryData(['collections.getbyUser'], (oldData: any) => {
+          return oldData.filter((collection: any) => collection.id !== data.id);
+        });
+      },
+    },
+  );
 
-
-  const {mutate: cancelPinned} = rspc.useMutation(['collections.editOne'], {
+  const { mutate: cancelPinned } = rspc.useMutation(['collections.editOne'], {
     meta: {
-      message: 'Edit Pinned Status!'
-    }, 
-    onSuccess: () => {
-    }
-  })
+      message: 'Edit Pinned Status!',
+    },
+    onSuccess: () => {},
+  });
 
   return (
     <Dialog open={showEdit} onOpenChange={setShowEdit}>
@@ -74,41 +75,48 @@ export function CollectionDropdown({
               </button>
             </DialogTrigger>
           </DropdownMenuItem>
-          { collection.isPinned ? ( <DropdownMenuItem key='remove'>
-            <button
-              onClick={() => {
-                cancelPinned({
-                  id: collection.id,
-                  name: collection.name,
-                  color: collection.color,
-                  pinned: false,
-                  public: collection.isPublic,
-                })
-              }}
-            >
-            Remove Pinned
-            </button>
-          </DropdownMenuItem>) : (
-        <DropdownMenuItem key='remove'>
-            <button
-              onClick={() => {
-                cancelPinned({
-                  id: collection.id,
-                  name: collection.name,
-                  color: collection.color,
-                  pinned: true,
-                  public: collection.isPublic,
-                })
-              }}
-            >
-            Set Pinned
-            </button>
-          </DropdownMenuItem>)}
+          {collection.isPinned ? (
+            <DropdownMenuItem key='remove'>
+              <button
+                onClick={() => {
+                  cancelPinned({
+                    id: collection.id,
+                    name: collection.name,
+                    color: collection.color,
+                    pinned: false,
+                    public: collection.isPublic,
+                  });
+                }}
+              >
+                Remove Pinned
+              </button>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem key='remove'>
+              <button
+                onClick={() => {
+                  cancelPinned({
+                    id: collection.id,
+                    name: collection.name,
+                    color: collection.color,
+                    pinned: true,
+                    public: collection.isPublic,
+                  });
+                }}
+              >
+                Set Pinned
+              </button>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
             key='delete'
           >
-            <button onClick={() => {delCollection(collection.id)}}>
+            <button
+              onClick={() => {
+                delCollection(collection.id);
+              }}
+            >
               Delete Collection
             </button>
           </DropdownMenuItem>

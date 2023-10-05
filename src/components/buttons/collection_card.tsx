@@ -26,11 +26,11 @@ export function CollectionCard({
     <Card
       className='group w-full rounded-lg m-h-[200px] pb-0 hover:border-2 border-0 group'
       key={id}
-      style={{borderColor: `${color}50`}}
+      style={{ borderColor: `${color}50` }}
     >
       <CardHeader className='p-3 text-gray-700 font-medium'>
         <CardTitle>{name}</CardTitle>
-        <CardDescription>{description || "None"}</CardDescription>
+        <CardDescription>{description || 'None'}</CardDescription>
       </CardHeader>
       <CardContent className='p-2'>
         {/* <div className='h-[1px] w-full rounded-full bg-gray-100' /> */}
@@ -38,8 +38,9 @@ export function CollectionCard({
       {/* <div className='h-[1px] w-full rounded-full bg-gray-100' /> */}
       <div className='group mt-2 flex w-full items-center justify-end space-x-1 '>
         <CollectionDropdown collection={collection}>
-          <button className='group-hover:border-2  rounded-full h-6 w-6 '
-          style={{borderColor: `${color}50`}}
+          <button
+            className='group-hover:border-2  rounded-full h-6 w-6 '
+            style={{ borderColor: `${color}50` }}
           >
             <Menu size={20} />
           </button>
@@ -48,7 +49,7 @@ export function CollectionCard({
           to={`/collections/$collectionId`}
           params={{ collectionId: id.toString() }}
           className='rounded-full h-6 w-6 group-hover:border-2' // Position the button at the bottom-right
-          style={{borderColor: `${color}50`}}
+          style={{ borderColor: `${color}50` }}
         >
           <button>
             <ArrowRight color={'black'} size={20} />

@@ -23,7 +23,9 @@ export function LinkLink({ link }: { link: LinkWithTags }) {
           {/* <Dot color={color} size={30} /> */}
           {/* <Dot color={color} size={30} /> */}
         </div>
+        <a href={url} target='_black' rel='noreferrer'>
         <p className='truncate text-sm'>{name}</p>
+        </a>
       </div>
       {/* <CollectionPopover collection={collection} /> */}
       <LinkDropdown link={link}>
