@@ -30,22 +30,18 @@ interface LinkPopoverProps {
 export function LinkDropdown({ link, children }: LinkPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
-  const {mutate: delLink} = rspc.useMutation(['links.deleteOne'], {
+  const { mutate: delLink } = rspc.useMutation(['links.deleteOne'], {
     meta: {
-      message: 'Link deleted!'
-    }, 
-    onSuccess: () => {
-
-    }
-  })
-  const {mutate: archiveLink} = rspc.useMutation(['links.editOne'], {
+      message: 'Link deleted!',
+    },
+    onSuccess: () => {},
+  });
+  const { mutate: archiveLink } = rspc.useMutation(['links.editOne'], {
     meta: {
-      message: 'Link archived!'
-    }, 
-    onSuccess: () => {
-
-    }
-  })
+      message: 'Link archived!',
+    },
+    onSuccess: () => {},
+  });
 
   return (
     <Dialog open={showEdit} onOpenChange={setShowEdit}>
@@ -71,26 +67,33 @@ export function LinkDropdown({ link, children }: LinkPopoverProps) {
             </DialogTrigger>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <button onClick={()=> {archiveLink(
-            {
-              id: link.id,
-              link_name: link.name,
-              url: link.url,
-              description: link.description || null,
-              collection_id: link.collectionId,
-              new_tags: [],
-              deleted_tags: [],
-              archived: true,
-            })}} >
-            Archive Link
+            <button
+              onClick={() => {
+                archiveLink({
+                  id: link.id,
+                  link_name: link.name,
+                  url: link.url,
+                  description: link.description || null,
+                  collection_id: link.collectionId,
+                  new_tags: [],
+                  deleted_tags: [],
+                  archived: true,
+                });
+              }}
+            >
+              Archive Link
             </button>
           </DropdownMenuItem>
           <DropdownMenuItem
             className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
             key='delete'
           >
-            <button onClick={()=> {delLink(link.id)}}>
-            Delete Link
+            <button
+              onClick={() => {
+                delLink(link.id);
+              }}
+            >
+              Delete Link
             </button>
           </DropdownMenuItem>
           <DropdownMenuSeparator />

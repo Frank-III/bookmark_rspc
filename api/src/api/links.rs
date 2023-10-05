@@ -24,6 +24,11 @@ prisma::link::include!( link_with_tags {
 });
 
 
+#[derive(Debug, Deserialize, Serialize, Type)]
+pub struct FilterResult {
+  total_links: Option<i32>,
+  links: Vec<link_with_tags::Data>
+}
 
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
@@ -84,6 +89,63 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         Ok(links)
       })
     })
+    .query("searchByWord", |t| {
+      
+
+
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      enum SearchMode {
+        Name,
+        Description,
+        Url
+      }
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      struct SearchByNameArgs {
+        mode: SearchMode,
+        word: String,
+        collection_id: Option<i32>,
+        take: i32,
+        skip: i32
+      }
+
+      t(|ctx: PrivateCtx, SearchByNameArgs {mode, word, collection_id, take, skip}| async move {
+
+        let mut filter_cond = vec![
+            prisma::link::owner_id::equals(ctx.user_id.clone()),
+          ];
+        match collection_id {
+          None =>  {}
+          Some(id) => { filter_cond.push(prisma::link::collection_id::equals(id));}
+        };
+
+        if !word.is_empty() {
+          match (mode) {
+            SearchMode::Name => { filter_cond.push(prisma::link::name::contains(word)); }
+            SearchMode::Description  => { filter_cond.push(prisma::link::description::contains(word)); }
+            SearchMode::Url => { filter_cond.push(prisma::link::url::contains(word)); }
+          }
+        }
+
+        let total_links = match skip {
+          0 => Some(ctx.db.link().count(filter_cond.clone()).exec().await? as i32),
+          _ => None
+        };
+
+        let links = ctx
+          .db
+          .link()
+          .find_many(filter_cond).skip(skip as i64)
+          .take(take as i64)
+          .include(link_with_tags::include())
+          .exec()
+          .await?;
+        // tracing::info!("links of name: {:?} is fetched", name);
+        Ok(FilterResult {
+          total_links,
+          links}
+        )
+      })
+    })
     .query("getById", |t| {
 
       t(|ctx: PrivateCtx, id: i32| async move {
@@ -114,12 +176,6 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         skip: i32
       }
       
-      #[derive(Debug, Deserialize, Serialize, Type)]
-      pub struct FilterByTagsResult {
-        total_links: Option<i32>,
-        links: Vec<link_with_tags::Data>
-      }
-
       t(|ctx: PrivateCtx, FilterByTagsArgs{ mode,  tags, skip, take}| async move {
         let filter_cond = match (mode, &*tags) {
           (_, []) => vec![prisma::link::owner_id::equals(ctx.user_id.clone())],
@@ -142,7 +198,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .exec()
           .await?;
         tracing::info!("links of tags: {:?} is fetched", tags);
-        Ok(FilterByTagsResult {
+        Ok(FilterResult {
           total_links,
           links
         })

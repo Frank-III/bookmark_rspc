@@ -78,15 +78,22 @@ export function Nav() {
   };
 
   return (
-    <div className={`left-sidebar ${isSidebarOpen ? 'sidebar--open' : ''} flex h-full w-[280px] flex-col items-center justify-between border-r border-gray-200 bg-white`}>
+    <div
+      className={`left-sidebar ${
+        isSidebarOpen ? 'sidebar--open' : ''
+      } flex h-full w-[280px] flex-col items-center justify-between border-r border-gray-200 bg-white`}
+    >
       <div className='flex h-full w-full flex-auto flex-col overflow-hidden'>
         <div className='flex h-[50px] flex-row items-center justify-between space-x-2 border-b border-gray-100 p-2 pl-2'>
           <UserButton />
           {/* TODO: add onClick */}
           <div className='trigger'>
-          <button className='flex items-center justify-center rounded-md p-0.5 text-gray-500 transition hover:bg-gray-200/50 hover:text-gray-700' onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-            <PanelLeft size={20} />
-          </button>
+            <button
+              className='flex items-center justify-center rounded-md p-0.5 text-gray-500 transition hover:bg-gray-200/50 hover:text-gray-700'
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+              <PanelLeft size={20} />
+            </button>
           </div>
         </div>
         <div className='mt-4 flex w-full flex-row space-x-2 px-2'>

@@ -271,7 +271,11 @@ export function SearchCMDK({ children }: { children: React.ReactNode }) {
             />
           </div>
           <Command.List className='max-h-[500px] overflow-x-hidden overflow-y-auto'>
-            <Command.Empty><div className='p-3 items-center justify-center'>Something went wrong</div></Command.Empty>
+            <Command.Empty>
+              <div className='p-3 items-center justify-center'>
+                Something went wrong
+              </div>
+            </Command.Empty>
             {activePage === 'home' &&
               commands.map((commandgroup) => (
                 <Command.Group
@@ -384,9 +388,17 @@ export function SearchLinks() {
   const { status, data: links } = rspc.useQuery(['links.getByUser']);
   return (
     <>
-      {status === 'loading' && <Command.Loading><div className='p-3 items-center justify-center'>Loading...</div></Command.Loading>}
+      {status === 'loading' && (
+        <Command.Loading>
+          <div className='p-3 items-center justify-center'>Loading...</div>
+        </Command.Loading>
+      )}
       {status === 'error' && (
-        <Command.Empty><div className='p-3 items-center justify-center'>Something went wrong</div></Command.Empty>
+        <Command.Empty>
+          <div className='p-3 items-center justify-center'>
+            Something went wrong
+          </div>
+        </Command.Empty>
       )}
       {links?.map((link) => (
         <Command.Item

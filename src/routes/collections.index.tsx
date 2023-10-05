@@ -84,8 +84,7 @@ export const route = new FileRoute('/collections/').createRoute({
     //   };
     // })
     return (
-      <>
-        <div className='flex flex-col mx-auto justify-center'>
+        <div className='w-full flex flex-col mx-auto justify-center'>
           <h1 className='text-3xl font-semibold mb-3'>Collections</h1>
           {status !== 'success' && isFetching && <CardsSkeleton />}
           <div
@@ -103,7 +102,6 @@ export const route = new FileRoute('/collections/').createRoute({
           {/* <Button onClick={() => {newLinks.length ? mutate(newLinks?.pop()!) : ''}}>Create Links</Button> */}
           {/* <DropdownWithDialogItemsSolution2 collection={collects[0]}/> */}
         </div>
-      </>
     );
   },
 });
