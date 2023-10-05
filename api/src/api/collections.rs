@@ -175,7 +175,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         },
       )
     })
-    .mutation("editSingle", |t| {
+    .mutation("editOne", |t| {
       #[derive(Deserialize, Type)]
       struct EditCollectionArgs {
         id: i32,
@@ -247,5 +247,17 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           Ok(updated_collection)
         },
       )
+    })
+    .mutation("deleteOne", |t| {
+      t(|ctx: PrivateCtx, id: i32| async move {
+        let deleted_collection = ctx
+          .db
+          .collection()
+          .delete(prisma::collection::id::equals(id))
+          .exec()
+          .await?;
+        tracing::info!("user: {:?} deleted collection: {:?} success", ctx.user_id, id);
+        Ok(deleted_collection)
+      })
     })
 }

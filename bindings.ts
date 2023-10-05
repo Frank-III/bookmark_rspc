@@ -20,7 +20,8 @@ export type Procedures = {
     mutations: 
         { key: "collections.addPinned", input: number, result: PinnedUserCollections } | 
         { key: "collections.create", input: CreateCollectionArgs, result: Collection } | 
-        { key: "collections.editSingle", input: EditCollectionArgs, result: Collection } | 
+        { key: "collections.deleteOne", input: number, result: Collection } | 
+        { key: "collections.editOne", input: EditCollectionArgs, result: Collection } | 
         { key: "links.create", input: CreateLinkArgs, result: Link } | 
         { key: "links.deleteOne", input: number, result: Link } | 
         { key: "links.editOne", input: EditLinkArgs, result: Link } | 
