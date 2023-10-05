@@ -27,7 +27,7 @@ interface EditCollectionProps {
 export function EditCllectionForm({ collection }: EditCollectionProps) {
   const { id, color, name, isPinned, isPublic } = collection;
   const queryClient = rspc.useContext().queryClient;
-  const editCollection = rspc.useMutation(['collections.editSingle'], {
+  const editCollection = rspc.useMutation(['collections.editOne'], {
     meta: {
       message: `Collection ${id} edited!`,
     },
@@ -66,7 +66,6 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
   });
 
   function onSubmit(values: FormValues) {
-    console.log('aaaaaa');
     editCollection.mutate({
       id: id,
       ...values,

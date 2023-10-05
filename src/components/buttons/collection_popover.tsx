@@ -1,4 +1,3 @@
-import { MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,18 +8,17 @@ import {
   DropdownMenuGroup,
 } from '../ui/dropdown-menu';
 
-import { EditCollection } from '../modals/collection_modals';
 import { CollectionPinned } from '../links/collection_lists';
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
-  DialogDescription,
 } from '../ui/dialog';
 import { DialogHeader } from '../ui/dialog';
 import { EditCllectionForm } from '../forms/edit_collection_forms';
 import React from 'react';
+import { queryClient, rspc } from '../../utils/rspc';
 
 interface CollectionPopoverProps {
   collection: CollectionPinned;
@@ -33,6 +31,26 @@ export function CollectionDropdown({
 }: CollectionPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
+  const {mutate: delCollection} = rspc.useMutation(['collections.deleteOne'], {
+    meta: {
+      message: 'Collection deleted!'
+    }, 
+    onSuccess: (data) => {
+      queryClient.setQueryData(['collections.getbyUser'], (oldData: any) => {
+        return oldData.filter((collection: any) => collection.id !== data.id)
+      })
+    }
+  })
+
+
+  const {mutate: cancelPinned} = rspc.useMutation(['collections.editOne'], {
+    meta: {
+      message: 'Edit Pinned Status!'
+    }, 
+    onSuccess: () => {
+    }
+  })
+
   return (
     <Dialog open={showEdit} onOpenChange={setShowEdit}>
       <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -56,12 +74,43 @@ export function CollectionDropdown({
               </button>
             </DialogTrigger>
           </DropdownMenuItem>
-          <DropdownMenuItem key='remove'>Remove Pinned</DropdownMenuItem>
+          { collection.isPinned ? ( <DropdownMenuItem key='remove'>
+            <button
+              onClick={() => {
+                cancelPinned({
+                  id: collection.id,
+                  name: collection.name,
+                  color: collection.color,
+                  pinned: false,
+                  public: collection.isPublic,
+                })
+              }}
+            >
+            Remove Pinned
+            </button>
+          </DropdownMenuItem>) : (
+        <DropdownMenuItem key='remove'>
+            <button
+              onClick={() => {
+                cancelPinned({
+                  id: collection.id,
+                  name: collection.name,
+                  color: collection.color,
+                  pinned: true,
+                  public: collection.isPublic,
+                })
+              }}
+            >
+            Set Pinned
+            </button>
+          </DropdownMenuItem>)}
           <DropdownMenuItem
             className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
             key='delete'
           >
-            Delete Collection
+            <button onClick={() => {delCollection(collection.id)}}>
+              Delete Collection
+            </button>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuLabel className='text-xs text-gray-700 font-light'>

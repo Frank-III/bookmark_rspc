@@ -71,7 +71,17 @@ export function LinkDropdown({ link, children }: LinkPopoverProps) {
             </DialogTrigger>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <button onClick={()=> {}} >
+            <button onClick={()=> {archiveLink(
+            {
+              id: link.id,
+              link_name: link.name,
+              url: link.url,
+              description: link.description || null,
+              collection_id: link.collectionId,
+              new_tags: [],
+              deleted_tags: [],
+              archived: true,
+            })}} >
             Archive Link
             </button>
           </DropdownMenuItem>
