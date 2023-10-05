@@ -17,7 +17,7 @@ export function LinkCard({ link }: { link: LinkWithTags }) {
   const { id, name, url, description, archived, collectionId, tags } = link;
 
   return (
-    <Card className='w-full rounded-lg m-h-[200px] pb-0' key={id}>
+    <Card className='w-full rounded-lg m-h-[200px] pb-0 border-2 hover:border-indigo-400' key={id}>
       <CardHeader className='p-3 text-gray-700 font-medium'>
         <CardTitle>{name}</CardTitle>
         <CardDescription>{description || "None"}</CardDescription>

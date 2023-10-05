@@ -14,7 +14,7 @@ export function LinkLink({ link }: { link: LinkWithTags }) {
   const { id, name, url, collectionId, tags } = link;
   return (
     <div
-      className='group flex w-full flex-row items-center justify-between rounded-lg border-2 border-gray-500 px-2 py-1 transition font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+      className='group flex w-full flex-row items-center justify-between rounded-lg border-[0.5] ring-1 ring-black/5 shadow-small px-2 py-1 transition font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900'
       key={`collection${id}`}
     >
       <div className='flex flex-row items-center justify-start truncate'>
