@@ -84,24 +84,24 @@ export const route = new FileRoute('/collections/').createRoute({
     //   };
     // })
     return (
-        <div className='w-full flex flex-col mx-auto justify-center'>
-          <h1 className='text-3xl font-semibold mb-3'>Collections</h1>
-          {status !== 'success' && isFetching && <CardsSkeleton />}
-          <div
-            className={cn(
-              'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
-              isPreviousData && !isLoading
-                ? 'opacity-40 blur-sm pointer-events-none '
-                : '',
-            )}
-          >
-            {collects.map((c) => (
-              <CollectionCard collection={c} />
-            ))}
-          </div>
-          {/* <Button onClick={() => {newLinks.length ? mutate(newLinks?.pop()!) : ''}}>Create Links</Button> */}
-          {/* <DropdownWithDialogItemsSolution2 collection={collects[0]}/> */}
+      <div className='w-full flex flex-col mx-auto justify-center'>
+        <h1 className='text-3xl font-semibold mb-3'>Collections</h1>
+        {status !== 'success' && isFetching && <CardsSkeleton />}
+        <div
+          className={cn(
+            'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+            isPreviousData && !isLoading
+              ? 'opacity-40 blur-sm pointer-events-none '
+              : '',
+          )}
+        >
+          {collects.map((c) => (
+            <CollectionCard collection={c} />
+          ))}
         </div>
+        {/* <Button onClick={() => {newLinks.length ? mutate(newLinks?.pop()!) : ''}}>Create Links</Button> */}
+        {/* <DropdownWithDialogItemsSolution2 collection={collects[0]}/> */}
+      </div>
     );
   },
 });

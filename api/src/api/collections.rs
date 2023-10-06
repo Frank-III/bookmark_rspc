@@ -187,13 +187,13 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
       use prisma::{collection, pinned_user_collections};
       t(
         |ctx: PrivateCtx,
-          EditCollectionArgs {
-            id,
-            name,
-            color,
-            pinned,
-            public,
-          }| async move {
+         EditCollectionArgs {
+           id,
+           name,
+           color,
+           pinned,
+           public,
+         }| async move {
           println!("update collection!");
           //TODO: create a macro to generate the set value vector
           let updated_collection = ctx
@@ -239,11 +239,16 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
                 pinned_user_collections::UniqueWhereParam::UserIdCollectionIdEquals(
                   ctx.user_id.clone(),
                   id,
-                ))
+                ),
+              )
               .exec()
               .await?;
           }
-          tracing::info!("user: {:?} updated collection: {:?} success", ctx.user_id, id);
+          tracing::info!(
+            "user: {:?} updated collection: {:?} success",
+            ctx.user_id,
+            id
+          );
           Ok(updated_collection)
         },
       )
@@ -256,7 +261,11 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
           .delete(prisma::collection::id::equals(id))
           .exec()
           .await?;
-        tracing::info!("user: {:?} deleted collection: {:?} success", ctx.user_id, id);
+        tracing::info!(
+          "user: {:?} deleted collection: {:?} success",
+          ctx.user_id,
+          id
+        );
         Ok(deleted_collection)
       })
     })

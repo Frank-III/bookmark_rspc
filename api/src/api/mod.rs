@@ -1,12 +1,12 @@
 use std::sync::Arc;
 
+use self::users::Role;
 use crate::prisma;
 use crate::utils::get_user;
 use axum::http::HeaderValue;
-use rspc::{Config, Error, ErrorCode};
+use rspc::{Config, Error, ErrorCode, Type};
+use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
-
-use self::users::Role;
 mod collections;
 mod links;
 mod tags;
@@ -18,6 +18,11 @@ pub struct Ctx {
   pub token: Option<HeaderValue>,
 }
 
+#[derive(Debug, Serialize, Deserialize, Type)]
+pub struct SummariesData {
+  pub date: String,
+  pub count: i32,
+}
 #[derive(Clone, Debug)]
 pub struct PrivateCtx {
   pub db: Arc<prisma::PrismaClient>,

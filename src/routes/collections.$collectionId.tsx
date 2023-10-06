@@ -21,7 +21,10 @@ import { useDebounce } from '../utils';
 import { set } from 'date-fns';
 import { Input } from '../components/ui/input';
 import { ChevronLeftIcon, ChevronRightIcon, Search } from 'lucide-react';
-import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons';
+import {
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from '@radix-ui/react-icons';
 
 async function loadCollectionById(
   collectionId: number,
@@ -61,7 +64,9 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
     const [input, setInput] = React.useState<string>('');
     const debouncedValue = useDebounce<string>(input, 500);
     const [page, setpage] = React.useState<number>(1);
-    const [totalPage, setTotalPage] = React.useState<undefined | number>(undefined);
+    const [totalPage, setTotalPage] = React.useState<undefined | number>(
+      undefined,
+    );
     const [mode, setMode] = React.useState<SearchMode>('Name');
 
     const collection = MakeCollectionWithPinnedStatus(
@@ -72,7 +77,7 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
       data: searchedLinks,
       isLoading: linkLoading,
       isPreviousData,
-      refetch
+      refetch,
     } = rspc.useQuery(
       [
         'links.searchByWord',
@@ -100,7 +105,9 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
           <Button>Edit Collection</Button>
         </CollectionDropdown> */}
         <div className='w-full flex flex-col justify-center'>
-          <h1 className='text-3xl font-semibold mb-3'>Welcome to Collections:{collection.name}</h1>
+          <h1 className='text-3xl font-semibold mb-3'>
+            Welcome to Collections:{collection.name}
+          </h1>
           <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 items-center'>
             <Select
               onValueChange={(v: SearchMode) => {
@@ -117,7 +124,11 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
                 <SelectItem value='Url'>Url</SelectItem>
               </SelectContent>
             </Select>
-            <Input className='flex-wrap space-x-2 items-center' value={input} onChange={(e) => setInput(e.target.value)}/>
+            <Input
+              className='flex-wrap space-x-2 items-center'
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
             <button
               className='rounded-full border-1 bg-gray-100 w-full md:w-auto text-gray-400 text-sm font-light'
               onClick={() => {
@@ -152,59 +163,59 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
                 searchedLinks.links.map((link) => <LinkCard link={link} />)}
             </div>
           </div>
-        <div className='flex items-center justify-end px-2 mt-3'>
-          <div className='flex items-center space-x-6 lg:space-x-8'>
-            <div className=' flex w-[100px] items-center justify-center text-sm font-medium'>
-              {totalPage && `Page ${page} of ${totalPage}`}
-            </div>
-            <div className='flex items-center space-x-2 '>
-              <Button
-                variant='outline'
-                className='h-8 w-8 p-0'
-                onClick={() => {
-                  setpage(1);
-                  refetch();
-                }}
-                disabled={page == 1}
-              >
-                <DoubleArrowLeftIcon className='h-4 w-4' />
-              </Button>
-              <Button
-                variant='outline'
-                className='h-8 w-8 p-0'
-                onClick={() => {
-                  setpage(page - 1);
-                  refetch();
-                }}
-                disabled={page == 1}
-              >
-                <ChevronLeftIcon className='h-4 w-4' />
-              </Button>
-              <Button
-                variant='outline'
-                className='h-8 w-8 p-0'
-                onClick={() => {
-                  setpage(page + 1);  
-                  refetch();
-                }}
-                disabled={page == totalPage}
-              >
-                <ChevronRightIcon className='h-4 w-4' />
-              </Button>
-              <Button
-                variant='outline'
-                className='h-8 w-8 p-0'
-                onClick={() => {
-                  setpage(totalPage!);
-                  refetch();
-                }}
-                disabled={page == totalPage}
-              >
-                <DoubleArrowRightIcon className='h-4 w-4' />
-              </Button>
+          <div className='flex items-center justify-end px-2 mt-3'>
+            <div className='flex items-center space-x-6 lg:space-x-8'>
+              <div className=' flex w-[100px] items-center justify-center text-sm font-medium'>
+                {totalPage && `Page ${page} of ${totalPage}`}
+              </div>
+              <div className='flex items-center space-x-2 '>
+                <Button
+                  variant='outline'
+                  className='h-8 w-8 p-0'
+                  onClick={() => {
+                    setpage(1);
+                    refetch();
+                  }}
+                  disabled={page == 1}
+                >
+                  <DoubleArrowLeftIcon className='h-4 w-4' />
+                </Button>
+                <Button
+                  variant='outline'
+                  className='h-8 w-8 p-0'
+                  onClick={() => {
+                    setpage(page - 1);
+                    refetch();
+                  }}
+                  disabled={page == 1}
+                >
+                  <ChevronLeftIcon className='h-4 w-4' />
+                </Button>
+                <Button
+                  variant='outline'
+                  className='h-8 w-8 p-0'
+                  onClick={() => {
+                    setpage(page + 1);
+                    refetch();
+                  }}
+                  disabled={page == totalPage}
+                >
+                  <ChevronRightIcon className='h-4 w-4' />
+                </Button>
+                <Button
+                  variant='outline'
+                  className='h-8 w-8 p-0'
+                  onClick={() => {
+                    setpage(totalPage!);
+                    refetch();
+                  }}
+                  disabled={page == totalPage}
+                >
+                  <DoubleArrowRightIcon className='h-4 w-4' />
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </>
     );
