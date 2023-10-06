@@ -14,8 +14,8 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod api;
 mod prisma;
-mod utils;
 mod trace_layer;
+mod utils;
 
 fn router(client: Arc<prisma::PrismaClient>) -> axum::Router {
   let router = api::new().arced();
@@ -62,9 +62,9 @@ async fn main() {
     .init();
 
   let trace_layer = TraceLayer::new_for_http()
-            .make_span_with(trace_layer::trace_layer_make_span_with)
-            .on_request(trace_layer::trace_layer_on_request)
-            .on_response(trace_layer::trace_layer_on_response);
+    .make_span_with(trace_layer::trace_layer_make_span_with)
+    .on_request(trace_layer::trace_layer_on_request)
+    .on_response(trace_layer::trace_layer_on_response);
 
   dotenv::dotenv().ok();
 
@@ -74,7 +74,11 @@ async fn main() {
   let addr = format!("[::]:{}", port).parse::<SocketAddr>().unwrap(); // This listens on IPv6 and IPv4
   tracing::info!("{} listening on http://{}", env!("CARGO_CRATE_NAME"), addr);
   axum::Server::bind(&addr)
-    .serve(router(client).layer(trace_layer).into_make_service_with_connect_info::<SocketAddr>())
+    .serve(
+      router(client)
+        .layer(trace_layer)
+        .into_make_service_with_connect_info::<SocketAddr>(),
+    )
     .with_graceful_shutdown(utils::axum_shutdown_signal())
     .await
     .expect("Error with HTTP server!");
