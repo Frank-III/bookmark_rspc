@@ -156,7 +156,7 @@ export const route = new FileRoute('/tags/').createRoute({
     }
 
     return (
-      <div className='flex flex-col mx-auto justify-center'>
+      <div className='w-full flex flex-col mx-auto justify-center'>
         <h1 className='text-3xl font-semibold mb-3'>Tags</h1>
         <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 items-center'>
           <TagMode />

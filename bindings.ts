@@ -37,7 +37,7 @@ export type Procedures = {
     | { key: 'links.getByDate'; input: GetByDateArgs; result: LinkWithTags[] }
     | { key: 'links.getById'; input: number; result: LinkWithTags | null }
     | { key: 'links.getByUser'; input: never; result: LinkWithTags[] }
-    | { key: 'links.getSummary'; input: number; result: number[][] }
+    | { key: 'links.getSummary'; input: number; result: SummariesReturnData }
     | {
         key: 'links.searchByWord';
         input: SearchByNameArgs;
@@ -72,19 +72,33 @@ export type Procedures = {
   subscriptions: never;
 };
 
-export type FilterByTagsArgs = {
-  mode: Mode;
-  tags: number[];
-  take: number;
-  skip: number;
-};
-
 export type CreateCollectionArgs = {
   name: string;
   color: string;
   pinned: boolean;
   public: boolean;
 };
+
+export type EditLinkArgs = {
+  id: number;
+  link_name: string;
+  url: string;
+  description: string | null;
+  collection_id: number;
+  new_tags: number[];
+  deleted_tags: number[];
+  archived: boolean;
+};
+
+export type CreateLinkArgs = {
+  link_name: string;
+  url: string;
+  description: string | null;
+  collection_id: number;
+  tags: number[];
+};
+
+export type SummariesData = { date: string; count: number };
 
 export type LinkWithTags = {
   id: number;
@@ -117,19 +131,7 @@ export type EditCollectionArgs = {
   public: boolean;
 };
 
-export type CreateLinkArgs = {
-  link_name: string;
-  url: string;
-  description: string | null;
-  collection_id: number;
-  tags: number[];
-};
-
-export type Mode = 'And' | 'Or';
-
 export type UpdateTagArgs = { tag_id: number; tag_name: string; color: string };
-
-export type SearchMode = 'Name' | 'Description' | 'Url';
 
 export type User = {
   id: string;
@@ -145,7 +147,26 @@ export type User = {
 
 export type Tag = { id: number; name: string; color: string; ownerId: string };
 
+export type FilterByTagsArgs = {
+  mode: Mode;
+  tags: number[];
+  take: number;
+  skip: number;
+};
+
 export type PinnedCollections = { collection: Collection };
+
+export type GetByDateArgs = { date: string; size: number | null };
+
+export type ArchiveStatData = {
+  total: number;
+  archived: number;
+  not_archived: number;
+};
+
+export type PinnedUserCollections = { userId: string; collectionId: number };
+
+export type SearchMode = 'Name' | 'Description' | 'Url';
 
 export type SearchByNameArgs = {
   mode: SearchMode;
@@ -154,10 +175,6 @@ export type SearchByNameArgs = {
   take: number;
   skip: number;
 };
-
-export type PinnedUserCollections = { userId: string; collectionId: number };
-
-export type GetByDateArgs = { date: string; size: number | null };
 
 export type Collection = {
   id: number;
@@ -169,23 +186,20 @@ export type Collection = {
   createdAt: string;
 };
 
+export type SummariesReturnData = {
+  total_links: number;
+  max_links: number;
+  summaries: SummariesData[][];
+};
+
+export type Mode = 'And' | 'Or';
+
 export type FilterResult = {
   total_links: number | null;
   links: LinkWithTags[];
 };
 
 export type CreateTagArgs = { tag_name: string; color: string };
-
-export type EditLinkArgs = {
-  id: number;
-  link_name: string;
-  url: string;
-  description: string | null;
-  collection_id: number;
-  new_tags: number[];
-  deleted_tags: number[];
-  archived: boolean;
-};
 
 export type Link = {
   id: number;
@@ -196,10 +210,4 @@ export type Link = {
   ownerId: string;
   collectionId: number;
   createdAt: string;
-};
-
-export type ArchiveStatData = {
-  total: number;
-  archived: number;
-  not_archived: number;
 };

@@ -18,7 +18,7 @@ pub struct Ctx {
   pub token: Option<HeaderValue>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Type)]
+#[derive(Debug, Serialize, Deserialize, Type, Clone)]
 pub struct SummariesData {
   pub date: String,
   pub count: i32,

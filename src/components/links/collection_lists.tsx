@@ -161,7 +161,7 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
                 </a>
               ))}
             </div>
-            <div className='absolute h-full w-full bg-gradient-to-t from-white to-transparent'></div>
+            <div className='absolute h-full w-full bg-gradient-to-t from-white to-transparent' />
             <div className='absolute left-1/2 top-2 mx-auto flex max-w-[150px] -translate-x-1/2 flex-col items-center justify-center text-center'>
               <GalleryVerticalEnd size={24} />
               <h4 className='mb-1 mt-3 text-sm font-medium text-gray-900'>

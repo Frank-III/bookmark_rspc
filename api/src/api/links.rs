@@ -241,6 +241,12 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
       )
     })
     .query("getSummary", |t| {
+      #[derive(Debug, Deserialize, Serialize, Type)]
+      struct SummariesReturnData {
+        total_links: i32,
+        max_links: i32,
+        summaries: Vec<Vec<crate::api::SummariesData>>,
+      }
       t(|ctx: PrivateCtx, year: i32| async move {
         let query = format!(
           r#"
@@ -267,8 +273,14 @@ GROUP BY
           .exec()
           .await?;
         println!("summaries: {:?}", summaries);
-        let summries = crate::utils::compute_heatmap_value(year, &summaries);
-        Ok(summries)
+        let total_links = summaries.iter().fold(0, |acc, x| acc + x.count);
+        let max_links = summaries.iter().fold(0, |acc, x| acc.max(x.count));
+        let summaries = crate::utils::compute_heatmap_value(year, &summaries);
+        Ok(SummariesReturnData {
+          total_links,
+          max_links,
+          summaries,
+        })
       })
     })
     .query("archiveStatByDate", |t| {

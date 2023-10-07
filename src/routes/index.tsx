@@ -7,73 +7,67 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { rspc } from '../utils/rspc';
 import { addDays, addWeeks, startOfYear, getISODay } from 'date-fns';
-
-const SQUARE_SIZE = 20;
-const GAP = 2;
-const firstDay = new Date(Date.UTC(2023, 0, 1));
-
-function getDateFromWeek(weekNumber: number, dayOfWeek: number): Date {
-  console.log(weekNumber, dayOfWeek);
-  const startDate = startOfYear(new Date(2023, 0, 1)); // January 1, 2023
-  const daysToAdd = (weekNumber - 1) * 7 + dayOfWeek;
-
-  return addDays(startDate, daysToAdd);
-}
+import { start } from 'repl';
+import LinkHeatMap from '../components/summary_stats/heatmap';
+import { Button } from '../components/ui/button';
+import { NewLinkForm } from '../components/forms/new_link_forms';
+import { NewTagForm } from '../components/forms/create_tag_forms';
+import { cn } from '../utils';
+import * as Dialog from '@radix-ui/react-dialog';
+import { NewTag } from '../components/modals/tag_modals';
 
 export const route = new FileRoute('/').createRoute({
   component: () => {
-    const {
-      isLoading,
-      data: summaryData,
-      refetch,
-    } = rspc.useQuery(['links.getSummary', 2023], {
-      enabled: false,
-    });
+    const [isDialogOpen, setDialogOpen] = React.useState(false);
 
-    const year = 2023;
-
-    const preview_rest = summaryData?.map((row, rowId) => {
-      return (
-        <div>
-          {row?.map((val, colId) => (
-            <button
-              className='border font-sm p-0 m-1 w-[20px]'
-              onClick={() => {
-                console.log(`${colId}, ${rowId}`);
-                console.log(`${getDateFromWeek(colId + 1, rowId)}`);
-              }}
-            >
-              {val}
-            </button>
-          ))}
-        </div>
-      );
-    });
     return (
-      <div className='p-2'>
-        <h1>Hello</h1>
-        <button onClick={() => refetch()}>Refetch</button>
-        {isLoading && <div>Loading...</div>}
-        <div>
-          <div className='space-x-[95px]'>
-            {Array(12)
-              .fill(null)
-              .map((_, month) => {
-                const firstDayOfMonth = new Date(Date.UTC(year, month, 1));
-
-                return (
-                  <text key={month} fontSize={12} className='fill-gray-11'>
-                    {firstDayOfMonth.toLocaleDateString('en-US', {
-                      month: 'short',
-                      timeZone: 'UTC',
-                    })}
-                  </text>
-                );
-              })}
+      <>
+        <h1>Hello, Welcome to Bookmarks</h1>
+        <div className='p-2 flex items-center justify-center'>
+          <div className='flex flex-row space-x-5'>
+            <LinkHeatMap />
+            <div className='mt-4 w-[300px] flex justify-center items-center border shadow-sm ring ring-black/5 rounded-md'>
+              <Dialog.Root
+                onOpenChange={() => {
+                  setDialogOpen(!isDialogOpen);
+                }}
+              >
+                <Dialog.Trigger className={cn('', isDialogOpen && 'hidden')}>
+                  <div className='relative flex w-full flex-col '>
+                    <div
+                      className={cn(
+                        '',
+                        !isDialogOpen &&
+                          'opacity-40 blur-sm pointer-events-none',
+                      )}
+                    >
+                      <NewTagForm />
+                    </div>
+                    <div className='absolute left-1/2 top-1/2 mx-auto flex max-w-[150px] -translate-x-1/2 flex-col items-center justify-center text-center'>
+                      <Button className='mx-auto'>New Tag</Button>
+                    </div>
+                  </div>
+                </Dialog.Trigger>
+                <Dialog.Content>
+                  <div className='h-[0.8px] w-full rounded-full bg-gray-200' />
+                  <NewTagForm />
+                </Dialog.Content>
+              </Dialog.Root>
+            </div>
+            {/* <div className='relative flex w-full flex-col space-y-2 px-2'>
+        <div className='absolute h-full w-full bg-gradient-to-t from-white to-transparent' />
+        <div className='absolute left-1/2 top-2 mx-auto flex max-w-[150px] -translate-x-1/2 flex-col items-center justify-center text-center' >
+        <div className='mx-auto'>
+          <button onClick={() => setNewTag(!newTag)}
+          className='bg-white text-gray-700 focus:outline-none ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white focus-visible:button-focus-outline  auto shrink-0 h-8 rounded-lg px-2 text-sm min-w-[60px] relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed'>
+            New Tag
+          </button>
           </div>
-          {preview_rest}
         </div>
-      </div>
+        </div> */}
+          </div>
+        </div>
+      </>
     );
   },
 });
