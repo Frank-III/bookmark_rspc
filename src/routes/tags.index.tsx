@@ -218,7 +218,7 @@ export const route = new FileRoute('/tags/').createRoute({
         <div className={cn('mt-5')}>
           <div
             className={cn(
-              'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+              'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6',
               isPreviousData && !linkLoading
                 ? 'opacity-40 blur-sm pointer-events-none '
                 : '',

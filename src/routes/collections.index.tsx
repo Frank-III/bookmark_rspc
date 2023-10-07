@@ -84,12 +84,12 @@ export const route = new FileRoute('/collections/').createRoute({
     //   };
     // })
     return (
-      <div className='w-full flex flex-col mx-auto justify-center'>
+      <div className='w-full flex flex-col mx-auto justify-center p-y-5'>
         <h1 className='text-3xl font-semibold mb-3'>Collections</h1>
         {status !== 'success' && isFetching && <CardsSkeleton />}
         <div
           className={cn(
-            'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+            'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6',
             isPreviousData && !isLoading
               ? 'opacity-40 blur-sm pointer-events-none '
               : '',
