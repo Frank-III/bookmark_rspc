@@ -68,11 +68,27 @@ pub(crate) fn get_user(token: Option<HeaderValue>) -> Option<Role> {
   Some(role)
 }
 
-pub fn compute_heatmap_value(year: i32, dailyvalues: &[SummariesData]) -> Vec<Vec<i32>> {
+pub fn compute_heatmap_value(year: i32, dailyvalues: &[SummariesData]) -> Vec<Vec<SummariesData>> {
   let date = NaiveDate::from_ymd(year, 1, 1);
-  let mut days = vec![vec![0; 53]; 7];
+  let defualt_val = SummariesData {
+    date: date.to_string(),
+    count: -1,
+  };
+  let mut days = vec![vec![defualt_val; 53]; 7];
 
-  let day_offset = date.weekday().num_days_from_sunday().try_into().unwrap();
+  let day1_index = date.weekday().num_days_from_sunday();
+  let day_offset = if day1_index == 0 { 0 } else { 1 };
+  for i in 0..7 {
+    for j in 1..53 {
+      if i == 0 && j < day1_index as usize {
+        continue;
+      }
+      days[i][j] = SummariesData {
+        date: (date + chrono::Duration::days((i * 7 + j - day1_index as usize) as i64)).to_string(),
+        count: 0,
+      }
+    }
+  }
 
   for (i, log) in dailyvalues.iter().enumerate() {
     let current_date = NaiveDate::parse_from_str(&log.date, "%Y-%m-%d").unwrap();
@@ -85,22 +101,7 @@ pub fn compute_heatmap_value(year: i32, dailyvalues: &[SummariesData]) -> Vec<Ve
       .naive_utc();
     let week = current_utc_date.iso_week().week() as usize;
     days[current_utc_date.weekday().num_days_from_sunday() as usize]
-      [week - 1 + day_offset as usize] = log.count;
-  }
-
-  let days_in_year = if year % 400 == 0 || (year % 100 != 0 && year % 4 == 0) {
-    366
-  } else {
-    365
-  };
-  for i in dailyvalues.len()..days_in_year {
-    let x = i / 7
-      + if date.weekday().num_days_from_sunday() < day_offset {
-        1
-      } else {
-        0
-      };
-    days[date.weekday().num_days_from_sunday() as usize][x] = 0;
+      [week - 1 + day_offset as usize] = log.clone();
   }
 
   days
