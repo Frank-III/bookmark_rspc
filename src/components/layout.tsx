@@ -5,6 +5,7 @@ import {
   Route,
   Link,
   RouterContext,
+  useMatchRoute,
 } from '@tanstack/react-router';
 import { useIsFetching } from '@tanstack/react-query';
 import { useJwtStore } from '../store';
@@ -23,6 +24,7 @@ export function Layout() {
   });
   
   const [isSidebarOpen, toggleSidebar] = React.useState<boolean>(true);
+
   const toggle = () => toggleSidebar(!isSidebarOpen);
   const Header = () => {
     return (
@@ -53,7 +55,7 @@ export function Layout() {
 
   return (
     <main className='flex h-screen overflow-hidden bg-gray-50'>
-      <div className={cn('overflow-hidden w-[280px] transition-[weight] ease-in-out', !isSidebarOpen ? 'w-0' : '')}>
+      <div className={cn('overflow-hidden w-[280px] transition-[width] ease-in-out', !isSidebarOpen ? 'w-0' : '')}>
         <Nav onClickHandle={toggle}/>
       </div>
       <div className='flex w-full min-w-[300px] flex-1 flex-col overflow-hidden'>
