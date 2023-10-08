@@ -55,9 +55,8 @@ export function Links({ links }: LinksProps) {
   );
 }
 
-export function Nav() {
+export function Nav({onClickHandle}: {onClickHandle: () => void}) {
   const { isSignedIn, user } = useUser();
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
   const UserButton = () => {
     return (
       <div className='hover:bg-gray-200/50 group flex w-full flex-row items-center justify-between space-x-2 rounded-lg p-2 space-y-3'>
@@ -79,9 +78,7 @@ export function Nav() {
 
   return (
     <div
-      className={`left-sidebar ${
-        isSidebarOpen ? 'sidebar--open' : ''
-      } flex h-full w-[280px] flex-col items-center justify-between border-r border-gray-200 bg-white`}
+      className={cn('flex h-full w-[280px] flex-col items-center justify-between border-r border-gray-200 bg-white')}
     >
       <div className='flex h-full w-full flex-auto flex-col overflow-hidden'>
         <div className='flex h-[50px] flex-row items-center justify-between space-x-2 border-b border-gray-100 p-2 pl-2'>
@@ -90,7 +87,7 @@ export function Nav() {
           <div className='trigger'>
             <button
               className='flex items-center justify-center rounded-md p-0.5 text-gray-500 transition hover:bg-gray-200/50 hover:text-gray-700'
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              onClick={onClickHandle}
             >
               <PanelLeft size={20} />
             </button>

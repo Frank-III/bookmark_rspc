@@ -10,23 +10,26 @@ import { useIsFetching } from '@tanstack/react-query';
 import { useJwtStore } from '../store';
 import { useAuth } from '@clerk/clerk-react';
 import { Nav } from './nav';
-import React from 'react';
+import React, { useState } from 'react';
 import './layout.css';
 import { PanelLeft, Plus } from 'lucide-react';
 import { CalenderView } from './calender_view';
 import { SearchCMDK } from './modals/search';
+import { cn } from '../utils';
 
 export function Layout() {
   const isLoading = useIsFetching({
     predicate: (query) => query.state.status === 'loading',
   });
-
+  
+  const [isSidebarOpen, toggleSidebar] = React.useState<boolean>(true);
+  const toggle = () => toggleSidebar(!isSidebarOpen);
   const Header = () => {
     return (
       <div className='flex h-[50px] max-h-[50px] flex-row items-center justify-between space-x-4 border-b border-gray-200/50 bg-gray-50 px-4 py-2.5'>
         <div className='flex flex-row items-center justify-start'>
-          <div className='hidden-toggle flex flex-row items-center justify-start space-x-1 overflow-hidden'>
-            <button className='flex items-center justify-center rounded-md p-0.5 text-gray-500 transition hover:bg-gray-200/50 hover:text-gray-700'>
+          <div className={cn('flex w-[0] flex-row items-center justify-start space-x-1 overflow-hidden', !isSidebarOpen && 'w-[20px] mr-2')}>
+            <button className='flex items-center justify-center rounded-md p-0.5 text-gray-500 transition hover:bg-gray-200/50 hover:text-gray-700' onClick={toggle}>
               <PanelLeft size={20} />
             </button>
           </div>
@@ -50,8 +53,8 @@ export function Layout() {
 
   return (
     <main className='flex h-screen overflow-hidden bg-gray-50'>
-      <div className='overflow-hidden w-[280px] min-w-[280px]'>
-        <Nav />
+      <div className={cn('overflow-hidden w-[280px] transition-[weight] ease-in-out', !isSidebarOpen ? 'w-0' : '')}>
+        <Nav onClickHandle={toggle}/>
       </div>
       <div className='flex w-full min-w-[300px] flex-1 flex-col overflow-hidden'>
         <Header />
