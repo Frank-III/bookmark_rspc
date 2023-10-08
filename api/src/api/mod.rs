@@ -43,7 +43,7 @@ pub(crate) fn new() -> PublicRouter {
   PublicRouter::new()
     .config(
       Config::new()
-        .export_ts_bindings(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../bindings.ts")),
+        .export_ts_bindings(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../client/bindings.ts")),
     )
     .query("version", |t| t(|_, _: ()| env!("CARGO_PKG_VERSION")))
     .middleware(|mw| {
