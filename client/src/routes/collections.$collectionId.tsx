@@ -34,13 +34,6 @@ async function loadCollectionById(
     .then((rsp) => rsp as CollectionWithPinnedStatus);
 }
 
-type searchArgs = {
-  mode: SearchMode;
-  page: number;
-  setmode: (mode: SearchMode) => void;
-  setpage: (page: number) => void;
-};
-
 // FIXME: Some hacky way to get around
 export const route = new FileRoute('/collections/$collectionId').createRoute({
   beforeLoad: ({ params: { collectionId } }) => {
