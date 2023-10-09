@@ -4,8 +4,8 @@ import {
   Router,
   Route,
   Link,
-  RouterContext,
-  useMatchRoute,
+  useMatches,
+  useRouterState,
 } from '@tanstack/react-router';
 import { useIsFetching } from '@tanstack/react-query';
 import { useJwtStore } from '../store';
@@ -18,7 +18,12 @@ import { CalenderView } from './calender_view';
 import { SearchCMDK } from './modals/search';
 import { cn } from '../utils';
 
+export function renderHeader(routeMatch: typeof useMatches) {
+
+}
+
 export function Layout() {
+
   const isLoading = useIsFetching({
     predicate: (query) => query.state.status === 'loading',
   });
@@ -37,7 +42,7 @@ export function Layout() {
           </div>
           <Link to='/'>
             <h1 className='whitespace-nowrap text-base font-semibold text-gray-900'>
-              Bookmarks
+              {`Bookmarks/`}
             </h1>
           </Link>
         </div>
