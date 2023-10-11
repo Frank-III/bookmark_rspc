@@ -14,6 +14,7 @@ interface Quote {
   author: string;
 }
 
+
 const getTimeOfDay = (): string => {
   const hour = new Date().getHours();
   if (hour >= 5 && hour < 12) {
@@ -45,7 +46,7 @@ export const route = new FileRoute('/').createRoute({
 
     return (
       <div className='p-5 grid-cols-2 gap-4 '>
-        <h1 className='items-first scroll-m-20 text-2xl font-bold tracking-tight lg:text-4xl'>
+        <h1 className='items-first scroll-m-20 text-2xl font-bold tracking-tight xl:text-4xl lg:text-3xl'>
           Good {timeOfDay}: {user?.firstName }
         </h1>
         {quote && (
@@ -58,14 +59,14 @@ export const route = new FileRoute('/').createRoute({
         <div className='flex items-center justify-center mt-10'>
           <div className='flex flex-row space-x-5'>
             <LinkHeatMap />
-            <div className='mt-4 w-[300px] flex justify-center items-center border shadow-sm ring ring-black/5 rounded-md'>
+            <div className='mt-4 xl:w-[300px] flex justify-center items-center border shadow-sm ring ring-black/5 rounded-md'>
               <Dialog.Root
                 onOpenChange={() => {
                   setDialogOpen(!isDialogOpen);
                 }}
               >
                 <Dialog.Trigger className={cn('', isDialogOpen && 'hidden')}>
-                  <div className='relative flex w-full flex-col '>
+                  <div className='relative flex w-full flex-col'>
                     <div
                       className={cn(
                         '',

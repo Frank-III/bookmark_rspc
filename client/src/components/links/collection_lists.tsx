@@ -20,6 +20,7 @@ import React from 'react';
 import { set } from 'date-fns';
 import { cn } from '../../utils';
 import ContentLoader from 'react-content-loader';
+import { useWindowSize } from 'usehooks-ts';
 
 export type CollectionPinned = Omit<CollectionWithPinnedStatus, 'pinnedBy'> & {
   isPinned: boolean;
@@ -88,7 +89,7 @@ const fakedCollections = [
 
 export function CollectionLinks({ pinned }: CollectionLinksProps) {
   const { isSignedIn, user } = useUser();
-
+  const { width, height } = useWindowSize()
   const {
     status,
     data: collections,
@@ -98,6 +99,7 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
     { enabled: !!user },
   );
 
+  const size = width > 1500 ? 300 : 180 
   // const collections = [{collection:{id:"1", name:"test", color:"red"}}]
   {
     switch (status) {
@@ -105,9 +107,9 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
         return isFetching ? (
           <ContentLoader
             speed={2}
-            width={400}
+            width={size}
             height={150}
-            viewBox='0 0 400 150'
+            viewBox={`0 0 ${size} 150`}
             backgroundColor='#f3f3f3'
             foregroundColor='#ecebeb'
             // {...props}

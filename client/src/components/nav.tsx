@@ -78,7 +78,7 @@ export function Nav({onClickHandle}: {onClickHandle: () => void}) {
 
   return (
     <div
-      className={cn('flex h-full w-[280px] flex-col items-center justify-between border-r border-gray-200 bg-white')}
+      className={cn('flex h-full w-full flex-col items-center justify-between border-r border-gray-200 bg-white')}
     >
       <div className='flex h-full w-full flex-auto flex-col overflow-hidden'>
         <div className='flex h-[50px] flex-row items-center justify-between space-x-2 border-b border-gray-100 p-2 pl-2'>

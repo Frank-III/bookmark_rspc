@@ -17,7 +17,7 @@ import { MakeCollectionWithPinnedStatus, cn } from '../utils';
 import { Button } from '../components/ui/button';
 import { LinkCard } from '../components/buttons/link_card';
 import { CardsSkeleton } from '../components/links/card_loader';
-import { useDebounce } from '../utils';
+import { useDebounce } from 'usehooks-ts';
 import { set } from 'date-fns';
 import { Input } from '../components/ui/input';
 import { ChevronLeftIcon, ChevronRightIcon, Search } from 'lucide-react';
