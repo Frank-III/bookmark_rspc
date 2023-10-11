@@ -23,7 +23,7 @@ export function LinkLink({ link }: { link: LinkWithTags }) {
           {/* <Dot color={color} size={30} /> */}
           {/* <Dot color={color} size={30} /> */}
         </div>
-        <a href={url} target='_black' rel='noreferrer'>
+        <a href={url} target='_blank' rel='noreferrer'>
           <p className='truncate text-sm'>{name}</p>
         </a>
       </div>
