@@ -1,16 +1,18 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
+import { useWindowSize } from 'usehooks-ts';
 
 export const CardsSkeleton = ({
   heading = { width: 140, height: 24 },
   row = 2,
   column = 5,
-  width = 1366,
   padding = 12,
   borderRadius = 4,
   ...props
 }) => {
   const list = [];
+  const {width: size}= useWindowSize();
+  const width = size > 1500 ? 768 : size;
 
   let height;
 
