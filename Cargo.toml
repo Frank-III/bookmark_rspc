@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["prisma", "api"]
+members = ["prisma", "api", "src-tauri"]
 default-members = ["api"]
 
 [workspace.dependencies]
@@ -14,7 +14,7 @@ prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust
   "rspc",
   "migrations",
 ], default-features = false }
-rspc = { version = "0.1.3", features = ["axum"] }
+rspc = { version = "0.1.3", features = ["axum", "tauri"] }
 
 [workspace.metadata.pkg-config]
 openssl = "0.0.3"
