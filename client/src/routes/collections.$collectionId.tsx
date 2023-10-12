@@ -25,6 +25,7 @@ import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from '@radix-ui/react-icons';
+import { useUrlStore } from '../store';
 
 async function loadCollectionById(
   collectionId: number,
@@ -50,10 +51,11 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
   component: ({ useRouteContext }) => {
     const { queryOptions } = useRouteContext();
     const { status, data: thisCollection } = rspc.useQuery(queryOptions);
+
+    // useUrlStore.getState().setUrl(['/', 'collections', thisCollection?.name ?? '...']);
     if (status !== 'success') {
       return <div>Error</div>;
     }
-
     const [input, setInput] = React.useState<string>('');
     const debouncedValue = useDebounce<string>(input, 500);
     const [page, setpage] = React.useState<number>(1);

@@ -20,6 +20,7 @@ import { Command as CommandPrimative } from 'cmdk';
 import { CheckIcon, Search } from 'lucide-react';
 import { CreateLinkArgs } from '../../../bindings';
 import { MultiSelectTags } from '../buttons/multi_select_tags';
+import { StyledButton } from '../buttons/styled_button';
 
 export function NewLinkForm() {
   const queryClient = rspc.useContext().queryClient;
@@ -205,9 +206,9 @@ export function NewLinkForm() {
             </FormItem>
           )}
         />
-        <Button type='submit' className='mt-3'>
+        <StyledButton type='submit' className='mt-3'>
           Add Link
-        </Button>
+        </StyledButton>
       </form>
     </Form>
   );

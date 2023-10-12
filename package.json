@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "web:build": "cd client && bun build",
-    "web:dev": "cd client && bun dev",
+    "web:build": "cd client && pnpm build",
+    "web:dev": "cd client && pnpm dev",
     "generate": "cargo prisma generate",
     "format:check": "prettier -c .",
     "tauri": "tauri"

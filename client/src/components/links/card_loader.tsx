@@ -11,7 +11,7 @@ export const CardsSkeleton = ({
   ...props
 }) => {
   const list = [];
-  const {width: size}= useWindowSize();
+  const { width: size } = useWindowSize();
   const width = size > 1500 ? 768 : size;
 
   let height;

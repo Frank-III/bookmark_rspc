@@ -89,7 +89,7 @@ const fakedCollections = [
 
 export function CollectionLinks({ pinned }: CollectionLinksProps) {
   const { isSignedIn, user } = useUser();
-  const { width, height } = useWindowSize()
+  const { width, height } = useWindowSize();
   const {
     status,
     data: collections,
@@ -99,7 +99,7 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
     { enabled: !!user },
   );
 
-  const size = width > 1500 ? 300 : 180 
+  const size = width > 1500 ? 300 : 180;
   // const collections = [{collection:{id:"1", name:"test", color:"red"}}]
   {
     switch (status) {

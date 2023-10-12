@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { rspc } from '../../utils/rspc';
-import { CreateTagArgs } from '../../../bindings';
+import { CreateTagArgs, UpdateTagArgs } from '../../../bindings';
 import {
   Form,
   FormControl,
@@ -49,7 +49,7 @@ export function NewTagForm() {
   });
 
   function onSubmit(values: FormValues) {
-    addTag.mutate(values as CreateTagArgs);
+    addTag.mutate(values as UpdateTagArgs);
   }
   const { watch } = form;
   const watchedTagName = watch('tag_name');

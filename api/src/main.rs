@@ -43,10 +43,11 @@ fn router(client: Arc<prisma::PrismaClient>) -> axum::Router {
         .allow_headers([AUTHORIZATION, CONTENT_TYPE, ACCEPT])
         .allow_methods([Method::GET, Method::POST])
         .allow_origin(
-          env::var("FRONTEND_URL")
+          [env::var("FRONTEND_URL")
             .unwrap_or("http://localhost:3000".to_string())
             .parse::<HeaderValue>()
             .unwrap(),
+            String::from("tauri://localhost").parse::<HeaderValue>().unwrap()]
         ),
     )
 }

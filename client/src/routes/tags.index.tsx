@@ -10,6 +10,7 @@ import { create } from 'zustand';
 import { cn } from '../utils';
 import { CardsSkeleton } from '../components/links/card_loader';
 import { LinkCard } from '../components/buttons/link_card';
+import { useUrlStore } from '../store';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -97,7 +98,7 @@ function TagMode() {
 export const route = new FileRoute('/tags/').createRoute({
   component: () => {
     const { status, data: allTags } = rspc.useQuery(['tags.getByUser']);
-
+    // useUrlStore.getState().setUrl(['/', 'tags']);
     const useSelectedTagsId = useSelectedTagsStore((state) =>
       state.tags.map((t) => t.id),
     );

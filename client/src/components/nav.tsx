@@ -4,7 +4,7 @@ import {
   UserButton as ClerkUserButton,
   RedirectToSignIn,
 } from '@clerk/clerk-react';
-import { Boxes, PanelLeft, Plus, Tag, User, Search } from 'lucide-react';
+import { Boxes, PanelLeft, Plus, Tag, User, Search, BadgeCheck} from 'lucide-react';
 import { CollectionLinks } from './links/collection_lists';
 import { NewCollection } from './modals/collection_modals';
 import { SearchCMDK } from './modals/search';
@@ -55,11 +55,11 @@ export function Links({ links }: LinksProps) {
   );
 }
 
-export function Nav({onClickHandle}: {onClickHandle: () => void}) {
+export function Nav({ onClickHandle }: { onClickHandle: () => void }) {
   const { isSignedIn, user } = useUser();
   const UserButton = () => {
     return (
-      <div className='hover:bg-gray-200/50 group flex w-full flex-row items-center justify-between space-x-2 rounded-lg p-2 space-y-3'>
+      <div className='hover:bg-blue-200/50 hover:text-indigo-900 group flex w-full flex-row items-center justify-between space-x-2 rounded-xl m-0.5 p-1 space-y-3 border shadow-sm'>
         <div className='flex flex-row items-center justify-start space-x-2'>
           {isSignedIn ? (
             <>
@@ -67,6 +67,7 @@ export function Nav({onClickHandle}: {onClickHandle: () => void}) {
               <span className='line-clamp-1 text-left text-sm font-medium'>
                 {user.username}
               </span>
+              <BadgeCheck size={16}/>
             </>
           ) : (
             <RedirectToSignIn />
@@ -78,7 +79,9 @@ export function Nav({onClickHandle}: {onClickHandle: () => void}) {
 
   return (
     <div
-      className={cn('flex h-full w-full flex-col items-center justify-between border-r border-gray-200 bg-white')}
+      className={cn(
+        'flex h-full w-full flex-col items-center justify-between border-r border-gray-200 bg-white',
+      )}
     >
       <div className='flex h-full w-full flex-auto flex-col overflow-hidden'>
         <div className='flex h-[50px] flex-row items-center justify-between space-x-2 border-b border-gray-100 p-2 pl-2'>

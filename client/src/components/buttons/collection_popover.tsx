@@ -109,7 +109,7 @@ export function CollectionDropdown({
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
-            className='data-[highlighted]:bg-red-500 data-[highlighted]:opacity-80 data-[highlighted]:text-black'
+            className='data-[highlighted]:border-red-600 data-[highlighted]:bg-red-600 data-[highlighted]:text-black'
             key='delete'
           >
             <button

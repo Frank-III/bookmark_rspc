@@ -18,6 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Switch } from '../ui/switch';
 import { HexColorPicker } from 'react-colorful';
 import { Badge } from '../ui/badge';
+import { StyledButton } from '../buttons/styled_button';
 
 export function NewTagForm() {
   const queryClient = rspc.useContext().queryClient;
@@ -120,9 +121,9 @@ export function NewTagForm() {
             )}
           />
         </div>
-        <Button type='submit' className='mt-3'>
+        <StyledButton type='submit' className='mt-3'>
           Submit
-        </Button>
+        </StyledButton>
       </form>
     </Form>
   );

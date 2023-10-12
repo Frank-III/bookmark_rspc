@@ -8,12 +8,13 @@ import { cn } from '../utils';
 import * as Dialog from '@radix-ui/react-dialog';
 import { time } from 'console';
 import { useUser } from '@clerk/clerk-react';
+import { useUrlStore } from '../store';
+import { StyledButton } from '../components/buttons/styled_button';
 
 interface Quote {
   content: string;
   author: string;
 }
-
 
 const getTimeOfDay = (): string => {
   const hour = new Date().getHours();
@@ -34,7 +35,8 @@ const fetchQuote = async (): Promise<Quote> => {
 
 export const route = new FileRoute('/').createRoute({
   component: () => {
-    const {user} = useUser();
+    // useUrlStore.getState().setUrl(['/']);
+    const { user } = useUser();
 
     const [quote, setQuote] = React.useState<Quote | null>(null);
 
@@ -47,7 +49,7 @@ export const route = new FileRoute('/').createRoute({
     return (
       <div className='p-5 grid-cols-2 gap-4 '>
         <h1 className='items-first scroll-m-20 text-2xl font-bold tracking-tight xl:text-4xl lg:text-3xl'>
-          Good {timeOfDay}: {user?.firstName }
+          Good {timeOfDay}: {user?.firstName}
         </h1>
         {quote && (
           <div>
@@ -77,7 +79,7 @@ export const route = new FileRoute('/').createRoute({
                       <NewTagForm />
                     </div>
                     <div className='absolute left-1/2 top-1/2 mx-auto flex max-w-[150px] -translate-x-1/2 items-center justify-center text-center'>
-                      <Button className='mx-auto'>New Tag</Button>
+                      <StyledButton className='mx-auto'>New Tag</StyledButton>
                     </div>
                   </div>
                 </Dialog.Trigger>
@@ -96,10 +98,8 @@ export const route = new FileRoute('/').createRoute({
             {/* <NewCollectionForm /> */}
           </div>
           <div className='flex flex-col space-y-4'>
-            <div className='w-[500px] h-[180px] grid grid-cols3 border shadow-sm ring ring-black/5 rounded-lg'>
-              
-            </div>
-          <div className='w-[500px] border h-[300px] shadow-sm ring ring-black/5 rounded-lg'></div>
+            <div className='w-[500px] h-[180px] grid grid-cols3 border shadow-sm ring ring-black/5 rounded-lg'></div>
+            <div className='w-[500px] border h-[300px] shadow-sm ring ring-black/5 rounded-lg'></div>
           </div>
         </div>
       </div>
