@@ -16,3 +16,15 @@ export const useJwtStore = create<JwtStore>()(
     setExpired: (expired) => set({ expired, jwt: null }),
   })),
 );
+
+type UrlStore = {
+  url: Array<string>;
+  setUrl: (url: Array<string>) => void;
+};
+
+export const useUrlStore = create<UrlStore>()(
+  devtools((set) => ({
+    url: ['/'],
+    setUrl: (url) => set({ url }),
+  })),
+);

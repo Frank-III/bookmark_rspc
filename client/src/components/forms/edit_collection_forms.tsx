@@ -19,6 +19,7 @@ import { Switch } from '../ui/switch';
 import { HexColorPicker } from 'react-colorful';
 import { CollectionPinned } from '../links/collection_lists';
 import React from 'react';
+import { StyledButton } from '../buttons/styled_button';
 
 interface EditCollectionProps {
   collection: CollectionPinned;
@@ -162,7 +163,7 @@ export function EditCllectionForm({ collection }: EditCollectionProps) {
             </FormItem>
           )}
         />
-        <Button type='submit'>Submit</Button>
+        <StyledButton type='submit'>Submit</StyledButton>
       </form>
     </Form>
   );

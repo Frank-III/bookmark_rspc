@@ -18,6 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Switch } from '../ui/switch';
 import { HexColorPicker } from 'react-colorful';
 import { useRouter } from '@tanstack/react-router';
+import { StyledButton } from '../buttons/styled_button';
 
 export function NewCollectionForm() {
   const router = useRouter();
@@ -154,7 +155,7 @@ export function NewCollectionForm() {
             </FormItem>
           )}
         />
-        <Button type='submit'>Submit</Button>
+        <StyledButton type='submit'>Submit</StyledButton>
       </form>
     </Form>
   );

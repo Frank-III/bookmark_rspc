@@ -10,6 +10,7 @@ import { CardsSkeleton } from '../components/links/card_loader';
 import { Collection, CollectionWithPinnedStatus } from '../../bindings';
 import { cn } from '../utils';
 import { CollectionCard } from '../components/buttons/collection_card';
+import { useUrlStore } from '../store';
 import ContentLoader from 'react-content-loader';
 
 // async function loadCollectionById(
@@ -33,6 +34,7 @@ export const route = new FileRoute('/collections/').createRoute({
     await queryClient.ensureQueryData(queryOptions);
   },
   component: ({ useRouteContext }) => {
+    // useUrlStore.getState().setUrl(['/', 'collections']);
     const { queryOptions } = useRouteContext();
     const {
       isPreviousData,
@@ -43,6 +45,7 @@ export const route = new FileRoute('/collections/').createRoute({
     } = rspc.useQuery(queryOptions, {
       keepPreviousData: true,
     });
+
     if (isLoading) {
       return (
         <ContentLoader

@@ -21,6 +21,7 @@ import { Command as CommandPrimative } from 'cmdk';
 import { CheckIcon, Command, Search } from 'lucide-react';
 import { LinkWithTags, EditLinkArgs } from '../../../bindings';
 import { MultiSelectTags } from '../buttons/multi_select_tags';
+import { StyledButton } from '../buttons/styled_button';
 interface EditLinkProps {
   link: LinkWithTags;
 }
@@ -240,9 +241,9 @@ export function EditLinkForm({ link }: EditLinkProps) {
             </FormItem>
           )}
         />
-        <Button type='submit' className='mt-3'>
+        <StyledButton type='submit' className='mt-3'>
           Edit Link
-        </Button>
+        </StyledButton>
       </form>
     </Form>
   );
