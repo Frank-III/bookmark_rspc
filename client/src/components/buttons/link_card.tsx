@@ -49,7 +49,7 @@ export function LinkCard({ link }: { link: LinkWithTags }) {
       <div className='h-[1px] w-full rounded-full bg-gray-100' />
       <div className='mt-2 flex w-full items-center justify-end space-x-1 mb-0'>
         <LinkDropdown link={link}>
-          <button className='bg-white text-gray-700  ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white auto shrink-0 rounded-lg px-2 text-sm  relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed h-6 px-0 w-6 '>
+          <button className='bg-white text-gray-700  ring-1 ring-black/5 shadow-small hover:bg-gray-50 disabled:text-gray-400 disabled:hover:bg-white auto shrink-0 rounded-lg  text-sm  relative flex flex-row items-center justify-center space-x-1 font-medium transition disabled:cursor-not-allowed h-6 px-0 w-6 '>
             <Menu size={20} />
           </button>
         </LinkDropdown>

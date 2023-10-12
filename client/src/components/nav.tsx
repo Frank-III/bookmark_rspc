@@ -4,7 +4,15 @@ import {
   UserButton as ClerkUserButton,
   RedirectToSignIn,
 } from '@clerk/clerk-react';
-import { Boxes, PanelLeft, Plus, Tag, User, Search, BadgeCheck} from 'lucide-react';
+import {
+  Boxes,
+  PanelLeft,
+  Plus,
+  Tag,
+  User,
+  Search,
+  BadgeCheck,
+} from 'lucide-react';
 import { CollectionLinks } from './links/collection_lists';
 import { NewCollection } from './modals/collection_modals';
 import { SearchCMDK } from './modals/search';
@@ -67,7 +75,7 @@ export function Nav({ onClickHandle }: { onClickHandle: () => void }) {
               <span className='line-clamp-1 text-left text-sm font-medium'>
                 {user.username}
               </span>
-              <BadgeCheck size={16}/>
+              <BadgeCheck size={16} />
             </>
           ) : (
             <RedirectToSignIn />
