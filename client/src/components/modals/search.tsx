@@ -103,7 +103,7 @@ export function SearchCMDK({ children }: { children: React.ReactNode }) {
   const [newTag, setNewTag] = React.useState(false);
 
   React.useEffect(() => {
-    const down = (e) => {
+    const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);

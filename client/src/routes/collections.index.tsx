@@ -23,7 +23,7 @@ export const route = new FileRoute('/collections/').createRoute({
   beforeLoad: () => {
     return {
       queryOptions: {
-        queryKey: ['collections.getByUser'],
+        queryKey: ['collections.getByUser'] as const,
         queryFn: () => {
           return client.query(['collections.getByUser']);
         },
@@ -68,7 +68,7 @@ export const route = new FileRoute('/collections/').createRoute({
         </ContentLoader>
       );
     }
-    const collects = allCollections?.map((c: CollectionWithPinnedStatus) => {
+    const collects: CollectionPinned[] = allCollections?.map((c: CollectionWithPinnedStatus) => {
       const { pinnedBy, ...collection } = c;
       return {
         ...collection,

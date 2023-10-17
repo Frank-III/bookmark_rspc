@@ -36,7 +36,7 @@ export function CalenderView() {
     isFetching,
     refetch,
   } = rspc.useQuery(
-    ['links.getByDate', { date: date?.toISOString()?.slice(0, 10), size: 10 }],
+    ['links.getByDate', { date: date?.toISOString()?.slice(0, 10)!, size: 10 }],
     { enabled: false },
   );
 

@@ -24,20 +24,20 @@ import { cn } from '../../utils';
 import { rspc } from '../../utils/rspc';
 import { Button } from '../ui/button';
 import { RefreshCcw } from 'lucide-react';
+import { StyledButton } from '../buttons/styled_button';
 
-const SQUARE_SIZE = 18;
-const GAP = 4;
 // -----------------------------------------------------------------------------
 // Component
 // -----------------------------------------------------------------------------
 
 const LinkHeatMap: FC = () => {
-  // `log.date` doesn't have to be initialized to a UTC date because we only
-  // care about the year (which should stay consistent).
-  // const yearsLogged = useMemo(
-  //   () => Array.from(new Set(linkSummary.map((log) => new Date(log).getFullYear()))).reverse(),
-  //   [linkSummary],
-  // );
+
+
+
+
+  const SQUARE_SIZE = 18;
+  const GAP = 4;
+
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const {
     isLoading,
@@ -137,14 +137,14 @@ const LinkHeatMap: FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-              <Button
+              <StyledButton
                 onClick={() => {
                   refetch();
                 }}
-                className='h-8 w-8 p-2 bg-transparent border hover:bg-current'
+                className='h-8 w-8 p-2'
               >
                 <RefreshCcw size={20} color='black' />
-              </Button>
+              </StyledButton>
             </div>
           </div>
           <div className='relative'>
