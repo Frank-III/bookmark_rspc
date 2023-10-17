@@ -1,8 +1,13 @@
 {
   "name": "test_bookmarks",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.2",
+    "prettier": "^3.0.3",
+    "prettier-plugin-rust": "^0.1.9",
+    "prettier-plugin-tailwindcss": "^0.1.13"
+  },
+  "private": true,
   "scripts": {
     "web:build": "cd client && pnpm build",
     "web:dev": "cd client && pnpm dev",
@@ -10,11 +15,5 @@
     "format:check": "prettier -c .",
     "tauri": "tauri"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "@tauri-apps/cli": "^1.5.2",
-    "prettier": "^3.0.3",
-    "prettier-plugin-rust": "^0.1.9",
-    "prettier-plugin-tailwindcss": "^0.1.13"
-  }
+  "type": "module"
 }

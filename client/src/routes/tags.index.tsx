@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { FileRoute } from '@tanstack/react-router';
-import { Badge } from '../components/ui/badge';
 import { rspc } from '../utils/rspc';
 import ContentLoader from 'react-content-loader';
 import { Button } from '../components/ui/button';
@@ -10,7 +9,7 @@ import { create } from 'zustand';
 import { cn } from '../utils';
 import { CardsSkeleton } from '../components/links/card_loader';
 import { LinkCard } from '../components/buttons/link_card';
-import { useUrlStore } from '../store';
+// import { useUrlStore } from '../store';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -25,7 +24,9 @@ import {
   SelectValue,
 } from '../components/ui/select';
 import { Mode, FilterByTagsArgs } from '../../bindings';
-import { is } from 'date-fns/locale';
+import { Input } from '../components/ui/input';
+import { StyledButton } from '../components/buttons/styled_button';
+import { TagBadge } from '../components/buttons/tag_badge';
 
 type selectedTags = {
   tags: Array<Exclude<Tag, 'ownerId'>>;
@@ -50,31 +51,6 @@ const useSelectedTagsStore = create<selectedTags>((set) => ({
     set((state) => ({ tags: state.tags.filter((t) => t.id !== tag.id) })),
 }));
 
-export function TagBadge({
-  tag,
-  onClick,
-  className,
-  ...props
-}: {
-  tag: Exclude<Tag, 'ownerId'>;
-  className?: string;
-  onClick?: () => void;
-}) {
-  return (
-    <Badge
-      className={cn('mb-2', className)} // Add margin at the bottom for spacing
-      style={{
-        backgroundColor: `${tag.color}30`,
-        color: tag.color,
-        borderColor: `${tag.color}20`,
-        ...props.styles,
-      }}
-      onClick={onClick}
-    >
-      {tag.name}
-    </Badge>
-  );
-}
 
 function TagMode() {
   return (
@@ -158,16 +134,16 @@ export const route = new FileRoute('/tags/').createRoute({
 
     return (
       <div className='w-full flex flex-col mx-auto justify-center'>
-        <h1 className='text-3xl font-semibold mb-3'>Tags</h1>
+        <h1 className='text-3xl font-semibold mb-3'>🏷️ Tags</h1>
         <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 items-center'>
           <TagMode />
           <div
             className={cn(
               'flex min-h-[2.5rem] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-              'flex-wrap space-x-2 items-center',
+              'flex-wrap space-x-2 items-center text-gray-300 font-semibold',
             )}
-            placeholder='Search by tags...'
           >
+            {useSelectedTagsStore.getState().tags.length === 0 && "Select Tag By Clicking on it"}
             {useSelectedTagsStore.getState().tags.map((tag) => (
               <TagBadge
                 key={tag.id}
@@ -179,6 +155,8 @@ export const route = new FileRoute('/tags/').createRoute({
               />
             ))}
           </div>
+          <Input placeholder='Search by link name...'>
+          </Input>
           <button
             className='rounded-full border-1 bg-gray-100 w-full md:w-auto text-gray-400 text-sm font-light'
             onClick={() => {
@@ -188,15 +166,15 @@ export const route = new FileRoute('/tags/').createRoute({
           >
             clear
           </button>
-          <Button
-            className='border-2 bg-gray-900 w-full md:w-auto'
+          <StyledButton
+            className='w-full md:w-auto '
             onClick={() => {
               useSelectedTagsStore.setState({ page: 1 });
               refetch();
             }}
           >
             <Search />
-          </Button>
+          </StyledButton>
         </div>
         <div className='flex flex-wrap space-x-2 items-center justify-center mt-5'>
           {allTags.map((tag) => (
@@ -208,7 +186,7 @@ export const route = new FileRoute('/tags/').createRoute({
                   : useSelectedTagsStore.getState().addSelect(tag);
                 useSelectedTagsStore.setState({ page: 1 });
               }}
-              styles={
+              style={
                 useSelectedTagsId.includes(tag.id) ? { opacity: 0.5 } : {}
               }
             />

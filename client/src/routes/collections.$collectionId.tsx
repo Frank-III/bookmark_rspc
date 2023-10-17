@@ -38,17 +38,19 @@ async function loadCollectionById(
 // FIXME: Some hacky way to get around
 export const route = new FileRoute('/collections/$collectionId').createRoute({
   beforeLoad: ({ params: { collectionId } }) => {
-    const queryOptions = {
-      queryKey: ['collections.getOnePinnedStatus', parseInt(collectionId)],
-      queryFn: () => loadCollectionById(parseInt(collectionId)),
-      enabled: !!collectionId,
+    return { 
+      queryOptions: {
+        queryKey: ['collections.getOnePinnedStatus', parseInt(collectionId)],
+        queryFn: () => loadCollectionById(parseInt(collectionId)),
+        enabled: !!collectionId,
+      }
     };
-    return { queryOptions };
   },
   loader: async ({ context: { queryClient, queryOptions } }) => {
     await queryClient.ensureQueryData(queryOptions);
   },
   component: ({ useRouteContext }) => {
+
     const { queryOptions } = useRouteContext();
     const { status, data: thisCollection } = rspc.useQuery(queryOptions);
 

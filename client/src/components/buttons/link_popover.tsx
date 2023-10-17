@@ -1,4 +1,3 @@
-import { MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,

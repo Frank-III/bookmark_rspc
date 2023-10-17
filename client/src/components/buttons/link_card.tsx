@@ -18,7 +18,7 @@ export function LinkCard({ link }: { link: LinkWithTags }) {
 
   return (
     <Card
-      className='w-full rounded-lg m-h-[200px] pb-0 border-2 hover:border-indigo-400 '
+      className='w-full rounded-lg m-h-[200px] border-0 pb-0 shadow-small ring-1 ring-black/5 hover:border-2 hover:border-indigo-400 '
       key={id}
     >
       <CardHeader className='p-3 text-gray-700 font-medium'>

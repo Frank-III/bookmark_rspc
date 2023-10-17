@@ -63,16 +63,17 @@ export function Layout() {
           <div
             className={cn(
               'flex w-[0] flex-row items-center justify-start space-x-1 overflow-hidden',
-              !isSidebarOpen && 'w-[20px] mr-2',
+              !isSidebarOpen && 'w-[28px] mr-2',
             )}
           >
             <button
-              className='flex items-center justify-center rounded-md p-0.5 text-gray-500 transition hover:bg-gray-200/50 hover:text-gray-700'
+              className='flex items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700'
               onClick={toggleLeft}
             >
               <PanelLeft size={20} />
             </button>
           </div>
+          {/* <div className='h-[25px] w-[1px] bg-gray-300 rounded-full mx-1'/> */}
           {/* <RenderHeader url={url}/> */}
           <Link to='/'>
             <h1 className='whitespace-nowrap text-base font-semibold text-gray-900'>
@@ -82,7 +83,7 @@ export function Layout() {
         </div>
         <div className='flex flex-row items-center space-x-2'>
           <button
-            className='flex items-center justify-center rounded-md p-0.5 text-gray-500 transition hover:bg-gray-200/50 hover:text-gray-700'
+            className='flex items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700'
             onClick={toggleRight}
             disabled={width < 768 ? true : false}
           >

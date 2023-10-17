@@ -132,7 +132,7 @@ export function CollectionLinks({ pinned }: CollectionLinksProps) {
       case 'error':
         //TODO: better Errors
         // return <div>Error</div>;
-        return;
+        return <></>;
       case 'success':
         // collections.sort((a, b) => {return a.})
         //TODO: better way?

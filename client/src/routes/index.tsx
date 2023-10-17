@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FileRoute } from '@tanstack/react-router';
+import { FileRoute, Link } from '@tanstack/react-router';
 import LinkHeatMap from '../components/summary_stats/heatmap';
 import { Button } from '../components/ui/button';
 import { NewLinkForm } from '../components/forms/new_link_forms';
@@ -10,11 +10,20 @@ import { time } from 'console';
 import { useUser } from '@clerk/clerk-react';
 import { useUrlStore } from '../store';
 import { StyledButton } from '../components/buttons/styled_button';
+import { rspc } from '../utils/rspc';
+import { TagBadge } from '../components/buttons/tag_badge';
 
 interface Quote {
   content: string;
   author: string;
 }
+
+function generateRandomPosition() {
+  const top = Math.floor(Math.random() * 85) + 1; // 1 to 90 to ensure they don't touch container edge
+  const left = Math.floor(Math.random() * 85) + 1;
+  return { top: `${top}%`, left: `${left}%` };
+};
+
 
 const getTimeOfDay = (): string => {
   const hour = new Date().getHours();
@@ -37,6 +46,7 @@ export const route = new FileRoute('/').createRoute({
   component: () => {
     // useUrlStore.getState().setUrl(['/']);
     const { user } = useUser();
+    const { status: tagStatus, data: allTags } = rspc.useQuery(['tags.getByUser'])
 
     const [quote, setQuote] = React.useState<Quote | null>(null);
 
@@ -98,8 +108,16 @@ export const route = new FileRoute('/').createRoute({
             {/* <NewCollectionForm /> */}
           </div>
           <div className='flex flex-col space-y-4'>
-            <div className='w-[500px] h-[180px] grid grid-cols3 border shadow-sm ring ring-black/5 rounded-lg'></div>
-            <div className='w-[500px] border h-[300px] shadow-sm ring ring-black/5 rounded-lg'></div>
+            <div className='relative w-[500px] h-[180px] grid grid-cols3 border shadow-sm ring ring-black/5 rounded-lg'></div>
+            <div className='relative w-[500px] border h-[300px] shadow-sm ring ring-black/5 rounded-lg'>
+              {allTags && (allTags.slice(0,5).map((tag) => {
+                const {top, left} = generateRandomPosition();
+                return (
+                <Link to={"/tags/$tagId"} params={{ tagId: tag.id.toString()}}>
+                <TagBadge tag={tag} style={{top: top, left: left}} className='absolute'></TagBadge>
+                </Link>
+                )}))}
+            </div>
           </div>
         </div>
       </div>
