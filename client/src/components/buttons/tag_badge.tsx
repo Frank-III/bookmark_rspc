@@ -3,7 +3,8 @@ import { Tag } from "../../../bindings";
 import { cn } from "../../utils";
 
 interface TagBadgeProp extends React.HTMLAttributes<HTMLDivElement> {
-  tag: Exclude<Tag, 'ownerId'>;
+  tag: Omit<Tag, 'ownerId'>;
+  onClick?: () => void;
 }
 
 export function TagBadge({

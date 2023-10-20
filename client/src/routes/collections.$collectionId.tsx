@@ -26,6 +26,7 @@ import {
   DoubleArrowRightIcon,
 } from '@radix-ui/react-icons';
 import { useUrlStore } from '../store';
+import { FullLinkCard } from '../components/buttons/full_link_card';
 
 async function loadCollectionById(
   collectionId: number,
@@ -149,7 +150,7 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
           <div className='mt-5'>
             <div
               className={cn(
-                'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6',
+                'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5',
                 isPreviousData && !linkLoading
                   ? 'opacity-40 blur-sm pointer-events-none '
                   : '',
@@ -157,7 +158,7 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
             >
               {searchedLinks &&
                 searchedLinks?.links.length > 0 &&
-                searchedLinks.links.map((link) => <LinkCard link={link} />)}
+                searchedLinks.links.map((link) => <FullLinkCard link={link} />)}
             </div>
           </div>
           <div className='flex items-center justify-end px-2 mt-3'>

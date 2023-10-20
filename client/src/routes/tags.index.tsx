@@ -27,6 +27,7 @@ import { Mode, FilterByTagsArgs } from '../../bindings';
 import { Input } from '../components/ui/input';
 import { StyledButton } from '../components/buttons/styled_button';
 import { TagBadge } from '../components/buttons/tag_badge';
+import { FullLinkCard } from '../components/buttons/full_link_card';
 
 type selectedTags = {
   tags: Array<Exclude<Tag, 'ownerId'>>;
@@ -205,7 +206,7 @@ export const route = new FileRoute('/tags/').createRoute({
           >
             {filteredLinks &&
               filteredLinks?.links.length > 0 &&
-              filteredLinks.links.map((link) => <LinkCard link={link} />)}
+              filteredLinks.links.map((link) => <FullLinkCard link={link} />)}
           </div>
           {/* {isPreviousData  && <div className='absolute left-1/2 top-1/2'>Please Click Search</div>} */}
         </div>
