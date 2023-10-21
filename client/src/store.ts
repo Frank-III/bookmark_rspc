@@ -28,3 +28,16 @@ export const useUrlStore = create<UrlStore>()(
     setUrl: (url) => set({ url }),
   })),
 );
+
+
+type LinkDetailStore = {
+  linkId: number;
+  setLinkId: (linkId: number) => void;
+}
+
+export const useLinkDetailStore = create<LinkDetailStore>()(
+  devtools((set) => ({
+    linkId: 0,
+    setLinkId: (linkId) => set({ linkId }),
+  })),
+);

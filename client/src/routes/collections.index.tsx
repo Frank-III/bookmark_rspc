@@ -7,7 +7,7 @@ import { client, rspc } from '../utils/rspc';
 import { CollectionPinned } from '../components/links/collection_lists';
 import { EditCllectionForm } from '../components/forms/edit_collection_forms';
 import { CardsSkeleton } from '../components/links/card_loader';
-import { Collection, CollectionWithPinnedStatus } from '../../bindings';
+import { Collection, CollectionWithPinnedStatus, Procedures } from '../../bindings';
 import { cn } from '../utils';
 import { CollectionCard } from '../components/buttons/collection_card';
 import { useUrlStore } from '../store';

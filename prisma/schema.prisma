@@ -23,6 +23,7 @@ model User {
 
   links               Link[]
   tags                Tag[]
+  // comments            Comment[]
   collections         Collection[]            @relation("UsersAndCollections")
   pinnedCollections   PinnedUserCollections[]
   UsersAndCollections UsersAndCollections[]
@@ -86,9 +87,19 @@ model Link {
   collectionId Int
   tags         Tag[]
   createdAt    DateTime   @default(now())
-
+  // comments    Comment[]
   // @@unique([name, collectionId, ownerId])
 }
+
+// model Comment {
+//   id           Int        @id @default(autoincrement())
+//   text         String
+//   owner        User       @relation(fields: [ownerId], references: [id])
+//   ownerId      String
+//   link         Link       @relation(fields: [linkId], references: [id])
+//   linkId       Int
+//   createdAt    DateTime   @default(now())
+// }
 
 model Tag {
   id      Int    @id @default(autoincrement())
