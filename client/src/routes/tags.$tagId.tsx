@@ -60,7 +60,7 @@ export const route = new FileRoute('/tags/$tagId').createRoute({
 
     return (
       <div className='grid grid-cols-4'>
-      { thisTags && <FullLinkCard link={thisTags?.links[0]} /> } 
+      {/* { thisTags && <FullLinkCard link={thisTags?.links[0]} /> }  */}
       </div>
       )
     
