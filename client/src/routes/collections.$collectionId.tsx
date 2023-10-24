@@ -53,7 +53,7 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
   component: ({ useRouteContext }) => {
 
     const { queryOptions } = useRouteContext();
-    const { status, data: thisCollection } = rspc.useQuery(queryOptions);
+    const { status, data: thisCollection } = rspc.useQuery<'collections.getOnePinnedStatus'>(queryOptions);
 
     // useUrlStore.getState().setUrl(['/', 'collections', thisCollection?.name ?? '...']);
     if (status !== 'success') {
