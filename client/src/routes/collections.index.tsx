@@ -23,7 +23,7 @@ export const route = new FileRoute('/collections/').createRoute({
   beforeLoad: () => {
     return {
       queryOptions: {
-        queryKey: ['collections.getByUser'] as const,
+        queryKey: ['collections.getByUser'],
         queryFn: () => {
           return client.query(['collections.getByUser']);
         },
@@ -42,7 +42,7 @@ export const route = new FileRoute('/collections/').createRoute({
       status,
       data: allCollections,
       isFetching,
-    } = rspc.useQuery(queryOptions, {
+    } = rspc.useQuery(['collections.getByUser'], {
       keepPreviousData: true,
     });
 
@@ -68,7 +68,7 @@ export const route = new FileRoute('/collections/').createRoute({
         </ContentLoader>
       );
     }
-    const collects: CollectionPinned[] = allCollections?.map((c: CollectionWithPinnedStatus) => {
+    const collects: CollectionPinned[] = allCollections!.map((c: CollectionWithPinnedStatus) => {
       const { pinnedBy, ...collection } = c;
       return {
         ...collection,

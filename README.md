@@ -1,6 +1,9 @@
-# Create rspc app
 
-This app was scaffolded using the [create-rspc-app](https://rspc.dev) CLI.
+![logo](public/Bookmarks.png)
+
+# Bookmarks for devs
+
+An Opnionated Bookmarks app, inspired by linkwarden.
 
 ## Usage
 
@@ -8,11 +11,8 @@ This app was scaffolded using the [create-rspc-app](https://rspc.dev) CLI.
 # Terminal One
 cd web
 pnpm i
-pnpm dev
+pnpm web:dev
 
 # Terminal Two
-cd api/
-cargo prisma generate
-cargo prisma db push
 cargo run
 ```
