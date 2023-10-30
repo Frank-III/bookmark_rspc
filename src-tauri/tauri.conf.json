@@ -18,6 +18,10 @@
               "execute": true, 
               "sidecar": true, 
               "open": true 
+            },
+      "http": {
+              "request": true,
+              "scope": [" http://localhost:9000/*"] 
             }
     },
     "bundle": {
