@@ -62,7 +62,7 @@ model UsersAndCollections {
   canCreate    Boolean
   canUpdate    Boolean
   canDelete    Boolean
-
+  // verified    Boolean   @default(false)
   @@id([userId, collectionId])
 }
 
@@ -104,18 +104,10 @@ model Link {
 model Tag {
   id      Int    @id @default(autoincrement())
   name    String
-  color   String 
+  color   String
   links   Link[]
   owner   User   @relation(fields: [ownerId], references: [id])
   ownerId String
 
   @@unique([name, ownerId])
-}
-
-model DailyStats {
-  id         Int      @id @default(autoincrement())
-  date       DateTime @default(now()) @db.Date
-  totallinks Int
-  archived   Int
-  unarchived Int
 }
