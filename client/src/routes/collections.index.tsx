@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FileRoute } from '@tanstack/react-router';
+import { FileRoute, RouteMeta } from '@tanstack/react-router';
 import { NewCollection } from '../components/modals/collection_modals';
 import { Button } from '../components/ui/button';
 import { CollectionDropdown } from '../components/buttons/collection_popover';
@@ -7,7 +7,11 @@ import { client, rspc } from '../utils/rspc';
 import { CollectionPinned } from '../components/links/collection_lists';
 import { EditCllectionForm } from '../components/forms/edit_collection_forms';
 import { CardsSkeleton } from '../components/links/card_loader';
-import { Collection, CollectionWithPinnedStatus, Procedures } from '../../bindings';
+import {
+  Collection,
+  CollectionWithPinnedStatus,
+  Procedures,
+} from '../../bindings';
 import { cn } from '../utils';
 import { CollectionCard } from '../components/buttons/collection_card';
 import { useUrlStore } from '../store';
@@ -20,22 +24,21 @@ import ContentLoader from 'react-content-loader';
 // }
 
 export const route = new FileRoute('/collections/').createRoute({
-  beforeLoad: () => {
-    return {
-      queryOptions: {
-        queryKey: ['collections.getByUser'],
-        queryFn: () => {
-          return client.query(['collections.getByUser']);
-        },
+  beforeLoad: () => ({
+    // TODO: should fetch two queries, one for private collections (using collections.getByUser), and one for public/shared one (using collections.getAllShared)
+    queryOptions: {
+      queryKey: ['collections.getByUser'],
+      queryFn: () => {
+        return client.query(['collections.getByUser']);
       },
-    };
-  },
-  loader: async ({ context: { queryClient, queryOptions } }) => {
+    },
+  }),
+  load: async ({ meta: { queryClient, queryOptions } }) => {
     await queryClient.ensureQueryData(queryOptions);
   },
-  component: ({ useRouteContext }) => {
+  component: ({ useRouteMeta }) => {
     // useUrlStore.getState().setUrl(['/', 'collections']);
-    const { queryOptions } = useRouteContext();
+    const { queryOptions } = useRouteMeta();
     const {
       isPreviousData,
       isLoading,
@@ -68,13 +71,15 @@ export const route = new FileRoute('/collections/').createRoute({
         </ContentLoader>
       );
     }
-    const collects: CollectionPinned[] = allCollections!.map((c: CollectionWithPinnedStatus) => {
-      const { pinnedBy, ...collection } = c;
-      return {
-        ...collection,
-        isPinned: pinnedBy.length > 0 ? true : false,
-      } as CollectionPinned;
-    });
+    const collects: CollectionPinned[] = allCollections!.map(
+      (c: CollectionWithPinnedStatus) => {
+        const { pinnedBy, ...collection } = c;
+        return {
+          ...collection,
+          isPinned: pinnedBy.length > 0 ? true : false,
+        } as CollectionPinned;
+      },
+    );
     // const {mutate} = rspc.useMutation('links.create')
 
     // const newLinks: CreateLinkArgs[] = Array(20).fill(0).map((_, i) => i).map((i) => {

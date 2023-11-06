@@ -83,9 +83,9 @@ export function Layout() {
         </div>
         <div className='flex flex-row items-center space-x-2'>
           <button
-            className='flex items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700'
+            className='flex items-center justify-center rounded-md p-1 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700 disabled:text-gray-300 disabled:hover:bg-gray-100'
             onClick={toggleRight}
-            disabled={width < 768 ? true : false}
+            disabled={width < 1280 ? true : false}
           >
             {isCalenderOpen ? <PanelRightClose /> : <PanelRightOpen />}
           </button>
@@ -115,7 +115,8 @@ export function Layout() {
         <Header />
         <div
           id='infinite-scoll-container'
-          className='relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden p-4'
+          //TODO: could increase the padding a bit
+          className={cn('relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden py-4', width > 2146 ? 'px-[100px]': width > 1540 ? 'px-20': 'px-4')}
         >
           <div className='pointer-events-none sticky top-0 z-10 w-full -translate-y-4 py-4'>
             <div className='pointer-events-none absolute left-0 top-0 z-0 h-full w-full bg-gradient-to-b from-gray-50 via-gray-50/50' />

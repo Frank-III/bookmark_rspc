@@ -232,6 +232,7 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
               .exec()
               .await?;
           } else {
+            // TODO: when allow share links, not the user may not pinned the collection
             ctx
               .db
               .pinned_user_collections()

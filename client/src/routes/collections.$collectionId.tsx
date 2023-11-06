@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FileRoute, useRouteContext } from '@tanstack/react-router';
+import { FileRoute } from '@tanstack/react-router';
 import { CollectionDropdown } from '../components/buttons/collection_popover';
 import { client, rspc } from '../utils/rspc';
 import { CollectionPinned } from '../components/links/collection_lists';
@@ -15,7 +15,6 @@ import {
 } from '../components/ui/select';
 import { MakeCollectionWithPinnedStatus, cn } from '../utils';
 import { Button } from '../components/ui/button';
-import { LinkCard } from '../components/buttons/link_card';
 import { CardsSkeleton } from '../components/links/card_loader';
 import { useDebounce } from 'usehooks-ts';
 import { set } from 'date-fns';
@@ -39,21 +38,22 @@ async function loadCollectionById(
 // FIXME: Some hacky way to get around
 export const route = new FileRoute('/collections/$collectionId').createRoute({
   beforeLoad: ({ params: { collectionId } }) => {
-    return { 
+    return {
       queryOptions: {
-        queryKey: ['collections.getOnePinnedStatus', parseInt(collectionId)],
+        queryKey: ['collections.getOnePinnedStatus', parseInt(collectionId)] as const,
         queryFn: () => loadCollectionById(parseInt(collectionId)),
         enabled: !!collectionId,
-      }
+      },
     };
   },
-  loader: async ({ context: { queryClient, queryOptions } }) => {
+  load: async ({ meta: { queryClient, queryOptions } }) => {
     await queryClient.ensureQueryData(queryOptions);
   },
-  component: ({ useRouteContext }) => {
-
-    const { queryOptions } = useRouteContext();
-    const { status, data: thisCollection } = rspc.useQuery<'collections.getOnePinnedStatus'>(queryOptions);
+  component: ({ useRouteMeta }) => {
+    const { queryOptions } = useRouteMeta();
+    const { status, data: thisCollection } =
+      //TODO: find a typescript way to fix this
+      rspc.useQuery<'collections.getOnePinnedStatus'>(queryOptions.queryKey);
 
     // useUrlStore.getState().setUrl(['/', 'collections', thisCollection?.name ?? '...']);
     if (status !== 'success') {

@@ -6,18 +6,14 @@ import {
 } from '../../../bindings';
 import { CollectionDropdown } from '../buttons/collection_popover';
 import {
-  Album,
   Dot,
   GalleryVerticalEnd,
-  Loader2,
   MoreVertical,
   Pin,
-  SquareDot,
 } from 'lucide-react';
 import { rspc } from '../../utils/rspc';
 import { useUser } from '@clerk/clerk-react';
 import React from 'react';
-import { set } from 'date-fns';
 import { cn } from '../../utils';
 import ContentLoader from 'react-content-loader';
 import { useWindowSize } from 'usehooks-ts';
