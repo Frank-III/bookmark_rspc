@@ -28,7 +28,7 @@ pub struct FilterResult {
   total_links: Option<i32>,
   links: Vec<link_with_tags::Data>,
 }
-
+// TODO: can I make a generic getBy function and searchBy function ? 
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
     .query("getByDate", |t| {
