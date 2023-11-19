@@ -1,19 +1,21 @@
 use std::{env, sync::Arc, vec};
 
 use super::{PrivateCtx, PrivateRouter};
-use crate::prisma::{self, link, PrismaClient};
+use crate::prisma::{self, link::{self, WhereParam}, PrismaClient};
 use axum::{
   http::{HeaderMap, StatusCode},
   routing::post,
   Extension, Router,
 };
+use hyper::client::connect::dns::Name;
 use prisma_client_rust::{
   and,
   chrono::{DateTime, FixedOffset},
   raw, PrismaValue,
 };
 use rspc::{Error, ErrorCode, RouterBuilder, Type};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de};
+use tracing::span::Id;
 
 prisma::link::include!( link_with_tags {
   tags: select {
@@ -23,6 +25,15 @@ prisma::link::include!( link_with_tags {
   }
 });
 
+
+#[derive(Debug, Deserialize, Type)]
+pub enum LinkGetter {
+  Date(String),
+  Collection(i32),
+  Name(String),
+  Id(i32),
+}
+
 #[derive(Debug, Deserialize, Serialize, Type)]
 pub struct FilterResult {
   total_links: Option<i32>,
@@ -31,6 +42,60 @@ pub struct FilterResult {
 // TODO: can I make a generic getBy function and searchBy function ? 
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
+    //TODO: but how to query when the user is the owner of the link?
+    .query("getBy", |t| {
+      #[derive(Debug, Deserialize, Type)]
+      struct LinkGetterArgs {
+        getter: Option<LinkGetter>,
+        user_id: Option<String>,
+        take: Option<i32>,
+        skip: Option<i32>,
+      }
+
+      t(|ctx, LinkGetterArgs {getter, user_id, take, skip}| {
+        let mut where_params: Vec<WhereParam> = vec![];
+
+        match (getter, user_id) {
+          (None, None) => return Err(Error::new(ErrorCode::BadRequest, String::from("getter and user_id cannot be both empty"))),
+          (Some(Id(id)), _) => where_params.push(prisma::link::id::equals(id)),
+          (None, Some(user_id)) => {
+            // FIXME: should I check more things
+            where_params.push(prisma::link::owner_id::equals(user_id));
+            match getter {
+              Date(date) => where_params.extend(vec![
+                prisma::link::created_at::gte(
+                  DateTime::<FixedOffset>::parse_from_rfc3339(&format!("{}T00:00:00+00:00", date))
+                    .unwrap(),
+                ),
+                and!(prisma::link::created_at::lte(
+                  DateTime::<FixedOffset>::parse_from_rfc3339(&format!("{}T23:59:59+00:00", date))
+                    .unwrap()
+                ))]),
+              Collection(id) => where_params.push(prisma::link::collection_id::equals(id)),
+              Name(name) => where_params.push(prisma::link::name::contains(name)),
+              _ => {}
+            };
+          }
+        };
+
+        let links_query = ctx
+          .db
+          .link()
+          .find_many(filter_cond);
+
+        let links = match (skip, take) {
+          (Some(skip), Some(take)) => links_query.skip(skip as i64).take(take as i64),
+          (Some(skip), None) => links_query.skip(skip as i64),
+          (None, Some(take)) => links_query.take(take as i64),
+          (None, None) => links_query,
+        }.exec().await?;
+
+        match skip {
+          Some(_) => Ok(FilterResult { total_links: links.len(), links }),
+          None => Ok(FilterResult { total_links: None, links }),
+        }
+      })
+    })
     .query("getByDate", |t| {
       #[derive(Debug, Deserialize, Serialize, Type)]
       struct GetByDateArgs {
@@ -38,7 +103,6 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         size: Option<i32>,
       }
       t(|ctx: PrivateCtx, GetByDateArgs { date, size }| async move {
-        println!("date: {}", date);
         let links = ctx
           .db
           .link()
