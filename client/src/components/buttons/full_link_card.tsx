@@ -1,19 +1,8 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '../ui/card';
-
 import { LinkWithTags } from '../../../bindings';
 import { Badge } from '../ui/badge';
 import {
   AlignJustify,
-  Archive,
   ArchiveX,
-  ArrowRight,
   Calendar,
   CheckCircle2,
   ChevronLeft,
@@ -22,8 +11,6 @@ import {
   Tags,
   XCircle,
 } from 'lucide-react';
-import { LinkDropdown } from './link_popover';
-import { StyledButton } from './styled_button';
 import { cn } from '../../utils';
 import { TagBadge } from './tag_badge';
 

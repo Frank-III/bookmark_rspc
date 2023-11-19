@@ -69,7 +69,8 @@ pub(crate) fn get_user(token: Option<HeaderValue>) -> Option<Role> {
 }
 
 pub fn compute_heatmap_value(year: i32, dailyvalues: &[SummariesData]) -> Vec<Vec<SummariesData>> {
-  let date = NaiveDate::from_ymd(year, 1, 1);
+  //TODO: this is fine? right?
+  let date = NaiveDate::from_ymd_opt(year, 1, 1).unwrap();
   let defualt_val = SummariesData {
     date: date.to_string(),
     count: -1,

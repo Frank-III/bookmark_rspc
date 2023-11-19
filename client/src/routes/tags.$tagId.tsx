@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { FileRoute, Outlet } from '@tanstack/react-router';
+import { FileRoute } from '@tanstack/react-router';
 import { client, rspc } from '../utils/rspc';
 import {
-  CollectionWithPinnedStatus,
   FilterResult,
-  SearchMode,
 } from '../../bindings';
 
 async function loadCollectionById(tagId: number): Promise<FilterResult> {
@@ -27,12 +25,13 @@ export const route = new FileRoute('/tags/$tagId').createRoute({
       },
     };
   },
-  load: async ({ meta: { queryClient, queryOptions } }) => {
+  load: async ({ context: { queryClient, queryOptions } }) => {
     await queryClient.ensureQueryData(queryOptions);
   },
-  component: ({ useRouteMeta }) => {
-    const { queryOptions } = useRouteMeta();
-    const { status, data: thisTags } = rspc.useQuery(queryOptions);
+  component: ({ useRouteContext }) => {
+    const { queryOptions } = useRouteContext();
+    //TODO: fix this
+    const { status, data: thisTags } = rspc.useQuery(queryOptions.queryKey);
 
     // const {totalLink, links} = thisTags ?? {totalLink: 0, links: []};
 

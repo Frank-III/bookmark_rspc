@@ -289,6 +289,7 @@ export function SearchCMDK({ children }: { children: React.ReactNode }) {
               ))}
             {activePage === 'tags' && <SearchTags />}
             {activePage === 'collections' && <SearchCollection />}
+            {/* TODO: should pass the search input into search links with usedebounce ? */}
             {activePage === 'links' && <SearchLinks />}
             <NewTagSelect />
           </Command.List>
@@ -384,6 +385,7 @@ export function SearchCollection() {
   );
 }
 
+// TODO: refactor this: 1. load 20 links at a time, 2. have to check if not matched result refetch  
 export function SearchLinks() {
   const { status, data: links } = rspc.useQuery(['links.getByUser']);
   return (

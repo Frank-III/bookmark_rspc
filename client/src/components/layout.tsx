@@ -1,24 +1,16 @@
 import {
   Outlet,
-  RouterProvider,
-  Router,
-  Route,
   Link,
-  useMatches,
-  useRouterState,
 } from '@tanstack/react-router';
 import { useIsFetching } from '@tanstack/react-query';
-import { useJwtStore, useUrlStore } from '../store';
-import { useAuth } from '@clerk/clerk-react';
+import { useUrlStore } from '../store';
 import { Nav } from './nav';
 import React, { useState } from 'react';
 import './layout.css';
 import { PanelLeft, PanelRightClose, PanelRightOpen, Plus } from 'lucide-react';
 import { CalenderView } from './calender_view';
-import { SearchCMDK } from './modals/search';
 import { cn } from '../utils';
 import { useWindowSize } from 'usehooks-ts';
-import { HeaderTitle } from './header';
 
 // export function RenderHeader({url}: {url: string[]}) {
 //   const lenUrl = url.length;
@@ -51,8 +43,8 @@ export function Layout() {
   });
   const url = useUrlStore.getState().url;
   const { width } = useWindowSize();
-  const [isSidebarOpen, toggleSidebar] = React.useState<boolean>(true);
-  const [isCalenderOpen, toggleCalender] = React.useState<boolean>(true);
+  const [isSidebarOpen, toggleSidebar] = useState<boolean>(true);
+  const [isCalenderOpen, toggleCalender] = useState<boolean>(true);
 
   const toggleLeft = () => toggleSidebar(!isSidebarOpen);
   const toggleRight = () => toggleCalender(!isCalenderOpen);

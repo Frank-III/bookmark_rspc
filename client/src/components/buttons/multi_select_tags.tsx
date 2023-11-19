@@ -6,7 +6,6 @@ import { Badge } from '../ui/badge';
 import { queryClient, rspc } from '../../utils/rspc';
 import { cn } from '../../utils';
 import { Check, ChevronsUpDown, Search, X } from 'lucide-react';
-import { on } from 'events';
 import { CreateTagArgs } from '../../../bindings';
 
 interface MultiSelectProps {
