@@ -17,7 +17,7 @@ const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 const router = new Router({
   routeTree,
   defaultPreload: 'intent',
-  meta: {
+  context: {
     queryClient,
   },
 });

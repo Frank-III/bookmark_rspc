@@ -33,12 +33,12 @@ export const route = new FileRoute('/collections/').createRoute({
       },
     },
   }),
-  load: async ({ meta: { queryClient, queryOptions } }) => {
+  load: async ({ context: { queryClient, queryOptions } }) => {
     await queryClient.ensureQueryData(queryOptions);
   },
-  component: ({ useRouteMeta }) => {
+  component: ({ useRouteContext }) => {
     // useUrlStore.getState().setUrl(['/', 'collections']);
-    const { queryOptions } = useRouteMeta();
+    const { queryOptions } = useRouteContext();
     const {
       isPreviousData,
       isLoading,

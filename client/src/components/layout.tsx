@@ -18,6 +18,7 @@ import { CalenderView } from './calender_view';
 import { SearchCMDK } from './modals/search';
 import { cn } from '../utils';
 import { useWindowSize } from 'usehooks-ts';
+import { HeaderTitle } from './header';
 
 // export function RenderHeader({url}: {url: string[]}) {
 //   const lenUrl = url.length;
@@ -79,6 +80,7 @@ export function Layout() {
             <h1 className='whitespace-nowrap text-base font-semibold text-gray-900'>
               {`Bookmarks/`}
             </h1>
+            {/* <HeaderTitle /> */}
           </Link>
         </div>
         <div className='flex flex-row items-center space-x-2'>

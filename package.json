@@ -15,5 +15,8 @@
     "format:check": "prettier -c .",
     "tauri": "tauri"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@tanstack/router": "beta"
+  }
 }

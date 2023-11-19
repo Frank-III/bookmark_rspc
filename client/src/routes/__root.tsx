@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, Outlet, RootRoute, RouterMeta } from '@tanstack/react-router';
+import { Link, Outlet, rootRouteWithContext } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Layout } from '../components/layout';
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-react';
@@ -7,11 +7,11 @@ import { Toaster } from 'sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { queryClient } from '../utils/rspc';
 
-const routerContext = new RouterMeta<{
+const routerContext = rootRouteWithContext<{
   queryClient: typeof queryClient;
-}>();
+}>()
 
-export const route = routerContext.createRootRoute({
+export const route = routerContext({
   component: () => {
     return (
       <>

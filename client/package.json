@@ -28,7 +28,6 @@
     "@rspc/client": "^0.1.2",
     "@tanstack/react-query": "^4.10.1",
     "@tanstack/react-router": "^0.0.1-beta.205",
-    "@tanstack/router": "beta",
     "@tanstack/router-cli": "^0.0.1-beta.205",
     "@visx/visx": "^3.3.0",
     "class-variance-authority": "^0.7.0",

@@ -46,11 +46,11 @@ export const route = new FileRoute('/collections/$collectionId').createRoute({
       },
     };
   },
-  load: async ({ meta: { queryClient, queryOptions } }) => {
+  load: async ({ context: { queryClient, queryOptions } }) => {
     await queryClient.ensureQueryData(queryOptions);
   },
-  component: ({ useRouteMeta }) => {
-    const { queryOptions } = useRouteMeta();
+  component: ({ useRouteContext }) => {
+    const { queryOptions } = useRouteContext();
     const { status, data: thisCollection } =
       //TODO: find a typescript way to fix this
       rspc.useQuery<'collections.getOnePinnedStatus'>(queryOptions.queryKey);
