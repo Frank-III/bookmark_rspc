@@ -1,7 +1,11 @@
 use std::{env, sync::Arc, vec};
 
 use super::{PrivateCtx, PrivateRouter};
-use crate::prisma::{self, link::{self, WhereParam}, PrismaClient};
+use crate::prisma::{
+  self,
+  link::{self, WhereParam},
+  PrismaClient,
+};
 use axum::{
   http::{HeaderMap, StatusCode},
   routing::post,
@@ -14,7 +18,7 @@ use prisma_client_rust::{
   raw, PrismaValue,
 };
 use rspc::{Error, ErrorCode, RouterBuilder, Type};
-use serde::{Deserialize, Serialize, de};
+use serde::{de, Deserialize, Serialize};
 use tracing::span::Id;
 
 prisma::link::include!( link_with_tags {
@@ -24,7 +28,6 @@ prisma::link::include!( link_with_tags {
     color
   }
 });
-
 
 #[derive(Debug, Deserialize, Type)]
 pub enum LinkGetter {
@@ -39,7 +42,7 @@ pub struct FilterResult {
   total_links: Option<i32>,
   links: Vec<link_with_tags::Data>,
 }
-// TODO: can I make a generic getBy function and searchBy function ? 
+// TODO: can I make a generic getBy function and searchBy function ?
 pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
   PrivateRouter::new()
     //TODO: but how to query when the user is the owner of the link?
@@ -52,49 +55,78 @@ pub(crate) fn private_route() -> RouterBuilder<PrivateCtx> {
         skip: Option<i32>,
       }
 
-      t(|ctx, LinkGetterArgs {getter, user_id, take, skip}| {
-        let mut where_params: Vec<WhereParam> = vec![];
+      t(
+        |ctx,
+         LinkGetterArgs {
+           getter,
+           user_id,
+           take,
+           skip,
+         }| async move {
+          let mut where_params: Vec<WhereParam> = vec![];
 
-        match (getter, user_id) {
-          (None, None) => return Err(Error::new(ErrorCode::BadRequest, String::from("getter and user_id cannot be both empty"))),
-          (Some(Id(id)), _) => where_params.push(prisma::link::id::equals(id)),
-          (None, Some(user_id)) => {
-            // FIXME: should I check more things
-            where_params.push(prisma::link::owner_id::equals(user_id));
-            match getter {
-              Date(date) => where_params.extend(vec![
-                prisma::link::created_at::gte(
-                  DateTime::<FixedOffset>::parse_from_rfc3339(&format!("{}T00:00:00+00:00", date))
+          match (getter, user_id) {
+            (None, None) | (Some(_), None) => {
+              return Err(Error::new(
+                ErrorCode::BadRequest,
+                String::from("getter and user_id cannot be both empty"),
+              ))
+            }
+            (None, Some(user_id)) => where_params.push(prisma::link::owner_id::equals(user_id)),
+            (Some(LinkGetter::Id(id)), _) => where_params.push(prisma::link::id::equals(id)),
+            (Some(val), Some(user_id)) => {
+              // FIXME: should I check more things
+              where_params.push(prisma::link::owner_id::equals(user_id));
+              match val {
+                LinkGetter::Date(date) => where_params.extend(vec![
+                  prisma::link::created_at::gte(
+                    DateTime::<FixedOffset>::parse_from_rfc3339(&format!(
+                      "{}T00:00:00+00:00",
+                      date
+                    ))
                     .unwrap(),
-                ),
-                and!(prisma::link::created_at::lte(
-                  DateTime::<FixedOffset>::parse_from_rfc3339(&format!("{}T23:59:59+00:00", date))
+                  ),
+                  and!(prisma::link::created_at::lte(
+                    DateTime::<FixedOffset>::parse_from_rfc3339(&format!(
+                      "{}T23:59:59+00:00",
+                      date
+                    ))
                     .unwrap()
-                ))]),
-              Collection(id) => where_params.push(prisma::link::collection_id::equals(id)),
-              Name(name) => where_params.push(prisma::link::name::contains(name)),
-              _ => {}
-            };
+                  )),
+                ]),
+                LinkGetter::Collection(id) => {
+                  where_params.push(prisma::link::collection_id::equals(id))
+                }
+                LinkGetter::Name(name) => where_params.push(prisma::link::name::contains(name)),
+                _ => {}
+              };
+            }
+          };
+
+          let links_query = ctx.db.link().find_many(where_params);
+
+          let links = match (skip, take) {
+            (Some(skip), Some(take)) => links_query.skip(skip as i64).take(take as i64),
+            (Some(skip), None) => links_query.skip(skip as i64),
+            (None, Some(take)) => links_query.take(take as i64),
+            (None, None) => links_query,
           }
-        };
+          .include(link_with_tags::include())
+          .exec()
+          .await?;
 
-        let links_query = ctx
-          .db
-          .link()
-          .find_many(filter_cond);
-
-        let links = match (skip, take) {
-          (Some(skip), Some(take)) => links_query.skip(skip as i64).take(take as i64),
-          (Some(skip), None) => links_query.skip(skip as i64),
-          (None, Some(take)) => links_query.take(take as i64),
-          (None, None) => links_query,
-        }.exec().await?;
-
-        match skip {
-          Some(_) => Ok(FilterResult { total_links: links.len(), links }),
-          None => Ok(FilterResult { total_links: None, links }),
-        }
-      })
+          match skip {
+            Some(_) => Ok(FilterResult {
+              total_links: Some(links.len() as i32),
+              links,
+            }),
+            None => Ok(FilterResult {
+              total_links: None,
+              links,
+            }),
+          }
+        },
+      )
     })
     .query("getByDate", |t| {
       #[derive(Debug, Deserialize, Serialize, Type)]
