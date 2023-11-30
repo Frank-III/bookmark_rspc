@@ -9,6 +9,7 @@ export type Procedures = {
         { key: "collections.getPinned", input: never, result: PinnedCollections[] } | 
         { key: "links.archiveStatByDate", input: string | null, result: ArchiveStatData } | 
         { key: "links.filterByTags", input: FilterByTagsArgs, result: FilterResult } | 
+        { key: "links.getBy", input: LinkGetterArgs, result: FilterResult } | 
         { key: "links.getByCollection", input: number, result: LinkWithTags[] } | 
         { key: "links.getByDate", input: GetByDateArgs, result: LinkWithTags[] } | 
         { key: "links.getById", input: number, result: LinkWithTags | null } | 
@@ -32,15 +33,17 @@ export type Procedures = {
     subscriptions: never
 };
 
+export type GetByDateArgs = { date: string; size: number | null }
+
 export type CreateCollectionArgs = { name: string; color: string; pinned: boolean; public: boolean }
 
-export type EditLinkArgs = { id: number; link_name: string; url: string; description: string | null; collection_id: number; new_tags: number[]; deleted_tags: number[]; archived: boolean }
+export type LinkGetter = { Date: string } | { Collection: number } | { Name: string } | { Id: number }
 
 export type CreateLinkArgs = { link_name: string; url: string; description: string | null; collection_id: number; tags: number[] }
 
 export type SummariesData = { date: string; count: number }
 
-export type LinkWithTags = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string; tags: { id: number; name: string; color: string }[] }
+export type SearchMode = "Name" | "Description" | "Url"
 
 export type CollectionWithPinnedStatus = { id: number; name: string; description: string; color: string; isPublic: boolean; ownerId: string; createdAt: string; pinnedBy: { user: { id: string } }[] }
 
@@ -52,17 +55,19 @@ export type User = { id: string; created_at: string; updated_at: string; usernam
 
 export type Tag = { id: number; name: string; color: string; ownerId: string }
 
-export type FilterByTagsArgs = { mode: Mode; tags: number[]; take: number; skip: number }
+export type FilterResult = { total_links: number | null; links: LinkWithTags[] }
+
+export type LinkGetterArgs = { getter: LinkGetter | null; user_id: string | null; take: number | null; skip: number | null }
 
 export type PinnedCollections = { collection: Collection }
 
-export type GetByDateArgs = { date: string; size: number | null }
-
-export type ArchiveStatData = { total: number; archived: number; not_archived: number }
+export type Mode = "And" | "Or"
 
 export type PinnedUserCollections = { userId: string; collectionId: number }
 
-export type SearchMode = "Name" | "Description" | "Url"
+export type FilterByTagsArgs = { mode: Mode; tags: number[]; take: number; skip: number }
+
+export type LinkWithTags = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string; tags: { id: number; name: string; color: string }[] }
 
 export type SearchByNameArgs = { mode: SearchMode; word: string; collection_id: number | null; take: number; skip: number }
 
@@ -70,10 +75,10 @@ export type Collection = { id: number; name: string; description: string; color:
 
 export type SummariesReturnData = { total_links: number; max_links: number; summaries: SummariesData[][] }
 
-export type Mode = "And" | "Or"
-
-export type FilterResult = { total_links: number | null; links: LinkWithTags[] }
+export type ArchiveStatData = { total: number; archived: number; not_archived: number }
 
 export type CreateTagArgs = { tag_name: string; color: string }
+
+export type EditLinkArgs = { id: number; link_name: string; url: string; description: string | null; collection_id: number; new_tags: number[]; deleted_tags: number[]; archived: boolean }
 
 export type Link = { id: number; name: string; url: string; description: string; archived: boolean; ownerId: string; collectionId: number; createdAt: string }
